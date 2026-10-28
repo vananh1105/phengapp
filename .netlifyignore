@@ -1,0 +1,7 @@
+*.mjs
+*.zip
+package.json
+package-lock.json
+netlify.toml
+node_modules/
+.netlify/
