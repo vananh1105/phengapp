@@ -310,12 +310,12 @@ function finish(){
     if(group)m+='\n'+k+':\n';
     cart.forEach(function(l){if(!group||l.who===k)m+='- '+l.qty+' × '+l.name+' ('+desc(l)+') '+fmt(lineTotal(l))+'\n'});
   });
-  m+='\nTổng: '+fmt(total());
+  var TT=total();m+='\nTổng: '+fmt(TT);
   m+=' (khách báo đã chuyển khoản)';if(giftUse)m+='\n🎁 Quà Noel: '+giftUse.n+(giftUse.t==='sub'?' (đã trừ '+fmt(disc())+')':' (tặng kèm, 0đ)');var nt=$('nt').value.trim();if(nt)m+='\nGhi chú: '+nt;
-  done=m;if(giftUse&&giftUse.fromSaved)dropGift();sendOrder(m,nm,ph);
+  done=m;if(giftUse&&giftUse.fromSaved)dropGift();sendOrder(m,nm,ph,TT);
   show('<h3>Đơn của bạn</h3><p id="sst" style="font-weight:600">Đang gửi đơn đến quán...</p><p style="color:var(--mut)">Nếu quán chưa phản hồi, bạn sao chép đơn gửi qua Zalo hoặc gọi '+esc(CFG.info.phone)+'.</p><pre id="msg">'+esc(m)+'</pre><div class="sec2"><button class="btn o" onclick="copyMsg(this)">Sao chép đơn</button><a class="btn" href="https://zalo.me/'+esc(CFG.info.zalo)+'" target="_blank" rel="noopener">Mở Zalo</a></div><button class="btn o" style="margin-top:8px;justify-content:center" onclick="cart=[];giftReset();upd();closeSheet()">Đặt đơn mới</button>');
 }
-function sendOrder(m,nm,ph){var e=function(t){var x=$('sst');if(x)x.textContent=t};fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph})}).then(function(r){e(r.ok?'Đã gửi đơn đến quán ✓':'Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.')}).catch(function(){e('Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.')})}
+function sendOrder(m,nm,ph,tt){var e=function(t){var x=$('sst');if(x)x.textContent=t};fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph,total:tt})}).then(function(r){e(r.ok?'Đã gửi đơn đến quán ✓':'Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.')}).catch(function(){e('Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.')})}
 function copyMsg(b){
   var ok=function(){b.textContent='Đã sao chép'};
   try{navigator.clipboard.writeText(done).then(ok,fb)}catch(e){fb()}
