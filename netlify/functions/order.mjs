@@ -1,7 +1,7 @@
 import { getStore } from "@netlify/blobs";
 import { sendPushAll } from "../lib/push.mjs";
 export const config = { path: "/api/order" };
-export default async (req) => {
+export default async (req, context) => {
   if (req.method !== "POST") return new Response("", { status: 405 });
   let d;
   try { d = await req.json(); } catch { return new Response("bad", { status: 400 }); }
@@ -23,5 +23,16 @@ export default async (req) => {
     }).then((r) => { sent = r.ok; }).catch(() => {}));
   }
   await Promise.all(jobs);
+  // Nhắc thêm 2 lần (sau 8s và 16s) nếu đơn vẫn chưa được nhận, không bắt khách chờ
+  if (saved && context && typeof context.waitUntil === "function") {
+    const origin = new URL(req.url).origin, store = getStore({ name: "orders", consistency: "strong" });
+    context.waitUntil((async () => {
+      for (const ms of [8000, 8000]) {
+        await new Promise((r) => setTimeout(r, ms));
+        try { const v = await store.get(id, { type: "json" }); if (!v || v.s !== "new") return; } catch { return; }
+        await sendPushAll(origin).catch(() => 0);
+      }
+    })());
+  }
   return saved || sent ? Response.json({ ok: true }) : new Response("failed", { status: 502 });
 };
