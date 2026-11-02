@@ -17,11 +17,24 @@ export default async (req) => {
         try { return { id, t: await store.get(id), s: "done", at: id.slice(0, 24), total: 0, name: "", phone: "" }; } catch { return null; }
       }
     }));
-    return Response.json({ orders: out.filter(Boolean).reverse() }, { headers: { "cache-control": "no-store" } });
+    // Đơn chưa thanh toán ("pay") không hiện ở trang quản lý
+    const pays = getStore({ name: "pay", consistency: "strong" });
+    const { blobs } = await pays.list({ prefix: "u:" });
+    const un = await Promise.all(blobs.map((b) => b.key).sort().slice(-30).map(async (k) => {
+      try { const v = await pays.get(k, { type: "json" }); return v && !v.done ? { k, ...v } : null; } catch { return null; }
+    }));
+    return Response.json({ orders: out.filter((o) => o && o.s !== "pay").reverse(), unmatched: un.filter(Boolean).reverse() }, { headers: { "cache-control": "no-store" } });
   }
   if (req.method === "POST") {
     let d;
     try { d = await req.json(); } catch { return new Response("bad", { status: 400 }); }
+    // Quán đánh dấu đã xử lý một khoản tiền vào không khớp đơn
+    if (d && typeof d.dismiss === "string" && d.dismiss.startsWith("u:")) {
+      const pays = getStore({ name: "pay", consistency: "strong" });
+      const v = await pays.get(d.dismiss, { type: "json" });
+      if (v) { v.done = 1; await pays.setJSON(d.dismiss, v); }
+      return Response.json({ ok: true });
+    }
     if (!d || typeof d.id !== "string" || !["new", "doing", "done"].includes(d.s)) return new Response("bad", { status: 400 });
     const v = await store.get(d.id, { type: "json" });
     if (!v || typeof v !== "object") return new Response("missing", { status: 404 });
