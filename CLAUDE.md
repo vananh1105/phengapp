@@ -12,6 +12,7 @@
 - Web app quán trà, chạy trên Netlify.
 - `public/index.html`: trang khách đặt đơn.
 - `public/don.html`: trang quản lý đơn của quán (chuông và giọng đọc "Có đơn hàng mới" là file `public/don-moi.mp3`).
+- `public/ban.html`: phần mềm bán tại quầy (POS) cho quán: đăng nhập bằng `ADMIN_PASSWORD`, dùng chung menu với web đặt đơn (sửa món/giá ở `/#admin`), giỏ, thanh toán tiền mặt/chuyển khoản (QR nội dung `QUAY <số> <ngàytháng>`, `sepay.mjs` lưu riêng ở store `pay` khóa `q:`), in bill khổ 58/80mm bằng `window.print()`. Đơn tại quầy hiện lưu trong `localStorage` của máy bán (`pos_orders`). `/api/config?pos=1` trả thêm `bank`.
 - `public/sw.js`: service worker hiện thông báo đẩy.
 - `netlify/functions/`: API (`order` nhận đơn, `my` khách xem lại đơn bằng SĐT + PIN và quán đặt lại PIN, `orders`, `push`, `config`, `upload`, `img`, `qr` trả ảnh QR thanh toán của đơn để khách tải về).
 - `netlify/lib/member.mjs`: tài khoản khách = tên + số điện thoại + mã PIN 4 số (lưu băm, sai 5 lần khóa 15 phút). Bắt buộc đăng nhập/đăng ký ngay khi mở web mới xem menu và đặt đơn (trừ `#admin`).
