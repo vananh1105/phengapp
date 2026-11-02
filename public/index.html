@@ -293,7 +293,7 @@ function openCart(){
   });
   h+=giftHtml();
   h+='<div class="tot"><span>Tổng cộng</span><span>'+fmt(total())+'</span></div>';
-  h+='<div class="lb">Thông tin nhận hàng</div><input id="nm" placeholder="Tên của bạn" autocomplete="name"><input id="ph" placeholder="Số điện thoại" inputmode="tel" autocomplete="tel">';
+  h+='<div class="lb">Thông tin nhận hàng</div><input id="nm" placeholder="Tên của bạn" autocomplete="name"><input id="ph" placeholder="Số điện thoại" inputmode="tel" autocomplete="tel" value="'+esc(meGet().ph||'')+'"><input id="pin" placeholder="Mã PIN 4 số" inputmode="numeric" maxlength="4" autocomplete="off" value="'+esc(meGet().pin||'')+'"><p id="pinh" style="font-size:12px;color:var(--mut);margin:-4px 0 10px">Bắt buộc. Dùng số điện thoại + mã PIN để xem lại đơn ở bất kỳ đâu (Zalo, Facebook, Chrome…). Khách cũ nhập đúng PIN đã đặt lần trước.</p>';
   h+='<div class="ch" style="margin-bottom:10px"><button id="r1" class="on" onclick="ship(0)">Nhận tại quán</button><button id="r2" onclick="ship(1)">Giao tận nơi</button></div>';
   h+='<input id="ad" placeholder="Địa chỉ giao hàng" style="display:none"><textarea id="nt" rows="2" placeholder="Ghi chú (không bắt buộc)"></textarea>';
   h+='<div class="lb">Thanh toán trước bằng chuyển khoản</div>'+(CFG.info.qr?'<img src="/img/'+esc(CFG.info.qr)+'" style="width:100%;max-width:240px;display:block;margin:8px auto;border-radius:12px" alt="Mã QR">':'<div class="qr">Mã QR của quán sẽ hiện ở đây</div>')+'<p style="font-size:13px;color:var(--mut);margin:4px 0 10px">Chuyển đúng <b>'+fmt(total())+'</b>, nội dung ghi tên + số điện thoại.</p><label style="display:flex;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="pd" style="width:auto;margin:0 8px 0 0">Tôi đã chuyển khoản đúng số tiền</label>';
@@ -304,6 +304,7 @@ function ship(d){delivery=!!d;$('r1').className=d?'':'on';$('r2').className=d?'o
 function finish(){
   var nm=$('nm').value.trim(),ph=$('ph').value.trim(),ad=$('ad').value.trim();
   if(!nm||!ph){(nm?$('ph'):$('nm')).focus();return}
+  var pin=$('pin').value.trim();if(!/^\d{4}$/.test(pin)){$('pin').focus();$('pinh').style.color='var(--mr)';$('pinh').textContent='Mã PIN phải gồm đúng 4 số.';return}
   if(!$('pd').checked){$('pd').focus();$('pd').parentNode.style.color='var(--mr)';return}
   if(delivery&&!ad){$('ad').focus();return}
   var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:'Nhận tại quán')+'\n';
@@ -314,25 +315,38 @@ function finish(){
   });
   var TT=total();m+='\nTổng: '+fmt(TT);
   m+=' (khách báo đã chuyển khoản)';if(giftUse)m+='\n🎁 Quà Noel: '+giftUse.n+(giftUse.t==='sub'?' (đã trừ '+fmt(disc())+')':' (tặng kèm, 0đ)');var nt=$('nt').value.trim();if(nt)m+='\nGhi chú: '+nt;
-  done=m;if(giftUse&&giftUse.fromSaved)dropGift();sendOrder(m,nm,ph,TT);
+  done=m;if(giftUse&&giftUse.fromSaved)dropGift();sendOrder(m,nm,ph,TT,pin);
   show('<h3>Đơn của bạn</h3><p id="sst" style="font-weight:600">Đang gửi đơn đến quán...</p><p style="color:var(--mut)">Nếu quán chưa phản hồi, bạn sao chép đơn gửi qua Zalo hoặc gọi '+esc(CFG.info.phone)+'.</p><pre id="msg">'+esc(m)+'</pre><div class="sec2"><button class="btn o" onclick="copyMsg(this)">Sao chép đơn</button><a class="btn" href="https://zalo.me/'+esc(CFG.info.zalo)+'" target="_blank" rel="noopener">Mở Zalo</a></div><button class="btn o" style="margin-top:8px;justify-content:center" onclick="cart=[];giftReset();upd();closeSheet()">Đặt đơn mới</button>');
 }
-function sendOrder(m,nm,ph,tt){var e=function(t){var x=$('sst');if(x)x.textContent=t};var rec={t:m,ph:ph,total:tt,at:new Date().toISOString(),ok:0};
+function sendOrder(m,nm,ph,tt,pin){var e=function(t){var x=$('sst');if(x)x.innerHTML=t};var rec={t:m,ph:ph,total:tt,at:new Date().toISOString(),ok:0};
 var fail=function(){e('Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.');myAdd(rec)};
-fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph,total:tt})}).then(function(r){if(!r.ok)return fail();return r.json().catch(function(){return {}}).then(function(d){rec.ok=1;if(d&&d.id){rec.id=d.id;rec.code=d.code}e('Đã gửi đơn đến quán ✓'+(rec.code?' · Mã đơn #'+rec.code:''));myAdd(rec)})}).catch(fail)}
-// Lưu các đơn khách đã đặt trên máy của khách để xem lại
-var MYK='my_orders';
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph,total:tt,pin:pin})}).then(function(r){if(!r.ok)return fail();return r.json().catch(function(){return {}}).then(function(d){rec.ok=1;if(d&&d.id){rec.id=d.id;rec.code=d.code}
+var t='Đã gửi đơn đến quán ✓'+(rec.code?' · Mã đơn #'+esc(rec.code):'');
+if(d.member==='new'||d.member==='ok'){meSet({ph:ph,pin:pin});rec.mem=1;t+='<br><small style="font-weight:500;color:var(--mut)">'+(d.member==='new'?'Đã tạo mã PIN cho số này. ':'')+'Xem lại đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</small>'}
+else if(d.member==='wrong'||d.member==='locked')t+='<br><small style="font-weight:500;color:var(--mr)">Mã PIN không đúng với số này nên đơn chưa được lưu vào lịch sử (quán vẫn đã nhận đơn). Quên PIN thì gọi quán để đặt lại.</small>';
+e(t);myAdd(rec)})}).catch(fail)}
+// Lịch sử đơn: lấy từ máy chủ bằng số điện thoại + PIN (dùng được ở mọi trình duyệt),
+// cộng thêm các đơn chỉ lưu trên máy này (gửi lỗi hoặc sai PIN)
+var MYK='my_orders',MEK='my_me';
 function myGet(){try{var l=JSON.parse(localStorage.getItem(MYK)||'[]');return Array.isArray(l)?l:[]}catch(e){return []}}
-function mySet(l){try{localStorage.setItem(MYK,JSON.stringify(l.slice(0,30)))}catch(e){}myBtn()}
+function mySet(l){try{localStorage.setItem(MYK,JSON.stringify(l.slice(0,30)))}catch(e){}}
 function myAdd(r){var l=myGet();l.unshift(r);mySet(l)}
-function myBtn(){var b=$('mo'),n=myGet().length;if(!b)return;b.style.display=n?'block':'none';b.textContent='📋 Đơn đã đặt ('+n+')'}
+function meGet(){try{return JSON.parse(localStorage.getItem(MEK)||'{}')||{}}catch(e){return {}}}
+function meSet(m){try{m?localStorage.setItem(MEK,JSON.stringify(m)):localStorage.removeItem(MEK)}catch(e){}}
+function myBtn(){var b=$('mo');if(b){b.style.display='block';b.textContent='📋 Đơn đã đặt'}}
 var ST={new:'⏳ Chờ quán nhận',doing:'🧋 Quán đang làm',done:'✅ Đã xong'};
-function myOrders(){var l=myGet();var h='<h3>Đơn bạn đã đặt</h3>';if(!l.length)h+='<p style="color:var(--mut)">Chưa có đơn nào trên máy này.</p>';
-l.forEach(function(r,i){var d=new Date(r.at);h+='<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div id="ms'+i+'" style="font-size:14px;margin-top:4px;color:var(--mut)">'+(r.ok?(r.id?'Đang xem trạng thái…':'Đã gửi đến quán'):'❌ Chưa gửi được, hãy gửi qua Zalo')+'</div><pre>'+esc(r.t)+'</pre><button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'});
-if(l.length)h+='<button class="btn o" style="margin-top:8px" onclick="if(confirm(\'Xóa lịch sử đơn trên máy này?\')){mySet([]);closeSheet()}">Xóa lịch sử trên máy này</button>';
-h+='<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h);
-l.forEach(function(r,i){if(!r.id)return;fetch('/api/order?id='+encodeURIComponent(r.id)+'&phone='+encodeURIComponent(r.ph||''),{cache:'no-store'}).then(function(x){return x.ok?x.json():null}).then(function(d){var e=$('ms'+i);if(!e)return;e.textContent=d?(ST[d.s]||d.s):'Không tra được trạng thái, bạn gọi quán giúp nhé';if(d&&d.s==='done')e.style.color='var(--mr)'}).catch(function(){var e=$('ms'+i);if(e)e.textContent='Không xem được trạng thái (mất mạng?)'})})}
-function myCopy(i,b){var r=myGet()[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
+function myItem(r,st,i){var d=new Date(r.at);return '<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div style="font-size:14px;margin-top:4px;color:'+(r.s==='done'?'var(--mr)':'var(--mut)')+'">'+st+'</div><pre>'+esc(r.t)+'</pre><button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'}
+var MYL=[];
+function myCopy(i,b){var r=MYL[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
+function myOrders(){var me=meGet();if(me.ph&&me.pin)return myLoad(me.ph,me.pin);myForm('')}
+function myForm(err,ph){var me=meGet();ph=ph||me.ph||'';show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">Nhập số điện thoại và mã PIN 4 số bạn đã đặt khi đặt đơn.</p><input id="lph" placeholder="Số điện thoại" inputmode="tel" autocomplete="tel" value="'+esc(ph)+'"><input id="lpin" placeholder="Mã PIN 4 số" inputmode="numeric" maxlength="4" autocomplete="off"><p id="lerr" style="color:var(--mr);font-size:14px;margin:0 0 8px">'+esc(err)+'</p><button class="btn" style="justify-content:center" onclick="myLogin()">Xem đơn</button><p style="font-size:12px;color:var(--mut)">Quên mã PIN? Gọi quán '+esc(CFG.info.phone||'')+' để đặt lại.</p>'+myLocal([])+'<button class="btn o" style="margin-top:8px" onclick="closeSheet()">Đóng</button>')}
+function myLogin(){var ph=$('lph').value.trim(),pin=$('lpin').value.trim();if(!ph){$('lph').focus();return}if(!/^\d{4}$/.test(pin)){$('lerr').textContent='Mã PIN phải gồm đúng 4 số.';$('lpin').focus();return}$('lerr').textContent='Đang tìm…';myLoad(ph,pin)}
+function myLocal(ids){var l=myGet().filter(function(r){return !r.id||!r.mem||ids.indexOf(r.id)<0});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán (chưa lưu vào số điện thoại)':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
+function myLoad(ph,pin){MYL=[];fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429)meSet(null);return myForm(d.err||'Không xem được đơn',ph)}
+meSet({ph:ph,pin:pin});var os=d.orders||[],h='<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">Số '+esc(ph)+' · <a href="#" onclick="meSet(null);myForm(\'\');return false">Đổi số khác</a></p>';
+if(!os.length)h+='<p style="color:var(--mut)">Chưa có đơn nào.</p>';
+os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,ST[o.s]||o.s,i)});
+h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){myForm('Không kết nối được, thử lại sau',ph)})}
 function copyMsg(b){
   var ok=function(){b.textContent='Đã sao chép'};
   try{navigator.clipboard.writeText(done).then(ok,fb)}catch(e){fb()}
