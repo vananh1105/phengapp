@@ -268,10 +268,13 @@ function drawCart(){
 function openCart(){show('<div id="cartSheet" style="display:flex;flex-direction:column;margin:-18px">'+cartHtml()+'</div>')}
 
 /* ---------- Thanh toán ---------- */
-var PAY={disc:0,given:0,who:''};
-function money(v){v=+String(v).replace(/[^0-9]/g,'')||0;return v>=1000?v/1000:v}
-function total(){return Math.max(0,sub()-(+PAY.disc||0))}
-function openPay(){PAY={disc:0,given:0,who:''};payM='cash';drawPay()}
+var PAY={dt:'vnd',dv:0,given:0,who:''};
+// Tiền gõ vào là số đồng đầy đủ (100000 = 100.000đ), không gõ tắt. Bên trong tính theo nghìn đồng.
+function money(v){return (+String(v).replace(/[^0-9]/g,'')||0)/1000}
+// Số tiền giảm (nghìn đồng), làm tròn tới đồng
+function disc(){var s0=sub();if(PAY.dt==='pct')return Math.round(s0*Math.min(100,PAY.dv)*10)/1000;return Math.min(s0,PAY.dv)}
+function total(){return Math.max(0,Math.round((sub()-disc())*1000)/1000)}
+function openPay(){PAY={dt:'vnd',dv:0,given:0,who:''};payM='cash';drawPay()}
 function quickCash(t){var a=[t],r=Math.ceil(t/10)*10;if(r>t)a.push(r);[50,100,200,500].forEach(function(v){if(v>t&&a.indexOf(v)<0)a.push(v)});return a.slice(0,5)}
 function noNext(){var d=dayKey(new Date()),n=hist().filter(function(o){return o.day===d}).length;return n+1}
 function transferNote(no){var d=new Date();return 'QUAY '+String(no).padStart(3,'0')+' '+String(d.getDate()).padStart(2,'0')+String(d.getMonth()+1).padStart(2,'0')}
@@ -279,13 +282,15 @@ function qrUrl(amountK,note){if(!BANK)return '';return 'https://qr.sepay.vn/img?
 function drawPay(){
   var t=total(),h='<h3>Thanh toán</h3>';
   h+='<div class="sum"><span>Tạm tính</span><b>'+fmt(sub())+'</b></div>';
-  h+='<div class="sum" style="align-items:center"><span>Giảm giá</span><input id="dc" class="inp" style="width:140px;text-align:right" inputmode="numeric" value="'+(PAY.disc?fmt(PAY.disc):'')+'" placeholder="0đ" onfocus="this.select()" oninput="PAY.disc=money(this.value);payLive()"></div>';
+  h+='<div class="lb">Giảm giá</div><div style="display:flex;gap:8px;align-items:center"><div class="ch" style="flex:none"><button class="'+(PAY.dt==='vnd'?'on':'')+'" onclick="PAY.dt=\'vnd\';PAY.dv=0;drawPay()">Số tiền (đ)</button><button class="'+(PAY.dt==='pct'?'on':'')+'" onclick="PAY.dt=\'pct\';PAY.dv=0;drawPay()">Phần trăm (%)</button></div>'
+    +'<input id="dc" class="inp" style="flex:1;min-width:0;text-align:right" inputmode="numeric" value="'+(PAY.dv?(PAY.dt==='pct'?PAY.dv:Math.round(PAY.dv*1000)):'')+'" placeholder="'+(PAY.dt==='pct'?'Ví dụ 10':'Ví dụ 5000')+'" onfocus="this.select()" oninput="PAY.dv=PAY.dt===\'pct\'?Math.min(100,+this.value.replace(/[^0-9]/g,\'\')||0):money(this.value);payLive()"></div>'
+    +'<div class="sum"><span>Được giảm</span><b id="dcv"></b></div>';
   h+='<div class="sum"><span style="font-weight:700">Khách phải trả</span><span class="big" id="tt">'+fmt(t)+'</span></div>';
   h+='<div class="lb">Hình thức</div><div class="ch"><button class="'+(payM==='cash'?'on':'')+'" onclick="payM=\'cash\';drawPay()">💵 Tiền mặt</button><button class="'+(payM==='bank'?'on':'')+'" onclick="payM=\'bank\';drawPay()">🏦 Chuyển khoản</button></div>';
   if(payM==='cash'){
     h+='<div class="lb">Khách đưa</div><div class="ch" id="qc"></div>';
-    h+='<input id="gi" class="inp" style="margin-top:8px" inputmode="numeric" placeholder="Số khác, ví dụ 150000" value="" onfocus="this.select()" oninput="PAY.given=money(this.value);payLive()">';
-    h+='<div class="hint">Gõ đủ số tiền (150000) hoặc gõ tắt (150) đều được</div>';
+    h+='<input id="gi" class="inp" style="margin-top:8px" inputmode="numeric" placeholder="Gõ đúng số tiền khách đưa, ví dụ 150000" value="" onfocus="this.select()" oninput="PAY.given=money(this.value);payLive()">';
+    h+='<div class="hint" id="gv">Gõ đủ số đồng, không gõ tắt: 150000 là 150.000đ</div>';
     h+='<div class="sum" style="margin-top:8px"><span>Tiền thối</span><span class="big" id="chg"></span></div>';
   }else{
     var u=qrUrl(t,transferNote(noNext()));
@@ -300,15 +305,17 @@ function drawPay(){
 function payLive(){
   var t=total();$('tt').textContent=fmt(t);
   var qc=$('qc');if(qc)qc.innerHTML=quickCash(t).map(function(v){return '<button class="'+(PAY.given===v?'on':'')+'" onclick="PAY.given='+v+';var g=$(\'gi\');if(g)g.value=\'\';payLive()">'+fmt(v)+'</button>'}).join('');
-  var c=$('chg'),bad=payM==='cash'&&PAY.given>0&&PAY.given<t;
-  if(c){c.textContent=!PAY.given?'—':PAY.given>=t?fmt(PAY.given-t):'Thiếu '+fmt(t-PAY.given);c.style.color=bad?'var(--mr)':'var(--ok)'}
+  var dv=$('dcv');if(dv)dv.textContent=disc()?'-'+fmt(disc()):'0đ';
+  var gv=$('gv'),gi=$('gi');if(gv&&gi)gv.textContent=gi.value?'Khách đưa: '+fmt(money(gi.value)):'Gõ đủ số đồng, không gõ tắt: 150000 là 150.000đ';
+  var c=$('chg'),bad=payM==='cash'&&!(PAY.given>=t);
+  if(c){c.textContent=!PAY.given?'Chưa nhập tiền khách đưa':PAY.given>=t?fmt(PAY.given-t):'Thiếu '+fmt(t-PAY.given);c.style.color=bad?'var(--mr)':'var(--ok)';c.style.fontSize=PAY.given?'':'15px'}
   [].forEach.call(document.querySelectorAll('.pf'),function(b){b.disabled=bad});
 }
 function dayKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function hist(){return ls.get('pos_orders',[])}
 function finish(doPrint){
   var t=total(),now=new Date(),no=noNext();
-  var o={id:now.getTime().toString(36),no:no,day:dayKey(now),at:now.getTime(),lines:cart,sub:sub(),disc:+PAY.disc||0,total:t,m:payM,given:payM==='cash'?(PAY.given||t):0,who:PAY.who.trim()};
+  var o={id:now.getTime().toString(36),no:no,day:dayKey(now),at:now.getTime(),lines:cart,sub:sub(),disc:disc(),pct:PAY.dt==='pct'?PAY.dv:0,total:t,m:payM,given:payM==='cash'?PAY.given:0,who:PAY.who.trim()};
   o.change=payM==='cash'?Math.max(0,o.given-t):0;
   if(payM==='bank')o.note=transferNote(no);
   var H=hist();H.push(o);ls.set('pos_orders',H.slice(-2000));
@@ -328,7 +335,7 @@ function billHtml(o,temp){
     h+='<div class="r"><span>'+esc(l.n)+'</span><b>'+fmt(lineTotal(l))+'</b></div><div class="o">'+l.q+' x '+fmt(unit(l))+(desc(l)?' · '+esc(desc(l)):'')+'</div>';
   });
   h+='<hr><div class="r"><span>Tạm tính</span><span>'+fmt(o.sub)+'</span></div>';
-  if(o.disc)h+='<div class="r"><span>Giảm giá</span><span>-'+fmt(o.disc)+'</span></div>';
+  if(o.disc)h+='<div class="r"><span>Giảm giá'+(o.pct?' ('+o.pct+'%)':'')+'</span><span>-'+fmt(o.disc)+'</span></div>';
   h+='<div class="r tt"><span>TỔNG CỘNG</span><span>'+fmt(o.total)+'</span></div>';
   if(!temp){
     if(o.m==='cash')h+='<div class="r"><span>Tiền mặt khách đưa</span><span>'+fmt(o.given)+'</span></div><div class="r"><span>Tiền thối</span><span>'+fmt(o.change)+'</span></div>';
