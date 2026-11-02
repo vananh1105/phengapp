@@ -29,6 +29,8 @@ button.big{width:100%;padding:16px;font-size:18px}
 .o.n{border:2px solid var(--mr)}
 .oh{display:flex;justify-content:space-between;gap:8px;font-weight:700}
 .oh small{font-weight:500;color:var(--mut)}
+.ship{background:var(--bg);border-radius:10px;padding:10px;margin:0 0 8px;font-size:14px;display:grid;gap:8px}
+.mapl{flex:1;text-align:center;text-decoration:none;border:1.5px solid var(--ln);background:var(--cd);color:var(--ink);border-radius:10px;padding:9px 6px;font-weight:600;font-size:14px}
 pre{white-space:pre-wrap;word-break:break-word;font:inherit;background:var(--bg);border-radius:10px;padding:10px;margin:8px 0}
 .row{display:flex;gap:8px}.row button{flex:1}
 .it{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--cd);border:1px solid var(--ln);border-radius:12px;padding:10px 12px;margin-bottom:8px}
@@ -91,7 +93,10 @@ function ppRefresh(){if(pSup()&&Notification.permission==='granted')ppSub().catc
 function tab(t){cur=t;draw()}
 function upd(){var n=O.filter(function(o){return o.s==='new'}).length;$('pn').textContent=n+' chờ';var on=n>0&&!muted;ring(on);document.body.className=n>0?'alert':'';document.title=(n>0?'('+n+') ĐƠN MỚI · ':'')+'Đơn hàng'}
 function hm(a){var d=new Date(a);return d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})}
-function card(o){var h='<div class="o '+(o.s==='new'?'n':'')+'"><div class="oh"><span>#'+esc(String(o.id).slice(-6).toUpperCase())+' · '+esc(o.name||'Khách')+' · <a href="tel:'+esc(o.phone||'')+'">'+esc(o.phone||'')+'</a></span><small>'+hm(o.at)+(o.total?' · '+fmt(o.total):'')+'</small></div>'+(o.paid?'<div style="color:var(--ok);font-weight:600;font-size:14px;margin-top:4px">✅ Đã thanh toán '+fmt(o.paid/1000)+(o.late?' (trả trễ)':'')+'</div>':'')+'<pre>'+esc(o.t)+'</pre>';
+// Địa chỉ giao + nút mở Google Maps (xem vị trí / chỉ đường cho người giao)
+function shipBox(o){if(!o.lat||!o.lng)return '';var ll=o.lat+','+o.lng;
+return '<div class="ship"><div>📍 <b>'+esc(o.addr||'')+'</b>'+(o.km!=null?' · cách quán '+String(o.km).replace('.',',')+' km'+(o.road===false?' (ước chừng)':''):'')+'</div><div class="row"><a class="mapl" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+ll+'">🗺️ Xem bản đồ</a><a class="mapl" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination='+ll+'&travelmode=driving">🧭 Chỉ đường</a></div></div>'}
+function card(o){var h='<div class="o '+(o.s==='new'?'n':'')+'"><div class="oh"><span>#'+esc(String(o.id).slice(-6).toUpperCase())+' · '+esc(o.name||'Khách')+' · <a href="tel:'+esc(o.phone||'')+'">'+esc(o.phone||'')+'</a></span><small>'+hm(o.at)+(o.total?' · '+fmt(o.total):'')+'</small></div>'+(o.paid?'<div style="color:var(--ok);font-weight:600;font-size:14px;margin-top:4px">✅ Đã thanh toán '+fmt(o.paid/1000)+(o.late?' (trả trễ)':'')+'</div>':'')+'<pre>'+esc(o.t)+'</pre>'+shipBox(o);
 if(o.s==='new')h+='<button class="big rd" onclick="setS(\''+o.id+'\',\'doing\')">Đã nhận đơn</button>';
 else if(o.s==='doing')h+='<div class="row"><button class="gr" onclick="setS(\''+o.id+'\',\'done\')">Hoàn thành</button><button class="g" onclick="cp(\''+o.id+'\')">Sao chép</button></div>';
 else h+='<div class="row"><button class="g" onclick="cp(\''+o.id+'\')">Sao chép</button><button class="g" onclick="setS(\''+o.id+'\',\'doing\')">Mở lại</button></div>';
