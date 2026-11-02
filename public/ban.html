@@ -61,6 +61,12 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 .ch{display:flex;flex-wrap:wrap;gap:6px}
 .ch button{border:1.5px solid var(--ln);background:var(--cd);border-radius:99px;padding:9px 13px;font-size:14px}
 .ch button.on{background:var(--mr);border-color:var(--mr);color:#fff}
+.tl{display:grid;gap:0;border:1.5px solid var(--ln);border-radius:12px;overflow:hidden}
+.tr{display:grid;grid-template-columns:minmax(0,1fr) 64px 118px;align-items:center;gap:8px;padding:6px 10px;border-top:1px solid var(--ln);font-size:15px}
+.tr:first-child{border-top:0}.tr.on{background:var(--pk)}
+.tr .tp{color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
+.tr .q{justify-content:flex-end}
+.hint{font-size:13px;color:var(--mut);margin-top:4px}
 .inp{width:100%;border:1.5px solid var(--ln);border-radius:12px;padding:11px 12px;font-size:16px;background:var(--cd)}
 .sum{display:flex;justify-content:space-between;padding:5px 0}
 .big{font-size:26px;font-weight:800;color:var(--mr)}
@@ -174,11 +180,12 @@ function start(){
     if(d&&Array.isArray(d.cats)&&d.cats.length){CFG={info:Object.assign({},DEF_INFO,d.info||{}),cats:d.cats,tops:d.tops||[]};ls.set('pos_menu',CFG);ls.set('pos_bank',BANK);drawAll()}
   }).catch(function(){BANK=ls.get('pos_bank',null);toast('Mất mạng: đang dùng menu đã lưu trên máy')});
 }
-function drawAll(){$('shop').textContent=CFG.info.name||'Phéng';if(CAT>=CFG.cats.length)CAT=0;drawCats();drawGrid();drawCart()}
+function drawAll(){$('shop').textContent=CFG.info.name||'Phéng';if(CAT>CFG.cats.length||(CAT===CFG.cats.length&&!CFG.tops.length))CAT=0;drawCats();drawGrid();drawCart()}
 
 /* ---------- Menu ---------- */
 function drawCats(){
-  $('cats').innerHTML='<button class="'+(CAT<0?'on':'')+'" onclick="CAT=-1;drawCats();drawGrid()">Tất cả</button>'+CFG.cats.map(function(c,i){return '<button class="'+(CAT===i?'on':'')+'" onclick="CAT='+i+';drawCats();drawGrid()">'+esc((c.e||'')+' '+c.n)+'</button>'}).join('');
+  $('cats').innerHTML='<button class="'+(CAT<0?'on':'')+'" onclick="CAT=-1;drawCats();drawGrid()">Tất cả</button>'+CFG.cats.map(function(c,i){return '<button class="'+(CAT===i?'on':'')+'" onclick="CAT='+i+';drawCats();drawGrid()">'+esc((c.e||'')+' '+c.n)+'</button>'}).join('')
+    +(CFG.tops.length?'<button class="'+(CAT===CFG.cats.length?'on':'')+'" onclick="CAT='+CFG.cats.length+';drawCats();drawGrid()">🟤 Topping</button>':'');
 }
 function inCart(n){return cart.reduce(function(a,l){return a+(l.n===n?l.q:0)},0)}
 function drawGrid(){
@@ -193,6 +200,12 @@ function drawGrid(){
         +'<b>'+esc(x.n)+'</b><span>'+fmt(x.p)+'</span>'+(n?'<i class="n">'+n+'</i>':'')+'</button>';
     });
   });
+  var TC=CFG.cats.length;
+  if(q||CAT<0||CAT===TC)CFG.tops.forEach(function(t,k){
+    if(q&&plain(t.n).indexOf(q)<0)return;
+    var n=inCart(t.n);
+    h+='<button class="it" onclick="tapTop('+k+')"><div class="ph" style="background:#efe2d3">🟤</div><b>'+esc(t.n)+'</b><span>'+fmt(t.p)+'</span>'+(n?'<i class="n">'+n+'</i>':'')+'</button>';
+  });
   $('grid').innerHTML=h||'<div class="empty">Không có món nào</div>';
 }
 function tapItem(ci,k){
@@ -201,29 +214,36 @@ function tapItem(ci,k){
   if(ST.quick){addLine(l);return}
   cur={l:l,idx:-1};drawItem();
 }
-function same(a,b){return a.n===b.n&&a.p===b.p&&a.s===b.s&&a.ice===b.ice&&a.note===b.note&&JSON.stringify(a.tops)===JSON.stringify(b.tops)}
+function tapTop(k){var t=CFG.tops[k];addLine({n:t.n,p:+t.p||0,t:1,s:100,ice:'Vừa',tops:[],q:1,note:''});toast('Đã thêm '+t.n)}
+function same(a,b){return !a.t===!b.t&&a.n===b.n&&a.p===b.p&&a.s===b.s&&a.ice===b.ice&&a.note===b.note&&JSON.stringify(a.tops)===JSON.stringify(b.tops)}
 function addLine(l){for(var i=0;i<cart.length;i++)if(same(cart[i],l)){cart[i].q+=l.q;afterCart();return}cart.push(l);afterCart()}
 function afterCart(){drawCart();drawGrid()}
-function unit(l){return l.p+l.tops.reduce(function(a,t){return a+t.p},0)}
+function tq(t){return t.q||1}
+function unit(l){return l.p+l.tops.reduce(function(a,t){return a+t.p*tq(t)},0)}
 function lineTotal(l){return unit(l)*l.q}
 function sub(){return cart.reduce(function(a,l){return a+lineTotal(l)},0)}
-function desc(l){var a=[];if(l.s!==100)a.push(l.s+'% đường');if(l.ice!=='Vừa')a.push(l.ice.toLowerCase());l.tops.forEach(function(t){a.push('+'+t.n)});if(l.note)a.push(l.note);return a.join(', ')}
+function desc(l){var a=[];if(l.t)return l.note||'';if(l.s!==100)a.push(l.s+'% đường');if(l.ice!=='Vừa')a.push(l.ice.toLowerCase());l.tops.forEach(function(t){a.push('+'+(tq(t)>1?tq(t)+' ':'')+t.n)});if(l.note)a.push(l.note);return a.join(', ')}
 
 /* ---------- Chọn tuỳ chọn món ---------- */
 function show(h){$('sheet').innerHTML=h;$('mask').style.display='flex'}
 function closeSheet(){$('mask').style.display='none';cur=null}
 function drawItem(){
   var l=cur.l,h='<h3>'+esc(l.n)+'</h3><div style="color:var(--mut)">'+fmt(l.p)+'</div>';
+  if(!l.t){
   h+='<div class="lb">Đường</div><div class="ch">'+SUGAR.map(function(s){return '<button class="'+(l.s===s?'on':'')+'" onclick="cur.l.s='+s+';drawItem()">'+s+'%</button>'}).join('')+'</div>';
   h+='<div class="lb">Đá</div><div class="ch">'+ICE.map(function(s,i){return '<button class="'+(l.ice===s?'on':'')+'" onclick="cur.l.ice=ICE['+i+'];drawItem()">'+s+'</button>'}).join('')+'</div>';
-  if(CFG.tops.length)h+='<div class="lb">Topping</div><div class="ch">'+CFG.tops.map(function(t,i){var on=l.tops.some(function(x){return x.n===t.n});return '<button class="'+(on?'on':'')+'" onclick="togTop('+i+')">'+esc(t.n)+' +'+t.p+'k</button>'}).join('')+'</div>';
+  if(CFG.tops.length)h+='<div class="lb">Topping</div><div class="tl">'+CFG.tops.map(function(t,i){var n=topN(t.n);return '<div class="tr'+(n?' on':'')+'"><span>'+esc(t.n)+'</span><span class="tp">+'+fmt(t.p)+'</span><div class="q"><button onclick="topAdd('+i+',-1)" '+(n?'':'style="visibility:hidden"')+'>−</button><b>'+(n||'')+'</b><button onclick="topAdd('+i+',1)">+</button></div></div>'}).join('')+'</div>';
+  }
   h+='<div class="lb">Ghi chú</div><input class="inp" placeholder="Ví dụ: ly lớn, không lấy ống hút" value="'+esc(l.note)+'" oninput="cur.l.note=this.value">';
   h+='<div class="lb">Số lượng</div><div class="q"><button onclick="cur.l.q=Math.max(1,cur.l.q-1);drawItem()">−</button><b>'+l.q+'</b><button onclick="cur.l.q++;drawItem()">+</button></div>';
   h+='<div class="acts">'+(cur.idx>=0?'<button class="btn o" onclick="cart.splice(cur.idx,1);closeSheet();afterCart()">Xoá món</button>':'<button class="btn o" onclick="closeSheet()">Huỷ</button>')
     +'<button class="btn" onclick="saveItem()">'+(cur.idx>=0?'Lưu':'Thêm')+' · '+fmt(lineTotal(l))+'</button></div>';
   show(h);
 }
-function togTop(i){var t=CFG.tops[i],a=cur.l.tops,p=-1;a.forEach(function(x,j){if(x.n===t.n)p=j});if(p>-1)a.splice(p,1);else a.push({n:t.n,p:+t.p||0});drawItem()}
+function topN(n){var x=cur.l.tops.filter(function(t){return t.n===n})[0];return x?tq(x):0}
+function topAdd(i,d){var t=CFG.tops[i],a=cur.l.tops,p=-1;a.forEach(function(x,j){if(x.n===t.n)p=j});
+  if(p<0){if(d>0)a.push({n:t.n,p:+t.p||0,q:1})}else{a[p].q=tq(a[p])+d;if(a[p].q<1)a.splice(p,1)}
+  var y=$('sheet').scrollTop;drawItem();$('sheet').scrollTop=y}
 function saveItem(){cur.l.note=cur.l.note.trim();if(cur.idx>=0)cart[cur.idx]=cur.l;else addLine(cur.l);closeSheet();afterCart()}
 function editLine(i){cur={l:JSON.parse(JSON.stringify(cart[i])),idx:i};drawItem()}
 function qty(i,d){cart[i].q+=d;if(cart[i].q<1)cart.splice(i,1);afterCart();if($('mask').style.display==='flex'&&$('cartSheet'))openCart()}
@@ -233,7 +253,7 @@ function cartHtml(){
   var h='<div class="hd"><span>Đơn hiện tại ('+cart.reduce(function(a,l){return a+l.q},0)+')</span>'+(cart.length?'<button onclick="if(confirm(\'Xoá hết món trong đơn?\')){cart=[];afterCart();closeSheet()}">Xoá hết</button>':'')+'</div><div id="lines">';
   if(!cart.length)h+='<div class="empty">Chưa có món.<br>Bấm vào món bên menu để thêm.</div>';
   cart.forEach(function(l,i){
-    h+='<div class="ln"><div class="t" onclick="editLine('+i+')"><b>'+esc(l.n)+'</b><small>'+esc(desc(l)||'Bình thường')+'</small><small>'+fmt(unit(l))+'</small></div>'
+    h+='<div class="ln"><div class="t" onclick="editLine('+i+')"><b>'+esc(l.n)+'</b><small>'+esc(desc(l)||(l.t?'Topping mua riêng':'Bình thường'))+'</small><small>'+fmt(unit(l))+'</small></div>'
       +'<div><div class="p">'+fmt(lineTotal(l))+'</div><div class="q" style="margin-top:6px"><button onclick="qty('+i+',-1)">−</button><b>'+l.q+'</b><button onclick="qty('+i+',1)">+</button></div></div></div>';
   });
   h+='</div><div class="ft"><div class="tot"><span>Tổng</span><span>'+fmt(sub())+'</span></div>'
@@ -249,6 +269,7 @@ function openCart(){show('<div id="cartSheet" style="display:flex;flex-direction
 
 /* ---------- Thanh toán ---------- */
 var PAY={disc:0,given:0,who:''};
+function money(v){v=+String(v).replace(/[^0-9]/g,'')||0;return v>=1000?v/1000:v}
 function total(){return Math.max(0,sub()-(+PAY.disc||0))}
 function openPay(){PAY={disc:0,given:0,who:''};payM='cash';drawPay()}
 function quickCash(t){var a=[t],r=Math.ceil(t/10)*10;if(r>t)a.push(r);[50,100,200,500].forEach(function(v){if(v>t&&a.indexOf(v)<0)a.push(v)});return a.slice(0,5)}
@@ -258,22 +279,30 @@ function qrUrl(amountK,note){if(!BANK)return '';return 'https://qr.sepay.vn/img?
 function drawPay(){
   var t=total(),h='<h3>Thanh toán</h3>';
   h+='<div class="sum"><span>Tạm tính</span><b>'+fmt(sub())+'</b></div>';
-  h+='<div class="sum" style="align-items:center"><span>Giảm giá (nghìn đồng)</span><input class="inp" style="width:110px;text-align:right" type="number" inputmode="numeric" min="0" value="'+(PAY.disc||'')+'" placeholder="0" onchange="PAY.disc=Math.max(0,+this.value||0);drawPay()"></div>';
-  h+='<div class="sum"><span style="font-weight:700">Khách phải trả</span><span class="big">'+fmt(t)+'</span></div>';
+  h+='<div class="sum" style="align-items:center"><span>Giảm giá</span><input id="dc" class="inp" style="width:140px;text-align:right" inputmode="numeric" value="'+(PAY.disc?fmt(PAY.disc):'')+'" placeholder="0đ" onfocus="this.select()" oninput="PAY.disc=money(this.value);payLive()"></div>';
+  h+='<div class="sum"><span style="font-weight:700">Khách phải trả</span><span class="big" id="tt">'+fmt(t)+'</span></div>';
   h+='<div class="lb">Hình thức</div><div class="ch"><button class="'+(payM==='cash'?'on':'')+'" onclick="payM=\'cash\';drawPay()">💵 Tiền mặt</button><button class="'+(payM==='bank'?'on':'')+'" onclick="payM=\'bank\';drawPay()">🏦 Chuyển khoản</button></div>';
   if(payM==='cash'){
-    h+='<div class="lb">Khách đưa</div><div class="ch">'+quickCash(t).map(function(v){return '<button class="'+(PAY.given===v?'on':'')+'" onclick="PAY.given='+v+';drawPay()">'+fmt(v)+'</button>'}).join('')+'</div>';
-    h+='<input class="inp" style="margin-top:8px" type="number" inputmode="numeric" placeholder="Số khác (nghìn đồng), ví dụ 150" value="'+(PAY.given&&quickCash(t).indexOf(PAY.given)<0?PAY.given:'')+'" onchange="PAY.given=Math.max(0,+this.value||0);drawPay()">';
-    if(PAY.given)h+='<div class="sum" style="margin-top:8px"><span>Tiền thối</span><span class="big" style="color:'+(PAY.given>=t?'var(--ok)':'var(--mr)')+'">'+(PAY.given>=t?fmt(PAY.given-t):'Thiếu '+fmt(t-PAY.given))+'</span></div>';
+    h+='<div class="lb">Khách đưa</div><div class="ch" id="qc"></div>';
+    h+='<input id="gi" class="inp" style="margin-top:8px" inputmode="numeric" placeholder="Số khác, ví dụ 150000" value="" onfocus="this.select()" oninput="PAY.given=money(this.value);payLive()">';
+    h+='<div class="hint">Gõ đủ số tiền (150000) hoặc gõ tắt (150) đều được</div>';
+    h+='<div class="sum" style="margin-top:8px"><span>Tiền thối</span><span class="big" id="chg"></span></div>';
   }else{
     var u=qrUrl(t,transferNote(noNext()));
     h+=u?'<div class="qrbox"><img src="'+u+'" alt="Mã QR"><div style="font-size:13px;color:var(--mut)">'+esc(BANK.bank)+' · '+esc(BANK.acc)+' · '+esc(BANK.holder||'')+'<br>Nội dung: <b>'+esc(transferNote(noNext()))+'</b></div></div><div style="font-size:13px;color:var(--mut)">Kiểm tra app ngân hàng thấy tiền vào rồi mới bấm hoàn tất.</div>':'<div class="empty">Chưa lấy được thông tin tài khoản (cần mạng).</div>';
   }
   h+='<div class="lb">Tên khách / số bàn (không bắt buộc)</div><input class="inp" value="'+esc(PAY.who)+'" oninput="PAY.who=this.value">';
-  var bad=payM==='cash'&&PAY.given&&PAY.given<t;
-  h+='<div class="acts"><button class="btn o" '+(bad?'disabled':'')+' onclick="finish(false)">Hoàn tất, không in</button><button class="btn g" '+(bad?'disabled':'')+' onclick="finish(true)">🖨️ Hoàn tất & in bill</button></div>';
+  h+='<div class="acts"><button class="btn o pf" onclick="finish(false)">Hoàn tất, không in</button><button class="btn g pf" onclick="finish(true)">🖨️ Hoàn tất & in bill</button></div>';
   h+='<button class="btn o" style="width:100%;margin-top:8px;border-color:var(--ln);color:var(--mut)" onclick="closeSheet()">Quay lại</button>';
-  show(h);
+  show(h);payLive();
+}
+// Cập nhật tiền phải trả / tiền thối ngay khi gõ, không vẽ lại cả khung (để không mất chữ đang gõ)
+function payLive(){
+  var t=total();$('tt').textContent=fmt(t);
+  var qc=$('qc');if(qc)qc.innerHTML=quickCash(t).map(function(v){return '<button class="'+(PAY.given===v?'on':'')+'" onclick="PAY.given='+v+';var g=$(\'gi\');if(g)g.value=\'\';payLive()">'+fmt(v)+'</button>'}).join('');
+  var c=$('chg'),bad=payM==='cash'&&PAY.given>0&&PAY.given<t;
+  if(c){c.textContent=!PAY.given?'—':PAY.given>=t?fmt(PAY.given-t):'Thiếu '+fmt(t-PAY.given);c.style.color=bad?'var(--mr)':'var(--ok)'}
+  [].forEach.call(document.querySelectorAll('.pf'),function(b){b.disabled=bad});
 }
 function dayKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function hist(){return ls.get('pos_orders',[])}
