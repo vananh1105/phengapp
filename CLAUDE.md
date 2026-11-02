@@ -13,5 +13,5 @@
 - `public/index.html`: trang khách đặt đơn.
 - `public/don.html`: trang quản lý đơn của quán (chuông và giọng đọc "Có đơn hàng mới" là file `public/don-moi.mp3`).
 - `public/sw.js`: service worker hiện thông báo đẩy.
-- `netlify/functions/`: API (`order`, `orders`, `push`, `remind` nhắc lại mỗi phút, `config`, `upload`, `img`).
+- `netlify/functions/`: API (`order` nhận đơn và cho khách tra lại đơn, `orders`, `push`, `config`, `upload`, `img`).
 - `netlify/lib/push.mjs`: gửi Web Push (VAPID).

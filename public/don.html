@@ -91,7 +91,7 @@ function ppRefresh(){if(pSup()&&Notification.permission==='granted')ppSub().catc
 function tab(t){cur=t;draw()}
 function upd(){var n=O.filter(function(o){return o.s==='new'}).length;$('pn').textContent=n+' chờ';var on=n>0&&!muted;ring(on);document.body.className=n>0?'alert':'';document.title=(n>0?'('+n+') ĐƠN MỚI · ':'')+'Đơn hàng'}
 function hm(a){var d=new Date(a);return d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})}
-function card(o){var h='<div class="o '+(o.s==='new'?'n':'')+'"><div class="oh"><span>'+esc(o.name||'Khách')+' · <a href="tel:'+esc(o.phone||'')+'">'+esc(o.phone||'')+'</a></span><small>'+hm(o.at)+(o.total?' · '+fmt(o.total):'')+'</small></div><pre>'+esc(o.t)+'</pre>';
+function card(o){var h='<div class="o '+(o.s==='new'?'n':'')+'"><div class="oh"><span>#'+esc(String(o.id).slice(-6).toUpperCase())+' · '+esc(o.name||'Khách')+' · <a href="tel:'+esc(o.phone||'')+'">'+esc(o.phone||'')+'</a></span><small>'+hm(o.at)+(o.total?' · '+fmt(o.total):'')+'</small></div><pre>'+esc(o.t)+'</pre>';
 if(o.s==='new')h+='<button class="big rd" onclick="setS(\''+o.id+'\',\'doing\')">Đã nhận đơn</button>';
 else if(o.s==='doing')h+='<div class="row"><button class="gr" onclick="setS(\''+o.id+'\',\'done\')">Hoàn thành</button><button class="g" onclick="cp(\''+o.id+'\')">Sao chép</button></div>';
 else h+='<div class="row"><button class="g" onclick="cp(\''+o.id+'\')">Sao chép</button><button class="g" onclick="setS(\''+o.id+'\',\'doing\')">Mở lại</button></div>';

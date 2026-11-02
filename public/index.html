@@ -50,6 +50,8 @@ button.tile.on{outline:2px solid var(--mr)}
 .bar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:8;background:linear-gradient(transparent,var(--bg) 30%)}
 .btn{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:640px;margin:0 auto;border:0;border-radius:99px;background:var(--mr);color:#fff;padding:14px 22px;font:600 15px "Be Vietnam Pro",sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(110,15,34,.3)}
 .btn[disabled]{opacity:.5;box-shadow:none}
+.mo{display:block;margin:0 auto 8px;border:1.5px solid var(--mr);border-radius:99px;background:var(--cd);color:var(--mr);padding:7px 16px;font:600 13px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.mi{background:var(--cd);border-radius:14px;padding:12px;margin:10px 0}.mi .mh{display:flex;justify-content:space-between;gap:8px;font-weight:600}.mi small{color:var(--mut);font-weight:500}.mi pre{background:var(--bg)}
 .ov{position:fixed;inset:0;background:rgba(30,10,14,.5);z-index:20;display:none;align-items:flex-end}
 .ov.show{display:flex}
 .sheet{background:var(--bg);width:100%;max-width:640px;margin:0 auto;max-height:90%;overflow-y:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
@@ -153,7 +155,7 @@ input[type=file]{padding:9px}
   <div class="foot" id="ft"></div>
 </main>
 
-<div class="bar"><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
+<div class="bar"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
 
 <script>
@@ -315,14 +317,29 @@ function finish(){
   done=m;if(giftUse&&giftUse.fromSaved)dropGift();sendOrder(m,nm,ph,TT);
   show('<h3>Đơn của bạn</h3><p id="sst" style="font-weight:600">Đang gửi đơn đến quán...</p><p style="color:var(--mut)">Nếu quán chưa phản hồi, bạn sao chép đơn gửi qua Zalo hoặc gọi '+esc(CFG.info.phone)+'.</p><pre id="msg">'+esc(m)+'</pre><div class="sec2"><button class="btn o" onclick="copyMsg(this)">Sao chép đơn</button><a class="btn" href="https://zalo.me/'+esc(CFG.info.zalo)+'" target="_blank" rel="noopener">Mở Zalo</a></div><button class="btn o" style="margin-top:8px;justify-content:center" onclick="cart=[];giftReset();upd();closeSheet()">Đặt đơn mới</button>');
 }
-function sendOrder(m,nm,ph,tt){var e=function(t){var x=$('sst');if(x)x.textContent=t};fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph,total:tt})}).then(function(r){e(r.ok?'Đã gửi đơn đến quán ✓':'Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.')}).catch(function(){e('Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.')})}
+function sendOrder(m,nm,ph,tt){var e=function(t){var x=$('sst');if(x)x.textContent=t};var rec={t:m,ph:ph,total:tt,at:new Date().toISOString(),ok:0};
+var fail=function(){e('Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.');myAdd(rec)};
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph,total:tt})}).then(function(r){if(!r.ok)return fail();return r.json().catch(function(){return {}}).then(function(d){rec.ok=1;if(d&&d.id){rec.id=d.id;rec.code=d.code}e('Đã gửi đơn đến quán ✓'+(rec.code?' · Mã đơn #'+rec.code:''));myAdd(rec)})}).catch(fail)}
+// Lưu các đơn khách đã đặt trên máy của khách để xem lại
+var MYK='my_orders';
+function myGet(){try{var l=JSON.parse(localStorage.getItem(MYK)||'[]');return Array.isArray(l)?l:[]}catch(e){return []}}
+function mySet(l){try{localStorage.setItem(MYK,JSON.stringify(l.slice(0,30)))}catch(e){}myBtn()}
+function myAdd(r){var l=myGet();l.unshift(r);mySet(l)}
+function myBtn(){var b=$('mo'),n=myGet().length;if(!b)return;b.style.display=n?'block':'none';b.textContent='📋 Đơn đã đặt ('+n+')'}
+var ST={new:'⏳ Chờ quán nhận',doing:'🧋 Quán đang làm',done:'✅ Đã xong'};
+function myOrders(){var l=myGet();var h='<h3>Đơn bạn đã đặt</h3>';if(!l.length)h+='<p style="color:var(--mut)">Chưa có đơn nào trên máy này.</p>';
+l.forEach(function(r,i){var d=new Date(r.at);h+='<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div id="ms'+i+'" style="font-size:14px;margin-top:4px;color:var(--mut)">'+(r.ok?(r.id?'Đang xem trạng thái…':'Đã gửi đến quán'):'❌ Chưa gửi được, hãy gửi qua Zalo')+'</div><pre>'+esc(r.t)+'</pre><button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'});
+if(l.length)h+='<button class="btn o" style="margin-top:8px" onclick="if(confirm(\'Xóa lịch sử đơn trên máy này?\')){mySet([]);closeSheet()}">Xóa lịch sử trên máy này</button>';
+h+='<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h);
+l.forEach(function(r,i){if(!r.id)return;fetch('/api/order?id='+encodeURIComponent(r.id)+'&phone='+encodeURIComponent(r.ph||''),{cache:'no-store'}).then(function(x){return x.ok?x.json():null}).then(function(d){var e=$('ms'+i);if(!e)return;e.textContent=d?(ST[d.s]||d.s):'Không tra được trạng thái, bạn gọi quán giúp nhé';if(d&&d.s==='done')e.style.color='var(--mr)'}).catch(function(){var e=$('ms'+i);if(e)e.textContent='Không xem được trạng thái (mất mạng?)'})})}
+function myCopy(i,b){var r=myGet()[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
 function copyMsg(b){
   var ok=function(){b.textContent='Đã sao chép'};
   try{navigator.clipboard.writeText(done).then(ok,fb)}catch(e){fb()}
   function fb(){var r=document.createRange();r.selectNodeContents($('msg'));var s=getSelection();s.removeAllRanges();s.addRange(r);try{document.execCommand('copy');ok()}catch(e){}}
 }
 var PW='';try{PW=localStorage.getItem('pw')||''}catch(e){}
-build();upd();
+build();upd();myBtn();
 if(location.hash==='#admin')$('adm').style.display='';
 fetch('/api/config').then(function(r){return r.ok?r.json():{}}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build()}}).catch(function(){});
 function endIntro(){var e=$('intro');if(!e||e.className==='out')return;e.className='out';setTimeout(function(){e.remove()},700);try{sessionStorage.setItem('seen','1')}catch(x){}}
