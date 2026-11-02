@@ -78,13 +78,6 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 .br .tk i{display:block;height:100%;background:var(--mr);border-radius:0 4px 4px 0;min-width:2px}
 .br .v{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;white-space:nowrap}
 .br .v small{font-weight:400;color:var(--mut)}
-.tb{width:100%;border-collapse:collapse;font-size:14px}
-.tb th{text-align:left;color:var(--mut);font-weight:600;font-size:12px;padding:6px 4px;border-bottom:1px solid var(--ln)}
-.tb td{padding:7px 4px;border-bottom:1px dashed var(--ln);vertical-align:middle}
-.tb .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.tag{display:inline-block;border-radius:99px;padding:2px 8px;font-size:12px;font-weight:600;white-space:nowrap}
-.tag.hot{background:#fde3d6;color:#9a3412}.tag.ok{background:#e2efe8;color:#1f6b4a}.tag.slow{background:#fdf2cc;color:#7a5a00}.tag.none{background:#eee;color:#666}
-.tblw{overflow-x:auto}
 .inp{width:100%;border:1.5px solid var(--ln);border-radius:12px;padding:11px 12px;font-size:16px;background:var(--cd)}
 .sum{display:flex;justify-content:space-between;padding:5px 0}
 .big{font-size:26px;font-weight:800;color:var(--mr)}
@@ -386,53 +379,40 @@ function printOrder(o,reprint){
 function printTemp(){if(!cart.length)return;doPrint(billHtml({at:Date.now(),lines:cart,sub:sub(),disc:0,total:sub(),who:''},true))}
 
 /* ---------- Số liệu bán hàng ---------- */
-var SP='today';
-var PERIODS=[['today','Hôm nay'],['yday','Hôm qua'],['7','7 ngày'],['30','30 ngày'],['month','Tháng này']];
+var SP='today',SM=0; // SM: số tháng lùi lại (0 = tháng này)
+var PERIODS=[['today','Hôm nay'],['yday','Hôm qua'],['7','7 ngày'],['month','Tháng này']];
 function periodRange(k){var d=new Date(),to=dayKey(d),from=to;
   if(k==='yday'){d.setDate(d.getDate()-1);from=to=dayKey(d)}
-  else if(k==='7'||k==='30'){var a=new Date();a.setDate(a.getDate()-(+k-1));from=dayKey(a)}
+  else if(k==='7'){var a=new Date();a.setDate(a.getDate()-6);from=dayKey(a)}
   else if(k==='month'){from=to.slice(0,8)+'01'}
   return [from,to]}
-function catOf(l){if(l.c)return l.c;for(var i=0;i<CFG.cats.length;i++)if(CFG.cats[i].i.some(function(x){return x.n===l.n}))return CFG.cats[i].n;return 'Khác'}
-function stats(k){
-  var r=periodRange(k),O=hist().filter(function(o){return !o.void&&o.day>=r[0]&&o.day<=r[1]});
-  var S={orders:O.length,rev:0,cups:0,tops:0,items:{},cats:{},topsM:{}};
-  O.forEach(function(o){S.rev+=o.total;o.lines.forEach(function(l){
-    if(l.t){S.tops+=l.q;S.topsM[l.n]=(S.topsM[l.n]||0)+l.q;return}
-    var c=catOf(l),key=l.n,it=S.items[key]||(S.items[key]={n:l.n,c:c,q:0,rev:0});
-    it.q+=l.q;it.rev+=lineTotal(l);S.cups+=l.q;S.cats[c]=(S.cats[c]||0)+l.q;
-    l.tops.forEach(function(t){var n=tq(t)*l.q;S.tops+=n;S.topsM[t.n]=(S.topsM[t.n]||0)+n});
+// Trọn một tháng dương lịch (28–31 ngày tùy tháng)
+function monthRange(back){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-back);var e=new Date(d.getFullYear(),d.getMonth()+1,0);return [dayKey(d),dayKey(e),d,e.getDate()]}
+function ordersIn(r){return hist().filter(function(o){return !o.void&&o.day>=r[0]&&o.day<=r[1]})}
+function summary(O){var S={orders:O.length,rev:0,cups:0,tops:0};
+  O.forEach(function(o){S.rev+=o.total;o.lines.forEach(function(l){if(l.t){S.tops+=l.q;return}S.cups+=l.q;l.tops.forEach(function(t){S.tops+=tq(t)*l.q})})});return S}
+function top5(O){var I={},T={};
+  O.forEach(function(o){o.lines.forEach(function(l){
+    if(l.t){T[l.n]=(T[l.n]||0)+l.q;return}
+    I[l.n]=(I[l.n]||0)+l.q;
+    l.tops.forEach(function(t){T[t.n]=(T[t.n]||0)+tq(t)*l.q});
   })});
-  // Món trong menu chưa bán cũng phải có mặt trong bảng
-  CFG.cats.forEach(function(c){c.i.forEach(function(x){if(!x.off&&!S.items[x.n])S.items[x.n]={n:x.n,c:c.n,q:0,rev:0}})});
-  var L=Object.keys(S.items).map(function(k){return S.items[k]}).sort(function(a,b){return b.q-a.q||b.rev-a.rev||a.n.localeCompare(b.n)});
-  var sold=L.filter(function(x){return x.q>0}),avg=sold.length?S.cups/sold.length:0;
-  L.forEach(function(x,i){x.tag=x.q===0?'none':(i<5&&x.q>=avg)?'hot':(x.q<avg*0.4)?'slow':'ok'});
-  S.list=L;S.range=r;return S}
-var TAGS={hot:'🔥 Bán chạy',ok:'Đang bán',slow:'Bán chậm',none:'Chưa bán'};
-function barList(rows,max,unit){return '<div class="bars">'+rows.map(function(x){var w=max?Math.round(x.v/max*100):0;
-  return '<div class="br" title="'+esc(x.n)+': '+x.v+' '+unit+'"><div class="nm">'+esc(x.n)+(x.s?' <small>'+esc(x.s)+'</small>':'')+'</div><div class="tk"><i style="width:'+w+'%"></i></div><div class="v">'+x.v+' <small>'+unit+(x.p!=null?' · '+x.p+'%':'')+'</small></div></div>'}).join('')+'</div>'}
-function openStats(){drawStats()}
+  var f=function(M){return Object.keys(M).map(function(k){return {n:k,v:M[k]}}).sort(function(a,b){return b.v-a.v||a.n.localeCompare(b.n)}).slice(0,5)};
+  return {items:f(I),tops:f(T)}}
+function rankList(rows,unit,empty){if(!rows.length)return '<div class="hint">'+empty+'</div>';var max=rows[0].v;
+  return '<div class="bars">'+rows.map(function(x,i){var w=Math.round(x.v/max*100);
+  return '<div class="br" title="'+esc(x.n)+': '+x.v+' '+unit+'"><div class="nm">'+(i+1)+'. '+esc(x.n)+'</div><div class="tk"><i style="width:'+w+'%"></i></div><div class="v">'+x.v+' <small>'+unit+'</small></div></div>'}).join('')+'</div>'}
+function openStats(){SM=0;drawStats()}
 function drawStats(){
-  var S=stats(SP),h='<h3>Số liệu bán hàng</h3>';
-  var f=new Date(S.range[0]+'T00:00'),t=new Date(S.range[1]+'T00:00');
+  var r=periodRange(SP),S=summary(ordersIn(r)),h='<h3>Số liệu bán hàng</h3>';
+  var f=new Date(r[0]+'T00:00'),t=new Date(r[1]+'T00:00');
   h+='<div class="ch" style="margin-top:8px">'+PERIODS.map(function(p){return '<button class="'+(SP===p[0]?'on':'')+'" onclick="SP=\''+p[0]+'\';drawStats()">'+p[1]+'</button>'}).join('')+'</div>';
-  h+='<div class="hint">'+(S.range[0]===S.range[1]?f.toLocaleDateString('vi-VN'):f.toLocaleDateString('vi-VN')+' – '+t.toLocaleDateString('vi-VN'))+' · không tính đơn đã huỷ</div>';
+  h+='<div class="hint">'+(r[0]===r[1]?f.toLocaleDateString('vi-VN'):f.toLocaleDateString('vi-VN')+' – '+t.toLocaleDateString('vi-VN'))+' · không tính đơn đã huỷ</div>';
   h+='<div class="stat" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))"><div><b>'+S.cups+'</b>Ly đã bán</div><div><b>'+fmt(S.rev)+'</b>Doanh thu</div><div><b>'+S.orders+'</b>Đơn</div><div><b>'+S.tops+'</b>Phần topping</div></div>';
-  if(!S.orders){h+='<div class="empty">Chưa có đơn nào trong khoảng này.<br>Bán xong đơn đầu tiên là số liệu hiện ở đây.</div>'}
-  else{
-    var C=Object.keys(S.cats).map(function(k){return {n:k,v:S.cats[k]}}).sort(function(a,b){return b.v-a.v});
-    C.forEach(function(x){x.p=Math.round(x.v/S.cups*100)});
-    h+='<div class="sec"><h4>Theo loại</h4>'+barList(C,C.length?C[0].v:0,'ly')+'</div>';
-    var top=S.list.filter(function(x){return x.q>0}).slice(0,10);
-    h+='<div class="sec"><h4>Bán chạy nhất</h4>'+barList(top.map(function(x,i){return {n:(i+1)+'. '+x.n,s:x.c,v:x.q}}),top.length?top[0].q:0,'ly')+'</div>';
-    h+='<div class="sec"><h4>Tổng kết từng món</h4><div class="hint" style="margin:-4px 0 8px">🔥 Bán chạy: 5 món nhiều ly nhất (và trên mức trung bình). Bán chậm: dưới 40% mức trung bình '+(Math.round(S.cups/Math.max(1,S.list.filter(function(x){return x.q>0}).length)*10)/10)+' ly/món. Chưa bán: 0 ly.</div>'
-      +'<div class="tblw"><table class="tb"><thead><tr><th>#</th><th>Món</th><th class="n">Ly</th><th class="n">Tiền</th><th>Đánh giá</th></tr></thead><tbody>'
-      +S.list.map(function(x,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(x.n)+'<br><small style="color:var(--mut)">'+esc(x.c)+'</small></td><td class="n"><b>'+x.q+'</b></td><td class="n">'+fmt(x.rev)+'</td><td><span class="tag '+x.tag+'">'+TAGS[x.tag]+'</span></td></tr>'}).join('')
-      +'</tbody></table></div><div class="hint">Tiền của mỗi món đã gồm topping thêm vào ly, chưa trừ giảm giá cả đơn.</div></div>';
-    var T=Object.keys(S.topsM).map(function(k){return {n:k,v:S.topsM[k]}}).sort(function(a,b){return b.v-a.v});
-    if(T.length)h+='<div class="sec"><h4>Topping</h4>'+barList(T,T[0].v,'phần')+'</div>';
-  }
+  var m=monthRange(SM),T=top5(ordersIn(m)),mn='Tháng '+(m[2].getMonth()+1)+'/'+m[2].getFullYear();
+  h+='<div class="sec"><div class="sum" style="align-items:center"><button class="btn o" style="min-height:38px;padding:6px 14px" onclick="SM++;drawStats()">‹</button><div style="text-align:center"><b>'+mn+'</b><div class="hint" style="margin:0">'+m[3]+' ngày'+(SM===0?' · tính đến hôm nay':'')+'</div></div><button class="btn o" style="min-height:38px;padding:6px 14px" '+(SM?'':'disabled')+' onclick="SM--;drawStats()">›</button></div></div>';
+  h+='<div class="sec"><h4>🔥 5 món bán chạy nhất</h4>'+rankList(T.items,'ly','Tháng này chưa bán ly nào.')+'</div>';
+  h+='<div class="sec"><h4>🟤 5 topping bán chạy nhất</h4>'+rankList(T.tops,'phần','Tháng này chưa bán topping nào.')+'</div>';
   h+='<button class="btn" style="width:100%;margin-top:16px" onclick="closeSheet()">Đóng</button>';
   show(h,true);
 }
