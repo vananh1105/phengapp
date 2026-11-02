@@ -3,11 +3,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bán hàng · Phéng</title>
 <link rel="manifest" href="/manifest-ban.webmanifest">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="/ban-icon-180.png">
 <meta name="theme-color" content="#1F63C9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Bán hàng">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coiny&family=Nunito:wght@500;700;800&display=swap">
 <style id="pg">@page{margin:0}</style>
@@ -80,6 +81,17 @@ header button{border:0;border-radius:12px;background:var(--blue2);color:var(--cr
 #sheet{background:var(--cd);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px max(18px,env(safe-area-inset-bottom))}
 #sheet h3{margin:0 0 4px;font:400 24px/1.15 var(--disp);color:var(--ink)}
 .sheetcat{display:block;width:92px;height:92px;margin:-6px auto 4px}
+.inst{grid-column:1/-1;display:flex;align-items:center;gap:10px;background:var(--cream);border-radius:16px;padding:8px 10px;margin-bottom:10px;box-shadow:0 0 0 2px var(--black)}
+.inst svg{width:42px;height:42px;flex:none}
+.inst div{flex:1;min-width:0;font-size:14px;line-height:1.25}.inst div b{display:block;font-size:15px}
+.inst .go{border:0;border-radius:12px;background:var(--red);color:var(--cream);font-weight:800;padding:10px 12px;white-space:nowrap}
+.inst .x{border:0;background:none;color:var(--mut);font-size:20px;padding:4px 6px}
+.steps{display:grid;gap:10px;margin:12px 0;padding:0;list-style:none;counter-reset:st}
+.steps li{display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px;align-items:start;counter-increment:st;background:var(--cream);border-radius:14px;padding:10px 12px;font-size:15px}
+.steps li:before{content:counter(st);width:28px;height:28px;border-radius:50%;background:var(--blue);color:var(--cream);display:grid;place-items:center;font-weight:800}
+.ico{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#fff;box-shadow:0 0 0 1px var(--ln);vertical-align:middle;margin:0 2px}
+.ico svg{width:20px;height:20px}
+.warn{background:#FDECC8;border-radius:12px;padding:10px 12px;font-size:14px;margin-top:6px}
 .lb{margin:14px 0 6px;font-weight:800;font-size:13px;color:var(--mut)}
 .ch{display:flex;flex-wrap:wrap;gap:6px}
 .ch button{border:1.5px solid var(--ln);background:var(--cd);border-radius:99px;padding:9px 13px;font-size:14px;font-weight:700}
@@ -219,6 +231,7 @@ header button{border:0;border-radius:12px;background:var(--blue2);color:var(--cr
   <input id="pw" class="inp" type="password" placeholder="Mật khẩu" onkeydown="if(event.key==='Enter')login()">
   <div id="lgErr"></div>
   <button class="btn" onclick="login()">Vào bán hàng</button>
+  <button class="btn o" id="instL" style="display:none" onclick="openInstall()">📲 Cài vào màn hình</button>
 </div></div>
 
 <div id="app">
@@ -230,7 +243,7 @@ header button{border:0;border-radius:12px;background:var(--blue2);color:var(--cr
     <button onclick="openHist()">📋 <span class="tx">Đơn</span></button>
     <button onclick="openSet()">⚙️</button>
   </header>
-  <main id="menu"><div id="cats"></div><div class="grid" id="grid"></div></main>
+  <main id="menu"><div class="inst" id="inst" style="display:none"><svg aria-hidden="true"><use href="#p-peek"/></svg><div><b>Cài app Bán hàng</b>Mở nhanh, toàn màn hình</div><button class="go" onclick="openInstall()">📲 Cài</button><button class="x" aria-label="Ẩn" onclick="hideInst()">✕</button></div><div id="cats"></div><div class="grid" id="grid"></div></main>
   <aside id="cart"></aside>
 </div>
 <div id="bar"></div>
@@ -647,6 +660,7 @@ function openSet(){
   h+='<div class="lb">Dòng cuối bill</div><input class="inp" value="'+esc(ST.foot)+'" onchange="ST.foot=this.value;ls.set(\'pos_set\',ST)">';
   h+='<div class="acts"><button class="btn o" onclick="doPrint(billHtml({no:0,at:Date.now(),lines:[{n:\'Trà Sữa (in thử)\',p:20,s:50,ice:\'Ít đá\',tops:[{n:\'Trân Châu\',p:5}],q:2,note:\'\'}],sub:50,disc:0,total:50,m:\'cash\',given:100,change:50,who:\'\'},false))">🖨️ In thử</button>'
     +'<a class="btn o" style="text-decoration:none;display:grid;place-items:center" href="/#admin" target="_blank">✏️ Sửa menu, giá</a></div>';
+  if(!isStandalone())h+='<button class="btn o" style="width:100%;margin-top:10px" onclick="openInstall()">📲 Cài phần mềm vào màn hình</button>';
   h+='<div class="acts"><button class="btn o" onclick="reloadMenu()">🔄 Tải lại menu</button><button class="btn o" onclick="logout()">Đăng xuất</button></div>';
   h+='<button class="btn" style="width:100%;margin-top:12px" onclick="closeSheet()">Xong</button>';
   show(h);
@@ -654,8 +668,45 @@ function openSet(){
 function reloadMenu(){closeSheet();start();toast('Đã tải lại menu')}
 function logout(){try{localStorage.removeItem('pw')}catch(e){}PW='';closeSheet();showLogin('')}
 
+/* ---------- Cài vào màn hình (iPhone: hướng dẫn; Android/máy tính: hộp cài của Chrome) ---------- */
+var DEFER=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();DEFER=e;drawInst()});
+window.addEventListener('appinstalled',function(){DEFER=null;drawInst();toast('Đã cài xong. Mở bằng biểu tượng Bán hàng ngoài màn hình nhé!')});
+function isStandalone(){try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}}
+function plat(){var u=navigator.userAgent||'';return {ios:/iPhone|iPad|iPod/.test(u)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),inapp:/Zalo|FBAN|FBAV|FB_IAB|Instagram|Line\/|TikTok/i.test(u),other:/CriOS|FxiOS|EdgiOS/.test(u)}}
+function drawInst(){var P=plat(),can=!isStandalone()&&(P.ios||DEFER),off=ls.get('inst_hide',0)>Date.now();
+  var b=$('inst');if(b)b.style.display=can&&!off?'flex':'none';var l=$('instL');if(l)l.style.display=can?'':'none'}
+function hideInst(){ls.set('inst_hide',Date.now()+7*864e5);drawInst();toast('Muốn cài sau thì vào ⚙️ Cài đặt')}
+var IC_SHARE='<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#1F63C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span>';
+var IC_ADD='<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#14110F" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg></span>';
+function openInstall(){
+  if(isStandalone()){toast('Bạn đang dùng bản đã cài rồi');return}
+  if(DEFER){DEFER.prompt();DEFER.userChoice.then(function(c){if(c&&c.outcome==='accepted')DEFER=null;drawInst()});return}
+  var P=plat(),h='<svg class="sheetcat" aria-hidden="true"><use href="#p-hug"/></svg><h3 style="text-align:center">Cài Bán hàng vào màn hình</h3>';
+  if(P.inapp){
+    h+='<div class="warn">Bạn đang mở trong <b>Zalo / Messenger</b>, ở đây không cài được.</div><ol class="steps">'
+      +'<li><span>Bấm nút <b>⋯</b> hoặc <b>⋮</b> ở góc màn hình.</span></li>'
+      +'<li><span>Chọn <b>“Mở bằng trình duyệt”</b> hoặc <b>“Mở trong Safari”</b>.</span></li>'
+      +'<li><span>Trang mở trong Safari, bấm lại nút <b>📲 Cài</b>.</span></li></ol>'
+      +'<button class="btn o" style="width:100%" onclick="copyLink(this)">Chép link để dán vào Safari</button>';
+  }else if(P.ios){
+    h+='<ol class="steps">'
+      +(P.other?'<li><span>Bấm nút '+IC_SHARE+' <b>Chia sẻ</b> ở góc trên, cạnh thanh địa chỉ.</span></li>':'<li><span>Bấm nút '+IC_SHARE+' <b>Chia sẻ</b> ở thanh dưới cùng của Safari (iPad: góc trên bên phải).</span></li>')
+      +'<li><span>Kéo danh sách xuống, chọn '+IC_ADD+' <b>“Thêm vào MH chính”</b>.</span></li>'
+      +'<li><span>Bấm <b>“Thêm”</b> ở góc trên bên phải.</span></li>'
+      +'<li><span>Ra màn hình chính, mở biểu tượng <b>Bán hàng</b> có hình Mèo Đen.</span></li></ol>'
+      +'<div class="warn">Bản cài trên iPhone lưu dữ liệu <b>riêng</b> với Safari: lần đầu mở cần <b>đăng nhập và mở ca lại</b>. Đơn đã bán trong Safari không chuyển sang. Nên cài trước rồi mới bán.</div>';
+  }else{
+    h+='<ol class="steps"><li><span>Bấm <b>⋮</b> (góc trên bên phải trình duyệt).</span></li><li><span>Chọn <b>“Cài đặt ứng dụng”</b> hoặc <b>“Thêm vào màn hình chính”</b>.</span></li><li><span>Bấm <b>“Cài đặt”</b>.</span></li></ol>';
+  }
+  h+='<button class="btn" style="width:100%;margin-top:12px" onclick="closeSheet()">Đã hiểu</button>';
+  show(h);
+}
+function copyLink(b){var u=location.origin+'/ban.html';var ok=function(){b.textContent='Đã chép: '+u};try{navigator.clipboard.writeText(u).then(ok,function(){b.textContent=u})}catch(e){b.textContent=u}}
+
 /* ---------- Khởi động ---------- */
 (function(){
+  drawInst();
   var p='';try{p=localStorage.getItem('pw')||''}catch(e){}
   if(!p)return showLogin('');
   PW=p;start();
