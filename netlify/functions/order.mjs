@@ -1,4 +1,5 @@
 import { getStore } from "@netlify/blobs";
+import { sendPushAll } from "../lib/push.mjs";
 export const config = { path: "/api/order" };
 export default async (req) => {
   if (req.method !== "POST") return new Response("", { status: 405 });
@@ -10,16 +11,17 @@ export default async (req) => {
   const at = new Date().toISOString();
   const id = at + "-" + crypto.randomUUID().slice(0, 6);
   let saved = false, sent = false;
-  try { await getStore("orders").setJSON(id, { t: text, name, phone, total, s: "new", at }); saved = true; } catch {}
+  try { await getStore({ name: "orders", consistency: "strong" }).setJSON(id, { t: text, name, phone, total, s: "new", at }); saved = true; } catch {}
   const token = process.env.TELEGRAM_BOT_TOKEN, chat = process.env.TELEGRAM_CHAT_ID;
+  const jobs = [];
+  if (saved) jobs.push(sendPushAll(new URL(req.url).origin).catch(() => 0));
   if (token && chat) {
-    try {
-      const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ chat_id: chat, text: "🧋 ĐƠN MỚI\n\n" + text }),
-      });
-      sent = r.ok;
-    } catch {}
+    jobs.push(fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ chat_id: chat, text: "🧋 ĐƠN MỚI\n\n" + text }),
+      signal: AbortSignal.timeout(6000),
+    }).then((r) => { sent = r.ok; }).catch(() => {}));
   }
+  await Promise.all(jobs);
   return saved || sent ? Response.json({ ok: true }) : new Response("failed", { status: 502 });
 };

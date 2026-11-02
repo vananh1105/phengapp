@@ -4,15 +4,11 @@ const pw = () => (process.env.ADMIN_PASSWORD || "").trim();
 const isAdmin = (req) => !!pw() && (req.headers.get("x-admin") || "").trim() === pw();
 export default async (req) => {
   if (!isAdmin(req)) return new Response("no", { status: 401 });
-  const store = getStore("orders");
+  const store = getStore({ name: "orders", consistency: "strong" });
   if (req.method === "GET") {
     const day = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
-    const keys = [];
-    for (const p of [day(0), day(1)]) {
-      const { blobs } = await store.list({ prefix: p });
-      blobs.forEach((b) => keys.push(b.key));
-    }
-    keys.sort();
+    const lists = await Promise.all([day(0), day(1)].map((p) => store.list({ prefix: p })));
+    const keys = lists.flatMap((l) => l.blobs.map((b) => b.key)).sort();
     const out = await Promise.all(keys.slice(-80).map(async (id) => {
       try {
         const v = await store.get(id, { type: "json" });
