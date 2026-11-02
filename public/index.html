@@ -50,6 +50,11 @@ button.tile.on{outline:2px solid var(--mr)}
 .bar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:8;background:linear-gradient(transparent,var(--bg) 30%)}
 .btn{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:640px;margin:0 auto;border:0;border-radius:99px;background:var(--mr);color:#fff;padding:14px 22px;font:600 15px "Be Vietnam Pro",sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(110,15,34,.3)}
 .btn[disabled]{opacity:.5;box-shadow:none}
+#gate{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;display:none}
+#gate .gw{max-width:420px;margin:0 auto;padding:40px 20px calc(30px + env(safe-area-inset-bottom,0px))}
+#gate h2{font:700 26px "Baloo 2",sans-serif;margin:0 0 4px;color:var(--mr)}
+#gate .gt{display:flex;gap:6px;margin:18px 0 14px}#gate .gt button{flex:1;border:1.5px solid var(--mr);background:none;color:var(--mr);border-radius:99px;padding:9px;font:600 14px "Be Vietnam Pro",sans-serif;cursor:pointer}#gate .gt button.on{background:var(--mr);color:#fff}
+#gerr{color:var(--mr);font-size:14px;min-height:20px;margin:0 0 8px}
 .mo{display:block;margin:0 auto 8px;border:1.5px solid var(--mr);border-radius:99px;background:var(--cd);color:var(--mr);padding:7px 16px;font:600 13px "Be Vietnam Pro",sans-serif;cursor:pointer}
 .mi{background:var(--cd);border-radius:14px;padding:12px;margin:10px 0}.mi .mh{display:flex;justify-content:space-between;gap:8px;font-weight:600}.mi small{color:var(--mut);font-weight:500}.mi pre{background:var(--bg)}
 .ov{position:fixed;inset:0;background:rgba(30,10,14,.5);z-index:20;display:none;align-items:flex-end}
@@ -155,6 +160,11 @@ input[type=file]{padding:9px}
   <div class="foot" id="ft"></div>
 </main>
 
+<div id="gate"><div class="gw"><h2>Chào bạn 👋</h2><p style="color:var(--mut);margin:0">Đăng nhập hoặc đăng ký để đặt món và xem lại đơn ở bất kỳ đâu (Zalo, Facebook, TikTok, Chrome…).</p>
+<div class="gt"><button id="gt1" class="on" onclick="gTab(0)">Đăng nhập</button><button id="gt2" onclick="gTab(1)">Đăng ký</button></div>
+<input id="gnm" placeholder="Tên của bạn" autocomplete="name" style="display:none"><input id="gph" placeholder="Số điện thoại" inputmode="tel" autocomplete="tel"><input id="gpin" placeholder="Mã PIN 4 số" inputmode="numeric" maxlength="4" autocomplete="off" type="password"><input id="gpin2" placeholder="Nhập lại mã PIN" inputmode="numeric" maxlength="4" autocomplete="off" type="password" style="display:none">
+<p id="gerr"></p><button class="btn" id="gbtn" style="justify-content:center" onclick="gGo()">Đăng nhập</button>
+<p style="font-size:13px;color:var(--mut);margin-top:14px">Mã PIN gồm 4 số do bạn tự đặt, dùng để đăng nhập. Quên mã PIN? Gọi quán <span id="gtel"></span> để đặt lại.</p></div></div>
 <div class="bar"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
 
@@ -293,7 +303,7 @@ function openCart(){
   });
   h+=giftHtml();
   h+='<div class="tot"><span>Tổng cộng</span><span>'+fmt(total())+'</span></div>';
-  h+='<div class="lb">Thông tin nhận hàng</div><input id="nm" placeholder="Tên của bạn" autocomplete="name"><input id="ph" placeholder="Số điện thoại" inputmode="tel" autocomplete="tel" value="'+esc(meGet().ph||'')+'"><input id="pin" placeholder="Mã PIN 4 số" inputmode="numeric" maxlength="4" autocomplete="off" value="'+esc(meGet().pin||'')+'"><p id="pinh" style="font-size:12px;color:var(--mut);margin:-4px 0 10px">Bắt buộc. Dùng số điện thoại + mã PIN để xem lại đơn ở bất kỳ đâu (Zalo, Facebook, Chrome…). Khách cũ nhập đúng PIN đã đặt lần trước.</p>';
+  h+='<div class="lb">Thông tin nhận hàng</div><div style="background:var(--cd);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:14px">Đặt bằng tài khoản: <b>'+esc(meGet().name||'')+'</b> · '+esc(meGet().ph||'')+'</div>';
   h+='<div class="ch" style="margin-bottom:10px"><button id="r1" class="on" onclick="ship(0)">Nhận tại quán</button><button id="r2" onclick="ship(1)">Giao tận nơi</button></div>';
   h+='<input id="ad" placeholder="Địa chỉ giao hàng" style="display:none"><textarea id="nt" rows="2" placeholder="Ghi chú (không bắt buộc)"></textarea>';
   h+='<div class="lb">Thanh toán trước bằng chuyển khoản</div>'+(CFG.info.qr?'<img src="/img/'+esc(CFG.info.qr)+'" style="width:100%;max-width:240px;display:block;margin:8px auto;border-radius:12px" alt="Mã QR">':'<div class="qr">Mã QR của quán sẽ hiện ở đây</div>')+'<p style="font-size:13px;color:var(--mut);margin:4px 0 10px">Chuyển đúng <b>'+fmt(total())+'</b>, nội dung ghi tên + số điện thoại.</p><label style="display:flex;align-items:center;font-size:14px;margin-bottom:14px"><input type="checkbox" id="pd" style="width:auto;margin:0 8px 0 0">Tôi đã chuyển khoản đúng số tiền</label>';
@@ -302,9 +312,8 @@ function openCart(){
 }
 function ship(d){delivery=!!d;$('r1').className=d?'':'on';$('r2').className=d?'on':'';$('ad').style.display=d?'block':'none'}
 function finish(){
-  var nm=$('nm').value.trim(),ph=$('ph').value.trim(),ad=$('ad').value.trim();
-  if(!nm||!ph){(nm?$('ph'):$('nm')).focus();return}
-  var pin=$('pin').value.trim();if(!/^\d{4}$/.test(pin)){$('pin').focus();$('pinh').style.color='var(--mr)';$('pinh').textContent='Mã PIN phải gồm đúng 4 số.';return}
+  var me=meGet();if(!me.ph||!me.pin){closeSheet();gShow('Hãy đăng nhập để đặt đơn.');return}
+  var nm=me.name||'Khách',ph=me.ph,pin=me.pin,ad=$('ad').value.trim();
   if(!$('pd').checked){$('pd').focus();$('pd').parentNode.style.color='var(--mr)';return}
   if(delivery&&!ad){$('ad').focus();return}
   var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:'Nhận tại quán')+'\n';
@@ -320,11 +329,10 @@ function finish(){
 }
 function sendOrder(m,nm,ph,tt,pin){var e=function(t){var x=$('sst');if(x)x.innerHTML=t};var rec={t:m,ph:ph,total:tt,at:new Date().toISOString(),ok:0};
 var fail=function(){e('Chưa gửi được đơn, bạn gửi qua Zalo giúp quán nhé.');myAdd(rec)};
-fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph,total:tt,pin:pin})}).then(function(r){if(!r.ok)return fail();return r.json().catch(function(){return {}}).then(function(d){rec.ok=1;if(d&&d.id){rec.id=d.id;rec.code=d.code}
-var t='Đã gửi đơn đến quán ✓'+(rec.code?' · Mã đơn #'+esc(rec.code):'');
-if(d.member==='new'||d.member==='ok'){meSet({ph:ph,pin:pin});rec.mem=1;t+='<br><small style="font-weight:500;color:var(--mut)">'+(d.member==='new'?'Đã tạo mã PIN cho số này. ':'')+'Xem lại đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</small>'}
-else if(d.member==='wrong'||d.member==='locked')t+='<br><small style="font-weight:500;color:var(--mr)">Mã PIN không đúng với số này nên đơn chưa được lưu vào lịch sử (quán vẫn đã nhận đơn). Quên PIN thì gọi quán để đặt lại.</small>';
-e(t);myAdd(rec)})}).catch(fail)}
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:m,name:nm,phone:ph,total:tt,pin:pin})}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
+if(d&&d.login){e('❌ Chưa gửi được đơn: '+esc(d.err||'cần đăng nhập lại')+'. Đăng nhập lại rồi bấm Hoàn tất lại, giỏ hàng vẫn giữ nguyên.');meSet(null);setTimeout(function(){closeSheet();gShow(d.err||'')},2500);return}
+if(!r.ok)return fail();rec.ok=1;if(d.id){rec.id=d.id;rec.code=d.code}
+e('Đã gửi đơn đến quán ✓'+(rec.code?' · Mã đơn #'+esc(rec.code):'')+'<br><small style="font-weight:500;color:var(--mut)">Xem lại đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</small>');myAdd(rec)})}).catch(fail)}
 // Lịch sử đơn: lấy từ máy chủ bằng số điện thoại + PIN (dùng được ở mọi trình duyệt),
 // cộng thêm các đơn chỉ lưu trên máy này (gửi lỗi hoặc sai PIN)
 var MYK='my_orders',MEK='my_me';
@@ -338,22 +346,37 @@ var ST={new:'⏳ Chờ quán nhận',doing:'🧋 Quán đang làm',done:'✅ Đ�
 function myItem(r,st,i){var d=new Date(r.at);return '<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div style="font-size:14px;margin-top:4px;color:'+(r.s==='done'?'var(--mr)':'var(--mut)')+'">'+st+'</div><pre>'+esc(r.t)+'</pre><button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'}
 var MYL=[];
 function myCopy(i,b){var r=MYL[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
-function myOrders(){var me=meGet();if(me.ph&&me.pin)return myLoad(me.ph,me.pin);myForm('')}
-function myForm(err,ph){var me=meGet();ph=ph||me.ph||'';show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">Nhập số điện thoại và mã PIN 4 số bạn đã đặt khi đặt đơn.</p><input id="lph" placeholder="Số điện thoại" inputmode="tel" autocomplete="tel" value="'+esc(ph)+'"><input id="lpin" placeholder="Mã PIN 4 số" inputmode="numeric" maxlength="4" autocomplete="off"><p id="lerr" style="color:var(--mr);font-size:14px;margin:0 0 8px">'+esc(err)+'</p><button class="btn" style="justify-content:center" onclick="myLogin()">Xem đơn</button><p style="font-size:12px;color:var(--mut)">Quên mã PIN? Gọi quán '+esc(CFG.info.phone||'')+' để đặt lại.</p>'+myLocal([])+'<button class="btn o" style="margin-top:8px" onclick="closeSheet()">Đóng</button>')}
-function myLogin(){var ph=$('lph').value.trim(),pin=$('lpin').value.trim();if(!ph){$('lph').focus();return}if(!/^\d{4}$/.test(pin)){$('lerr').textContent='Mã PIN phải gồm đúng 4 số.';$('lpin').focus();return}$('lerr').textContent='Đang tìm…';myLoad(ph,pin)}
-function myLocal(ids){var l=myGet().filter(function(r){return !r.id||!r.mem||ids.indexOf(r.id)<0});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán (chưa lưu vào số điện thoại)':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
-function myLoad(ph,pin){MYL=[];fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429)meSet(null);return myForm(d.err||'Không xem được đơn',ph)}
-meSet({ph:ph,pin:pin});var os=d.orders||[],h='<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">Số '+esc(ph)+' · <a href="#" onclick="meSet(null);myForm(\'\');return false">Đổi số khác</a></p>';
+function myOrders(){var me=meGet();if(!me.ph||!me.pin)return gShow('');myLoad(me.ph,me.pin)}
+function myLocal(ids){var l=myGet().filter(function(r){return r.ph===meGet().ph&&(!r.id||ids.indexOf(r.id)<0)});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
+function myLoad(ph,pin){MYL=[];show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut)">Đang tải…</p>');fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429){meSet(null);closeSheet();return gShow(d.err||'')}return show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">'+esc(d.err||'Không xem được đơn')+'</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')}
+var me=meGet();me.name=d.name||me.name;meSet(me);var os=d.orders||[],h='<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
 if(!os.length)h+='<p style="color:var(--mut)">Chưa có đơn nào.</p>';
 os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,ST[o.s]||o.s,i)});
-h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){myForm('Không kết nối được, thử lại sau',ph)})}
+h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">Không kết nối được, thử lại sau</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')})}
+// Màn hình đăng nhập / đăng ký bắt buộc
+var GREG=0;
+function gTab(r){GREG=r;$('gt1').className=r?'':'on';$('gt2').className=r?'on':'';$('gnm').style.display=r?'block':'none';$('gpin2').style.display=r?'block':'none';$('gbtn').textContent=r?'Đăng ký':'Đăng nhập';$('gerr').textContent=''}
+function gShow(err){if(location.hash==='#admin')return;$('gate').style.display='block';$('gerr').textContent=err||'';$('gtel').textContent=CFG.info.phone||'';var me=meGet();if(me.ph&&!$('gph').value)$('gph').value=me.ph}
+function gHide(){$('gate').style.display='none'}
+function gOut(){meSet(null);closeSheet();$('gpin').value='';gShow('')}
+function gGo(){var nm=$('gnm').value.trim(),ph=$('gph').value.trim(),pin=$('gpin').value.trim(),er=$('gerr');
+if(GREG&&!nm){er.textContent='Hãy nhập tên.';$('gnm').focus();return}
+if(ph.replace(/\D/g,'').length<9){er.textContent='Số điện thoại không hợp lệ.';$('gph').focus();return}
+if(!/^\d{4}$/.test(pin)){er.textContent='Mã PIN phải gồm đúng 4 số.';$('gpin').focus();return}
+if(GREG&&$('gpin2').value.trim()!==pin){er.textContent='Hai lần nhập mã PIN không khớp.';$('gpin2').focus();return}
+er.textContent='Đang xử lý…';$('gbtn').disabled=true;
+fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(GREG?{action:'register',name:nm,phone:ph,pin:pin}:{phone:ph,pin:pin})}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){$('gbtn').disabled=false;if(!r.ok){er.textContent=d.err||'Không thành công';return}
+meSet({ph:ph,pin:pin,name:d.name||nm});$('gpin').value='';$('gpin2').value='';er.textContent='';gHide()})}).catch(function(){$('gbtn').disabled=false;er.textContent='Không kết nối được, thử lại sau.'})}
+// Mở web: chưa đăng nhập thì hiện màn hình đăng nhập; đã đăng nhập thì kiểm tra lại ngầm
+function gInit(){if(location.hash==='#admin')return;var me=meGet();if(!me.ph||!me.pin)return gShow('');
+fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){if(r.status===403||r.status===429)return r.json().catch(function(){return {}}).then(function(d){meSet(null);gShow(d.err||'Hãy đăng nhập lại.')});if(r.ok)return r.json().then(function(d){if(d.name){me.name=d.name;meSet(me)}})}).catch(function(){})}
 function copyMsg(b){
   var ok=function(){b.textContent='Đã sao chép'};
   try{navigator.clipboard.writeText(done).then(ok,fb)}catch(e){fb()}
   function fb(){var r=document.createRange();r.selectNodeContents($('msg'));var s=getSelection();s.removeAllRanges();s.addRange(r);try{document.execCommand('copy');ok()}catch(e){}}
 }
 var PW='';try{PW=localStorage.getItem('pw')||''}catch(e){}
-build();upd();myBtn();
+build();upd();myBtn();gInit();
 if(location.hash==='#admin')$('adm').style.display='';
 fetch('/api/config').then(function(r){return r.ok?r.json():{}}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build()}}).catch(function(){});
 function endIntro(){var e=$('intro');if(!e||e.className==='out')return;e.className='out';setTimeout(function(){e.remove()},700);try{sessionStorage.setItem('seen','1')}catch(x){}}
