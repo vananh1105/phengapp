@@ -4,66 +4,79 @@
 <title>Bán hàng · Phéng</title>
 <link rel="manifest" href="/manifest-ban.webmanifest">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#8d1a31">
+<meta name="theme-color" content="#1F63C9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Bán hàng">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coiny&family=Nunito:wght@500;700;800&display=swap">
 <style id="pg">@page{margin:0}</style>
 <style>
-:root{--bg:#f3efe9;--cd:#fff;--ink:#2b2220;--mut:#7d6f6a;--ln:#e3d9d1;--mr:#8d1a31;--pk:#f7e3e6;--ok:#2e7d5b;color-scheme:light}
+:root{
+  /* Mẫu 7 · Xanh Dương · Thanh bên · Mèo Ló đầu */
+  --blue:#1F63C9;--blue2:#3B7BD8;--cream:#FFF3DC;--soft:#DCE8F8;--red:#E3342F;--black:#14110F;
+  --bg:#F4ECDD;--cd:#FFFDF7;--ink:#14213D;--mut:#6E6A63;--ln:#E6D3AE;--mr:#E3342F;--pk:#FBE3D6;--ok:#2E7D5B;
+  --disp:"Coiny","Baloo 2","Arial Rounded MT Bold",system-ui,sans-serif;
+  color-scheme:light}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+body{margin:0;background:var(--blue);color:var(--ink);font:16px/1.35 "Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
 button{font:inherit;color:inherit;cursor:pointer}
 input{font:inherit;color:inherit}
-.btn{border:0;border-radius:12px;background:var(--mr);color:#fff;font-weight:700;padding:12px 16px;min-height:48px}
-.btn.o{background:var(--cd);color:var(--mr);border:1.5px solid var(--mr)}
-.btn.g{background:var(--ok)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--black);outline-offset:2px}
+.btn{border:0;border-radius:14px;background:var(--red);color:var(--cream);font-weight:800;padding:12px 16px;min-height:48px}
+.btn.o{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.btn.g{background:var(--red)}
 .btn:disabled{opacity:.45;cursor:default}
-#app{display:none;height:100%;grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr) 380px}
-header{grid-column:1/-1;display:flex;gap:8px;align-items:center;padding:8px 12px;background:var(--mr);color:#fff;padding-top:max(8px,env(safe-area-inset-top))}
-header h1{font-size:20px;margin:0 8px 0 0;white-space:nowrap}
-header input{flex:1;min-width:0;border:0;border-radius:10px;padding:10px 12px;font-size:15px}
-header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color:#fff;padding:10px 12px;white-space:nowrap;font-size:14px;font-weight:600}
-#menu{overflow:auto;padding:10px 12px 90px}
-#cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;position:sticky;top:-10px;background:var(--bg);padding-top:10px;margin-top:-10px;z-index:2}
-#cats button{border:1.5px solid var(--ln);background:var(--cd);border-radius:99px;padding:9px 14px;white-space:nowrap;font-weight:600;font-size:14px}
-#cats button.on{background:var(--mr);border-color:var(--mr);color:#fff}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-.it{border:0;border-radius:14px;background:var(--cd);padding:8px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:96px;box-shadow:0 1px 2px rgba(0,0,0,.06);position:relative}
+#app{display:none;height:100%;grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr) 380px;gap:10px;padding:10px;padding-top:max(10px,env(safe-area-inset-top))}
+header{grid-column:1/-1;display:flex;gap:8px;align-items:center;padding:8px 10px;background:var(--cream);color:var(--blue);border-radius:18px}
+header h1{display:flex;align-items:center;gap:8px;font:400 28px/1 var(--disp);color:var(--blue);text-shadow:2px 2px 0 var(--black);margin:0 6px 0 0;white-space:nowrap}
+header h1 svg{width:44px;height:44px;border-radius:50%;background:var(--blue);padding:2px;flex:none}
+header input{flex:1;min-width:0;border:0;border-radius:99px;padding:11px 14px;font-size:15px;background:#F4E6C8;color:var(--ink)}
+header button{border:0;border-radius:12px;background:var(--blue2);color:var(--cream);padding:10px 12px;white-space:nowrap;font-size:14px;font-weight:800}
+#menu{overflow:auto;padding:0 0 90px;display:grid;grid-template-columns:170px minmax(0,1fr);gap:10px;align-items:start}
+#cats{display:flex;flex-direction:column;gap:4px;position:sticky;top:0;background:var(--cream);border-radius:18px;padding:8px;z-index:2}
+#cats button{border:0;background:transparent;color:var(--blue);border-radius:12px;padding:11px 12px;text-align:left;font-weight:800;font-size:14px}
+#cats button.on{background:var(--blue);color:var(--cream)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.it{border:0;border-radius:18px;background:var(--cream);color:var(--ink);padding:8px;text-align:left;display:flex;flex-direction:column;gap:5px;min-height:96px;position:relative;transition:transform .12s}
 .it:active{transform:scale(.97)}
-.it .ph{height:64px;border-radius:10px;display:grid;place-items:center;font-size:30px;overflow:hidden}
+.it .ph{aspect-ratio:16/10;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:var(--soft)}
 .it .ph img{width:100%;height:100%;object-fit:cover}
-.it b{font-size:14px;line-height:1.2}
-.it span{color:var(--mr);font-weight:700;font-size:14px;margin-top:auto}
-.it.off{opacity:.4}.it.off:after{content:"Hết món";position:absolute;top:12px;left:12px;background:#000;color:#fff;font-size:12px;padding:2px 6px;border-radius:6px}
-.it .n{position:absolute;top:4px;right:4px;background:var(--mr);color:#fff;border-radius:99px;min-width:26px;height:26px;display:grid;place-items:center;font-size:13px;font-weight:700}
-#cart{background:var(--cd);border-left:1px solid var(--ln);display:flex;flex-direction:column;min-height:0}
-#cart .hd{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--ln);font-weight:700}
-#cart .hd button{border:0;background:none;color:var(--mr);font-size:14px}
-#lines{flex:1;overflow:auto;padding:4px 0}
-.ln{display:flex;gap:8px;align-items:flex-start;padding:10px 14px;border-bottom:1px dashed var(--ln)}
-.ln .t{flex:1;min-width:0}
+.it .ph svg{width:34%;height:auto;max-height:80%;color:var(--ink)}
+.it b{font-size:14px;line-height:1.2;font-weight:800}
+.it span{font:400 17px/1 var(--disp);color:var(--red);margin-top:auto}
+.it.off{opacity:.45}.it.off:after{content:"Hết món";position:absolute;top:12px;left:12px;background:var(--black);color:var(--cream);font-size:12px;padding:2px 8px;border-radius:8px}
+.it .n{position:absolute;top:4px;right:4px;background:var(--red);color:var(--cream);border-radius:99px;min-width:26px;height:26px;display:grid;place-items:center;font-size:13px;font-weight:800;font-style:normal;box-shadow:0 0 0 2px var(--cream)}
+#cart{background:var(--cream);border-radius:18px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#cart .hd{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 10px;font:400 20px/1 var(--disp)}
+#cart .hd button{border:0;background:none;color:var(--red);font:800 14px "Nunito",system-ui,sans-serif}
+#lines{flex:1;overflow:auto;padding:0 0 70px}
+.ln{display:flex;gap:8px;align-items:flex-start;padding:10px 16px;border-bottom:1.5px dashed var(--ln)}
+.ln .t{flex:1;min-width:0;cursor:pointer}
 .ln .t small{display:block;color:var(--mut);font-size:13px}
-.ln .p{font-weight:700;white-space:nowrap;text-align:right}
+.ln .p{font-weight:800;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
 .q{display:flex;align-items:center;gap:6px}
-.q button{width:34px;height:34px;border-radius:50%;border:0;background:var(--pk);color:var(--mr);font-size:20px;font-weight:700;line-height:1}
+.q button{width:34px;height:34px;border-radius:50%;border:0;background:var(--soft);color:var(--blue);font-size:20px;font-weight:800;line-height:1}
 .q b{min-width:20px;text-align:center}
-.empty{color:var(--mut);text-align:center;padding:40px 16px}
-.ft{padding:12px 14px;border-top:1px solid var(--ln);display:grid;gap:8px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
-.tot{display:flex;justify-content:space-between;font-size:22px;font-weight:800}
+.empty{color:var(--mut);text-align:center;padding:24px 16px;display:grid;justify-items:center;gap:6px;font-weight:700}
+.empty svg{width:130px;height:130px}
+.ft{padding:12px 16px;border-top:2px solid var(--ink);display:grid;gap:8px;padding-bottom:max(12px,env(safe-area-inset-bottom));position:relative;background:var(--cream)}
+.ft .peek{position:absolute;right:14px;top:-58px;width:70px;height:70px;pointer-events:none}
+.tot{display:flex;justify-content:space-between;align-items:baseline;font:400 24px/1 var(--disp)}
 .row2{display:grid;grid-template-columns:1fr 2fr;gap:8px}
 #bar{display:none}
-#mask{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;z-index:20;align-items:flex-end;justify-content:center}
-#sheet{background:var(--cd);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px max(18px,env(safe-area-inset-bottom))}
-#sheet h3{margin:0 0 4px;font-size:22px}
-.lb{margin:14px 0 6px;font-weight:600;font-size:13px;color:var(--mut)}
+#mask{position:fixed;inset:0;background:rgba(20,17,15,.45);display:none;z-index:20;align-items:flex-end;justify-content:center}
+#sheet{background:var(--cd);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px max(18px,env(safe-area-inset-bottom))}
+#sheet h3{margin:0 0 4px;font:400 24px/1.15 var(--disp);color:var(--ink)}
+.sheetcat{display:block;width:92px;height:92px;margin:-6px auto 4px}
+.lb{margin:14px 0 6px;font-weight:800;font-size:13px;color:var(--mut)}
 .ch{display:flex;flex-wrap:wrap;gap:6px}
-.ch button{border:1.5px solid var(--ln);background:var(--cd);border-radius:99px;padding:9px 13px;font-size:14px}
-.ch button.on{background:var(--mr);border-color:var(--mr);color:#fff}
+.ch button{border:1.5px solid var(--ln);background:var(--cd);border-radius:99px;padding:9px 13px;font-size:14px;font-weight:700}
+.ch button.on{background:var(--blue);border-color:var(--blue);color:var(--cream)}
 .tl{display:grid;gap:0;border:1.5px solid var(--ln);border-radius:12px;overflow:hidden}
 .tr{display:grid;grid-template-columns:minmax(0,1fr) 64px 118px;align-items:center;gap:8px;padding:6px 10px;border-top:1px solid var(--ln);font-size:15px}
-.tr:first-child{border-top:0}.tr.on{background:var(--pk)}
+.tr:first-child{border-top:0}.tr.on{background:var(--soft)}
 .tr .tp{color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
 .tr .q{justify-content:flex-end}
 .hint{font-size:13px;color:var(--mut);margin-top:4px}
@@ -75,7 +88,7 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 .br .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .br .nm small{color:var(--mut)}
 .br .tk{height:14px;background:var(--bg);border-radius:4px;overflow:hidden}
-.br .tk i{display:block;height:100%;background:var(--mr);border-radius:0 4px 4px 0;min-width:2px}
+.br .tk i{display:block;height:100%;background:var(--blue);border-radius:0 4px 4px 0;min-width:2px}
 .br .v{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;white-space:nowrap}
 .br .v small{font-weight:400;color:var(--mut)}
 .shg{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;font-size:15px;margin-top:8px}
@@ -84,10 +97,10 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
 .cols div{border:1.5px solid var(--ln);border-radius:12px;padding:10px;font-size:13px;color:var(--mut)}
 .cols b{display:block;font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;margin-top:2px}
-.cols .main{border-color:var(--mr);background:var(--pk)}
+.cols .main{border-color:var(--blue);background:var(--soft)}
 .inp{width:100%;border:1.5px solid var(--ln);border-radius:12px;padding:11px 12px;font-size:16px;background:var(--cd)}
 .sum{display:flex;justify-content:space-between;padding:5px 0}
-.big{font-size:26px;font-weight:800;color:var(--mr)}
+.big{font:400 28px/1 var(--disp);color:var(--red)}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
 .hi{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--ln)}
 .hi small{color:var(--mut)}
@@ -97,21 +110,28 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 .stat div{background:var(--bg);border-radius:12px;padding:10px;text-align:center;font-size:13px;color:var(--mut)}
 .stat b{display:block;color:var(--ink);font-size:17px}
 .qrbox{text-align:center;margin:10px 0}.qrbox img{width:240px;max-width:100%;border-radius:12px;border:1px solid var(--ln)}
-#lg{display:none;min-height:100%;place-items:center;padding:20px;background:var(--mr)}
+#lg{display:none;min-height:100%;place-items:center;padding:20px;background:var(--blue)}
 #lg .box{background:var(--cd);border-radius:20px;padding:24px;width:100%;max-width:360px;display:grid;gap:12px}
-#lg h2{margin:0;color:var(--mr)}
-#lgErr{color:var(--mr);min-height:20px;font-size:14px}
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:99px;font-size:14px;z-index:40;display:none}
+#lg h2{margin:0;font:400 28px/1.1 var(--disp);color:var(--blue);text-align:center}
+#lg .box{position:relative;padding-top:64px!important}#lg .box>svg{position:absolute;left:50%;top:-62px;transform:translateX(-50%);width:120px;height:120px}
+#lgErr{color:var(--red);min-height:20px;font-size:14px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--black);color:var(--cream);padding:10px 16px;border-radius:99px;font-size:14px;z-index:40;display:none}
 #bill{display:none}
 @media (max-width:820px){
-  #app{grid-template-columns:minmax(0,1fr)}
-  header{min-width:0}header button{padding:10px}header .tx{display:none}
+  #app{grid-template-columns:minmax(0,1fr);padding:8px;gap:8px}
+  header{min-width:0;padding:6px 8px}header button{padding:10px}header .tx{display:none}
+  header h1{font-size:0;text-shadow:none;margin:0}header h1 svg{width:38px;height:38px}
+  #menu{grid-template-columns:minmax(0,1fr)}
+  #cats{flex-direction:row;overflow-x:auto;position:static;padding:6px}
+  #cats button{flex:none;white-space:nowrap;padding:9px 12px}
   #cart{display:none}
-  #bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:10;gap:8px;padding:10px 12px max(10px,env(safe-area-inset-bottom));background:var(--cd);border-top:1px solid var(--ln)}
+  #bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:10;gap:8px;padding:10px 12px max(10px,env(safe-area-inset-bottom));background:var(--cream);border-top:2px solid var(--ink)}
   #bar .btn{flex:1;display:flex;justify-content:space-between}
-  header h1{display:none}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  #bar .peek{position:absolute;right:22px;top:-50px;width:60px;height:60px;pointer-events:none}
+  header{gap:6px}header button{padding:9px 8px;font-size:13px}header input{padding:10px 12px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 }
+@media (prefers-reduced-motion:reduce){.it{transition:none}}
 /* ---- In bill ---- */
 @media print{
   html,body{height:auto;overflow:visible;background:#fff}
@@ -142,7 +162,46 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 #bill .tk .o{font-size:13px}
 </style></head><body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<!-- Linh vật Mèo Đen (mẫu 7). Màu: --cat lông, --face nét mặt, --cup ly, --lid nắp, --blush má -->
+<symbol id="p-hug" viewBox="0 0 120 120">
+    <path d="M88 96q26-6 20-34q-3-12-12-10" fill="none" stroke="var(--cat,#14110F)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M28 40Q24 14 48 26Z M92 40Q96 14 72 26Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M16 92q0-28 44-28t44 28q0 22-44 22t-44-22Z" fill="var(--cat,#14110F)"/>
+    <ellipse cx="60" cy="54" rx="42" ry="32" fill="var(--cat,#14110F)"/>
+    <g fill="none" stroke="var(--face,#FFF3DC)" stroke-width="3" stroke-linecap="round"><path d="M40 52q6 5 12 0"/><path d="M68 52q6 5 12 0"/><path d="M55 63q2.5 3 5 0q2.5 3 5 0"/><path d="M22 58l-11-2M22 64l-11 2M98 58l11-2M98 64l11 2"/></g>
+    <ellipse cx="34" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="86" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <path d="M44 80h32l-3 26H47Z" fill="var(--cup,#E3342F)"/>
+    <path d="M76 86q10 0 10 7t-10 7" fill="none" stroke="var(--cup,#E3342F)" stroke-width="4.5"/>
+    <rect x="42" y="77" width="36" height="6" rx="3" fill="var(--lid,#FFF3DC)"/>
+    <circle cx="60" cy="94" r="6" fill="var(--lid,#FFF3DC)"/>
+    <ellipse cx="44" cy="88" rx="7" ry="6" fill="var(--cat,#14110F)"/>
+  </symbol>
+<symbol id="p-peek" viewBox="0 0 120 120">
+    <path d="M24 70Q18 40 44 52Z M96 70Q102 40 76 52Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M14 120q0-62 46-62t46 62Z" fill="var(--cat,#14110F)"/>
+    <circle cx="44" cy="84" r="9" fill="var(--face,#FFF3DC)"/><circle cx="76" cy="84" r="9" fill="var(--face,#FFF3DC)"/>
+    <circle cx="45" cy="82" r="5.4" fill="var(--cat,#14110F)"/><circle cx="77" cy="82" r="5.4" fill="var(--cat,#14110F)"/>
+    <circle cx="47" cy="79.6" r="1.8" fill="var(--face,#FFF3DC)"/><circle cx="79" cy="79.6" r="1.8" fill="var(--face,#FFF3DC)"/>
+    <ellipse cx="30" cy="96" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="90" cy="96" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <path d="M55 96q2.5 3 5 0q2.5 3 5 0" fill="none" stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"/>
+    <g stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"><path d="M20 90l-12-2M20 96l-12 2M100 90l12-2M100 96l12 2"/></g>
+    <ellipse cx="36" cy="112" rx="11" ry="7" fill="var(--cat,#14110F)"/>
+    <ellipse cx="84" cy="112" rx="11" ry="7" fill="var(--cat,#14110F)"/>
+    <g fill="var(--cup,#E3342F)"><path d="M60 26l2.4-7 2.4 7 7 2.4-7 2.4-2.4 7-2.4-7-7-2.4Z"/><circle cx="96" cy="26" r="3"/><circle cx="22" cy="30" r="2.4"/></g>
+      <path d="M32 115v-3M40 115v-3M80 115v-3M88 115v-3" stroke="var(--face,#FFF3DC)" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+<symbol id="cup" viewBox="0 0 60 70">
+    <path d="M40 4 34 20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <path d="M10 18h40l-5 48H15Z" fill="#FFFDF8" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M12.4 32h35.2l-3.4 32H15.8Z" fill="var(--tea,#C98A4B)"/>
+    <circle cx="22" cy="58" r="3" fill="currentColor"/><circle cx="30" cy="60" r="3" fill="currentColor"/><circle cx="38" cy="57" r="3" fill="currentColor"/>
+    <rect x="6" y="14" width="48" height="7" rx="3.5" fill="currentColor"/>
+  </symbol>
+<symbol id="pearls" viewBox="0 0 60 60"><g fill="currentColor"><circle cx="20" cy="38" r="10"/><circle cx="40" cy="38" r="10"/><circle cx="30" cy="20" r="10"/></g><g fill="#fff" opacity=".45"><circle cx="16" cy="34" r="3"/><circle cx="36" cy="34" r="3"/><circle cx="26" cy="16" r="3"/></g></symbol>
+</defs></svg>
 <div id="lg"><div class="box">
+  <svg aria-hidden="true"><use href="#p-peek"/></svg>
   <h2>Bán hàng tại quầy</h2>
   <div style="color:var(--mut);font-size:14px">Nhập mật khẩu quản lý quán (giống mật khẩu trang quản lý đơn).</div>
   <input id="pw" class="inp" type="password" placeholder="Mật khẩu" onkeydown="if(event.key==='Enter')login()">
@@ -152,8 +211,8 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 
 <div id="app">
   <header>
-    <h1 id="shop">Phéng</h1>
-    <input id="q" type="search" placeholder="🔍 Tìm món…" oninput="drawGrid()">
+    <h1><svg aria-hidden="true"><use href="#p-hug"/></svg><span id="shop">Phéng</span></h1>
+    <input id="q" type="search" placeholder="🔍 Tìm món" oninput="drawGrid()">
     <button id="shBtn" onclick="openShift()">🕐 <span class="tx">Ca</span></button>
     <button onclick="openStats()">📊 <span class="tx">Số liệu</span></button>
     <button onclick="openHist()">📋 <span class="tx">Đơn</span></button>
@@ -215,7 +274,7 @@ function drawAll(){$('shop').textContent=CFG.info.name||'Phéng';if(CAT>CFG.cats
 /* ---------- Menu ---------- */
 function drawCats(){
   $('cats').innerHTML='<button class="'+(CAT<0?'on':'')+'" onclick="CAT=-1;drawCats();drawGrid()">Tất cả</button>'+CFG.cats.map(function(c,i){return '<button class="'+(CAT===i?'on':'')+'" onclick="CAT='+i+';drawCats();drawGrid()">'+esc((c.e||'')+' '+c.n)+'</button>'}).join('')
-    +(CFG.tops.length?'<button class="'+(CAT===CFG.cats.length?'on':'')+'" onclick="CAT='+CFG.cats.length+';drawCats();drawGrid()">🟤 Topping</button>':'');
+    +(CFG.tops.length?'<button class="'+(CAT===CFG.cats.length?'on':'')+'" onclick="CAT='+CFG.cats.length+';drawCats();drawGrid()">Topping</button>':'');
 }
 function inCart(n){return cart.reduce(function(a,l){return a+(l.n===n?l.q:0)},0)}
 function drawGrid(){
@@ -226,7 +285,7 @@ function drawGrid(){
       if(q&&plain(x.n).indexOf(q)<0)return;
       var n=inCart(x.n);
       h+='<button class="it'+(x.off?' off':'')+'" '+(x.off?'disabled':'onclick="tapItem('+ci+','+k+')"')+'>'
-        +'<div class="ph" style="background:'+esc(c.bg||'#eee')+'">'+(x.img?'<img loading="lazy" src="/img/'+esc(x.img)+'" alt="">':esc(c.e||'🧋'))+'</div>'
+        +'<div class="ph">'+(x.img?'<img loading="lazy" src="/img/'+esc(x.img)+'" alt="">':'<svg aria-hidden="true" style="--tea:'+teaColor(x.n)+'"><use href="#cup"/></svg>')+'</div>'
         +'<b>'+esc(x.n)+'</b><span>'+fmt(x.p)+'</span>'+(n?'<i class="n">'+n+'</i>':'')+'</button>';
     });
   });
@@ -234,10 +293,13 @@ function drawGrid(){
   if(q||CAT<0||CAT===TC)CFG.tops.forEach(function(t,k){
     if(q&&plain(t.n).indexOf(q)<0)return;
     var n=inCart(t.n);
-    h+='<button class="it" onclick="tapTop('+k+')"><div class="ph" style="background:#efe2d3">🟤</div><b>'+esc(t.n)+'</b><span>'+fmt(t.p)+'</span>'+(n?'<i class="n">'+n+'</i>':'')+'</button>';
+    h+='<button class="it" onclick="tapTop('+k+')"><div class="ph"><svg aria-hidden="true" style="color:#5A3A22"><use href="#pearls"/></svg></div><b>'+esc(t.n)+'</b><span>'+fmt(t.p)+'</span>'+(n?'<i class="n">'+n+'</i>':'')+'</button>';
   });
   $('grid').innerHTML=h||'<div class="empty">Không có món nào</div>';
 }
+// Màu nước trong hình ly, đoán theo tên món
+var TEA=[[/matcha|bạc hà/i,'#9DBB6A'],[/cacao|socola|chocolate/i,'#6B4128'],[/cà phê|cafe|coffee/i,'#7A4E2D'],[/đào|cam|xoài|chanh dây|măng cầu/i,'#F0A35E'],[/dâu|vải|mận|hồng|long nhãn/i,'#F2A7B4'],[/chanh|tắc|thơm/i,'#E9D267'],[/sữa tươi|bánh|kem/i,'#F4E6C8'],[/olong|lài|sen|đen|trà/i,'#C98A4B']];
+function teaColor(n){for(var i=0;i<TEA.length;i++)if(TEA[i][0].test(n))return TEA[i][1];return '#C98A4B'}
 function tapItem(ci,k){
   var x=CFG.cats[ci].i[k];
   var l={n:x.n,c:CFG.cats[ci].n,p:+x.p||0,s:100,ice:'Vừa',tops:[],q:1,note:''};
@@ -281,19 +343,19 @@ function qty(i,d){cart[i].q+=d;if(cart[i].q<1)cart.splice(i,1);afterCart();if($(
 /* ---------- Giỏ ---------- */
 function cartHtml(){
   var h='<div class="hd"><span>Đơn hiện tại ('+cart.reduce(function(a,l){return a+l.q},0)+')</span>'+(cart.length?'<button onclick="if(confirm(\'Xoá hết món trong đơn?\')){cart=[];afterCart();closeSheet()}">Xoá hết</button>':'')+'</div><div id="lines">';
-  if(!cart.length)h+='<div class="empty">Chưa có món.<br>Bấm vào món bên menu để thêm.</div>';
+  if(!cart.length)h+='<div class="empty"><svg aria-hidden="true"><use href="#p-peek"/></svg>Chưa có món nào.<br>Bấm vào ly nước bên menu nhé!</div>';
   cart.forEach(function(l,i){
     h+='<div class="ln"><div class="t" onclick="editLine('+i+')"><b>'+esc(l.n)+'</b><small>'+esc(desc(l)||(l.t?'Topping mua riêng':'Bình thường'))+'</small><small>'+fmt(unit(l))+'</small></div>'
       +'<div><div class="p">'+fmt(lineTotal(l))+'</div><div class="q" style="margin-top:6px"><button onclick="qty('+i+',-1)">−</button><b>'+l.q+'</b><button onclick="qty('+i+',1)">+</button></div></div></div>';
   });
-  h+='</div><div class="ft"><div class="tot"><span>Tổng</span><span>'+fmt(sub())+'</span></div>'
+  h+='</div><div class="ft">'+(cart.length?'<svg class="peek" aria-hidden="true"><use href="#p-peek"/></svg>':'')+'<div class="tot"><span>Tổng</span><span>'+fmt(sub())+'</span></div>'
     +'<div class="row2"><button class="btn o" '+(cart.length?'':'disabled')+' onclick="printTemp()">In tạm tính</button><button class="btn" '+(cart.length?'':'disabled')+' onclick="openPay()">Thanh toán</button></div></div>';
   return h;
 }
 function drawCart(){
   $('cart').innerHTML=cartHtml();
   var n=cart.reduce(function(a,l){return a+l.q},0);
-  $('bar').innerHTML='<button class="btn" '+(n?'':'disabled')+' onclick="openCart()"><span>🛒 '+n+' món</span><span>'+fmt(sub())+'</span></button>';
+  $('bar').innerHTML=(n?'<svg class="peek" aria-hidden="true"><use href="#p-peek"/></svg>':'')+'<button class="btn" '+(n?'':'disabled')+' onclick="openCart()"><span>🛒 '+n+' món</span><span>'+fmt(sub())+'</span></button>';
 }
 function openCart(){show('<div id="cartSheet" style="display:flex;flex-direction:column;margin:-18px">'+cartHtml()+'</div>')}
 
@@ -490,7 +552,7 @@ function openShift(){if(SH)drawShiftOpen();else drawShiftNew()}
 var SHN={cash0:null,who:''};
 function drawShiftNew(){
   FORCE=1;var last=shiftsDone().slice(-1)[0];
-  var h='<h3>Mở ca</h3><div class="hint">Đếm tiền mặt đang có trong két rồi nhập vào. Chưa mở ca thì chưa thanh toán đơn được.</div>';
+  var h='<svg class="sheetcat" aria-hidden="true"><use href="#p-hug"/></svg><h3 style="text-align:center">Mở ca</h3><div class="hint">Đếm tiền mặt đang có trong két rồi nhập vào. Chưa mở ca thì chưa thanh toán đơn được.</div>';
   h+='<div class="lb">Tiền mặt đầu ca</div><input id="c0" class="inp" inputmode="numeric" placeholder="Gõ đủ số đồng, ví dụ 500000" oninput="SHN.cash0=this.value===\'\'?null:money(this.value);$(\'c0v\').textContent=SHN.cash0==null?\'\':\'= \'+fmt(SHN.cash0)"><div class="hint" id="c0v"></div>';
   if(last&&last.counted!=null)h+='<div class="hint">Ca trước đóng lúc '+tm(last.end)+', đếm được '+fmt(last.counted)+'.</div>';
   h+='<div class="lb">Người trực ca (không bắt buộc)</div><input class="inp" value="'+esc(SHN.who||(last&&last.who)||'')+'" oninput="SHN.who=this.value" id="cw">';
