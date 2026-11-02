@@ -13,7 +13,7 @@
 - `public/index.html`: trang khách đặt đơn.
 - `public/don.html`: trang quản lý đơn của quán (chuông và giọng đọc "Có đơn hàng mới" là file `public/don-moi.mp3`).
 - `public/sw.js`: service worker hiện thông báo đẩy.
-- `netlify/functions/`: API (`order` nhận đơn, `my` khách xem lại đơn bằng SĐT + PIN và quán đặt lại PIN, `orders`, `push`, `config`, `upload`, `img`).
+- `netlify/functions/`: API (`order` nhận đơn, `my` khách xem lại đơn bằng SĐT + PIN và quán đặt lại PIN, `orders`, `push`, `config`, `upload`, `img`, `qr` trả ảnh QR thanh toán của đơn để khách tải về).
 - `netlify/lib/member.mjs`: tài khoản khách = tên + số điện thoại + mã PIN 4 số (lưu băm, sai 5 lần khóa 15 phút). Bắt buộc đăng nhập/đăng ký ngay khi mở web mới xem menu và đặt đơn (trừ `#admin`).
 - `netlify/lib/push.mjs`: gửi Web Push (VAPID).
 - Thanh toán trước qua SePay: `order.mjs` tạo đơn trạng thái `pay` (quán chưa thấy), khách quét VietQR (TPBank, nội dung `PHENG <mã đơn>`, giữ 15 phút); `sepay.mjs` (`/api/sepay`, header `Authorization: Apikey <SEPAY_API_KEY>`) nhận tiền vào, đủ tiền thì đơn sang `new` + báo quán (`lib/notify.mjs`); tiền không khớp lưu `pay` store `u:` để quán xử lý tay ở `don.html`. Tài khoản nhận tiền ở `netlify/lib/pay.mjs`.
