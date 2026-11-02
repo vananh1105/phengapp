@@ -78,6 +78,13 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 .br .tk i{display:block;height:100%;background:var(--mr);border-radius:0 4px 4px 0;min-width:2px}
 .br .v{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;white-space:nowrap}
 .br .v small{font-weight:400;color:var(--mut)}
+.shg{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;font-size:15px;margin-top:8px}
+.shg span{color:var(--mut)}.shg b{text-align:right;font-variant-numeric:tabular-nums}
+.shg .hl{color:var(--ink);font-weight:700}.shg .line{grid-column:1/-1;border-top:1px solid var(--ln);margin:2px 0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
+.cols div{border:1.5px solid var(--ln);border-radius:12px;padding:10px;font-size:13px;color:var(--mut)}
+.cols b{display:block;font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;margin-top:2px}
+.cols .main{border-color:var(--mr);background:var(--pk)}
 .inp{width:100%;border:1.5px solid var(--ln);border-radius:12px;padding:11px 12px;font-size:16px;background:var(--cd)}
 .sum{display:flex;justify-content:space-between;padding:5px 0}
 .big{font-size:26px;font-weight:800;color:var(--mr)}
@@ -98,7 +105,7 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 #bill{display:none}
 @media (max-width:820px){
   #app{grid-template-columns:minmax(0,1fr)}
-  header{min-width:0}header button{padding:10px}
+  header{min-width:0}header button{padding:10px}header .tx{display:none}
   #cart{display:none}
   #bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:10;gap:8px;padding:10px 12px max(10px,env(safe-area-inset-bottom));background:var(--cd);border-top:1px solid var(--ln)}
   #bar .btn{flex:1;display:flex;justify-content:space-between}
@@ -118,7 +125,8 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 #bill h2{font-size:14px;margin:6px 0 2px}
 #bill hr{border:0;border-top:1px dashed #000;margin:5px 0}
 #bill .r{display:flex;justify-content:space-between;gap:6px}
-#bill .r b{white-space:nowrap}
+#bill .r b,#bill .r span:last-child{white-space:nowrap}
+#bill .r span:first-child{min-width:0}
 #bill .o{font-size:11px;padding-left:6px}
 #bill .tt{font-size:16px;font-weight:700}
 #bill img{display:block;margin:4px auto;width:70%}
@@ -138,15 +146,16 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
   <header>
     <h1 id="shop">Phéng</h1>
     <input id="q" type="search" placeholder="🔍 Tìm món…" oninput="drawGrid()">
-    <button onclick="openStats()">📊 Số liệu</button>
-    <button onclick="openHist()">📋 Đơn</button>
+    <button id="shBtn" onclick="openShift()">🕐 <span class="tx">Ca</span></button>
+    <button onclick="openStats()">📊 <span class="tx">Số liệu</span></button>
+    <button onclick="openHist()">📋 <span class="tx">Đơn</span></button>
     <button onclick="openSet()">⚙️</button>
   </header>
   <main id="menu"><div id="cats"></div><div class="grid" id="grid"></div></main>
   <aside id="cart"></aside>
 </div>
 <div id="bar"></div>
-<div id="mask" onclick="if(event.target===this)closeSheet()"><div id="sheet"></div></div>
+<div id="mask" onclick="if(event.target===this&&!FORCE)closeSheet()"><div id="sheet"></div></div>
 <div id="toast"></div>
 <div id="bill"></div>
 
@@ -169,7 +178,7 @@ var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){r
 var plain=function(s){return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d')};
 var ls={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
-var PW='',CFG=null,BANK=null,CAT=0,cart=[],cur=null,payM='cash',HDAY=0;
+var FORCE=0,PW='',CFG=null,BANK=null,CAT=0,cart=[],cur=null,payM='cash',HDAY=0;
 var ST=Object.assign({paper:58,qr:1,ticket:0,quick:0,copies:1,foot:'Cảm ơn quý khách! Hẹn gặp lại ❤'},ls.get('pos_set',{}));
 
 function toast(t){var e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){e.style.display='none'},2200)}
@@ -186,7 +195,8 @@ function login(){
 function defCfg(){return {info:DEF_INFO,cats:DEF_M.map(function(c){return {n:c.n,e:c.e,bg:c.bg,i:c.i.map(function(x){return {n:x[0],p:x[1]||c.p,img:'',off:0}})}}),tops:DEF_TOPS.map(function(t){return {n:t[0],p:t[1]}})}}
 function start(){
   $('lg').style.display='none';$('app').style.display='grid';$('bar').style.display='';
-  CFG=ls.get('pos_menu',null)||defCfg();drawAll();
+  CFG=ls.get('pos_menu',null)||defCfg();drawAll();drawShBtn();
+  if(!SH&&!start.asked&&$('mask').style.display!=='flex'){start.asked=1;drawShiftNew()}
   fetch('/api/config?pos=1',{cache:'no-store'}).then(function(r){return r.ok?r.json():{}}).then(function(d){
     if(d&&d.bank)BANK=d.bank;
     if(d&&Array.isArray(d.cats)&&d.cats.length){CFG={info:Object.assign({},DEF_INFO,d.info||{}),cats:d.cats,tops:d.tops||[]};ls.set('pos_menu',CFG);ls.set('pos_bank',BANK);drawAll()}
@@ -238,7 +248,7 @@ function desc(l){var a=[];if(l.t)return l.note||'';if(l.s!==100)a.push(l.s+'% đ
 
 /* ---------- Chọn tuỳ chọn món ---------- */
 function show(h,wide){$('sheet').className=wide?'wide':'';$('sheet').innerHTML=h;$('mask').style.display='flex'}
-function closeSheet(){$('mask').style.display='none';cur=null}
+function closeSheet(){$('mask').style.display='none';cur=null;FORCE=0}
 function drawItem(){
   var l=cur.l,h='<h3>'+esc(l.n)+'</h3><div style="color:var(--mut)">'+fmt(l.p)+'</div>';
   if(!l.t){
@@ -326,8 +336,9 @@ function payLive(){
 function dayKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function hist(){return ls.get('pos_orders',[])}
 function finish(doPrint){
+  if(!SH){openShift();toast('Mở ca trước rồi mới thanh toán được');return}
   var t=total(),now=new Date(),no=noNext();
-  var o={id:now.getTime().toString(36),no:no,day:dayKey(now),at:now.getTime(),lines:cart,sub:sub(),disc:disc(),pct:PAY.dt==='pct'?PAY.dv:0,total:t,m:payM,given:payM==='cash'?PAY.given:0,who:PAY.who.trim()};
+  var o={id:now.getTime().toString(36),no:no,day:dayKey(now),at:now.getTime(),lines:cart,sub:sub(),disc:disc(),pct:PAY.dt==='pct'?PAY.dv:0,total:t,m:payM,given:payM==='cash'?PAY.given:0,who:PAY.who.trim(),sh:SH.id};
   o.change=payM==='cash'?Math.max(0,o.given-t):0;
   if(payM==='bank')o.note=transferNote(no);
   var H=hist();H.push(o);ls.set('pos_orders',H.slice(-2000));
@@ -438,6 +449,88 @@ function drawHist(){
 function findO(id){return hist().filter(function(o){return o.id===id})[0]}
 function reprint(id){var o=findO(id);if(o)printOrder(o,true)}
 function voidO(id){if(!confirm('Huỷ đơn này? Doanh thu sẽ không tính đơn đã huỷ.'))return;var H=hist();H.forEach(function(o){if(o.id===id)o.void=1});ls.set('pos_orders',H);drawHist()}
+
+/* ---------- Ca làm việc ---------- */
+var SH=ls.get('pos_shift',null); // ca đang mở: {id,at,cash0,who}
+function shiftsDone(){return ls.get('pos_shifts',[])}
+function tm(t){var d=new Date(t);return d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')}
+function shiftCalc(sh){
+  var O=hist().filter(function(o){return o.sh===sh.id&&!o.void}),r={orders:O.length,cups:0,cash:0,bank:0,disc:0};
+  O.forEach(function(o){if(o.m==='bank')r.bank+=o.total;else r.cash+=o.total;r.disc+=o.disc||0;o.lines.forEach(function(l){if(!l.t)r.cups+=l.q})});
+  r.rev=r.cash+r.bank;
+  r.drawer=sh.cash0+r.cash;          // tiền mặt phải có trong két
+  r.all=sh.cash0+r.cash+r.bank;      // nếu không có chuyển khoản (khách trả hết tiền mặt) thì két phải có
+  return r}
+function drawShBtn(){var b=$('shBtn');if(!b)return;b.style.background=SH?'':'#f5c518';b.style.color=SH?'':'#000';b.title=SH?'Ca đang mở từ '+tm(SH.at):'Chưa mở ca'}
+function openShift(){if(SH)drawShiftOpen();else drawShiftNew()}
+var SHN={cash0:null,who:''};
+function drawShiftNew(){
+  FORCE=1;var last=shiftsDone().slice(-1)[0];
+  var h='<h3>Mở ca</h3><div class="hint">Đếm tiền mặt đang có trong két rồi nhập vào. Chưa mở ca thì chưa thanh toán đơn được.</div>';
+  h+='<div class="lb">Tiền mặt đầu ca</div><input id="c0" class="inp" inputmode="numeric" placeholder="Gõ đủ số đồng, ví dụ 500000" oninput="SHN.cash0=this.value===\'\'?null:money(this.value);$(\'c0v\').textContent=SHN.cash0==null?\'\':\'= \'+fmt(SHN.cash0)"><div class="hint" id="c0v"></div>';
+  if(last&&last.counted!=null)h+='<div class="hint">Ca trước đóng lúc '+tm(last.end)+', đếm được '+fmt(last.counted)+'.</div>';
+  h+='<div class="lb">Người trực ca (không bắt buộc)</div><input class="inp" value="'+esc(SHN.who||(last&&last.who)||'')+'" oninput="SHN.who=this.value" id="cw">';
+  h+='<div class="acts"><button class="btn o" onclick="FORCE=0;closeSheet()">Để sau</button><button class="btn g" onclick="doOpenShift()">Mở ca</button></div>';
+  show(h);setTimeout(function(){var e=$('c0');if(e)e.focus()},50);
+}
+function doOpenShift(){
+  if(SHN.cash0==null){toast('Nhập tiền mặt đầu ca (không có thì nhập 0)');$('c0').focus();return}
+  SH={id:'s'+Date.now().toString(36),at:Date.now(),cash0:SHN.cash0,who:($('cw').value||'').trim()};
+  ls.set('pos_shift',SH);SHN={cash0:null,who:''};FORCE=0;closeSheet();drawShBtn();toast('Đã mở ca · đầu ca '+fmt(SH.cash0));
+}
+var CNT=null;
+function shiftBody(sh,r,counted,end){
+  var h='<div class="shg"><span>Bắt đầu</span><b>'+tm(sh.at)+'</b>'+(end?'<span>Kết thúc</span><b>'+tm(end)+'</b>':'')+(sh.who?'<span>Người trực</span><b>'+esc(sh.who)+'</b>':'')
+    +'<span>Số đơn · số ly</span><b>'+r.orders+' đơn · '+r.cups+' ly</b><i class="line"></i>'
+    +'<span>Tiền mặt đầu ca</span><b>'+fmt(sh.cash0)+'</b>'
+    +'<span>Bán được bằng tiền mặt</span><b>+'+fmt(r.cash)+'</b>'
+    +'<span>Bán được bằng chuyển khoản</span><b>'+fmt(r.bank)+'</b>'
+    +(r.disc?'<span>Đã giảm giá cho khách</span><b>'+fmt(r.disc)+'</b>':'')
+    +'<span class="hl">Doanh thu ca</span><b>'+fmt(r.rev)+'</b></div>';
+  h+='<div class="cols"><div class="main">Tiền mặt phải có trong két<b>'+fmt(r.drawer)+'</b>= đầu ca + tiền mặt bán được</div>'
+    +'<div>Tiền vào tài khoản<b>'+fmt(r.bank)+'</b>khách chuyển khoản</div>'
+    +'<div>Nếu không có chuyển khoản thì két phải có<b>'+fmt(r.all)+'</b>= đầu ca + toàn bộ doanh thu</div></div>';
+  if(counted!=null){var d=Math.round((counted-r.drawer)*1000)/1000;
+    h+='<div class="shg"><span>Tiền mặt đếm được</span><b>'+fmt(counted)+'</b><span class="hl">Chênh lệch</span><b style="color:'+(d===0?'var(--ok)':'var(--mr)')+'">'+(d===0?'Khớp':(d>0?'Thừa ':'Thiếu ')+fmt(Math.abs(d)))+'</b></div>'}
+  return h}
+function drawShiftOpen(){
+  var r=shiftCalc(SH),h='<h3>Ca đang mở</h3>'+shiftBody(SH,r,null,0);
+  h+='<div class="lb">Đóng ca: đếm tiền mặt trong két rồi nhập vào</div><input id="cnt" class="inp" inputmode="numeric" placeholder="Gõ đủ số đồng, ví dụ 1250000" value="'+(CNT!=null?Math.round(CNT*1000):'')+'" oninput="CNT=this.value===\'\'?null:money(this.value);cntLive()"><div class="hint" id="cntv"></div>';
+  h+='<div class="acts"><button class="btn o" onclick="closeSheet()">Đóng lại</button><button class="btn" onclick="closeShift()">Đóng ca</button></div>';
+  h+='<button class="btn o" style="width:100%;margin-top:8px" onclick="openShiftList()">Xem các ca trước</button>';
+  show(h,true);cntLive();
+}
+function cntLive(){var e=$('cntv');if(!e)return;if(CNT==null){e.textContent='Không đếm thì để trống, vẫn đóng ca được.';e.style.color='';return}
+  var r=shiftCalc(SH),d=Math.round((CNT-r.drawer)*1000)/1000;e.textContent='Đếm được '+fmt(CNT)+' · '+(d===0?'khớp với số phải có':(d>0?'thừa ':'thiếu ')+fmt(Math.abs(d)));e.style.color=d===0?'var(--ok)':'var(--mr)'}
+function closeShift(){
+  if(cart.length&&!confirm('Đơn đang bấm dở chưa thanh toán, vẫn đóng ca?'))return;
+  var r=shiftCalc(SH),done=Object.assign({},SH,{end:Date.now(),counted:CNT,r:r});
+  var L=shiftsDone();L.push(done);ls.set('pos_shifts',L.slice(-400));
+  SH=null;ls.set('pos_shift',null);CNT=null;drawShBtn();
+  var h='<h3>Đã đóng ca</h3>'+shiftBody(done,r,done.counted,done.end);
+  h+='<div class="acts"><button class="btn o" onclick="printShift(\''+done.id+'\')">🖨️ In phiếu đóng ca</button><button class="btn g" onclick="drawShiftNew()">Mở ca mới</button></div>';
+  h+='<button class="btn o" style="width:100%;margin-top:8px" onclick="closeSheet()">Xong</button>';
+  show(h,true);
+}
+function openShiftList(){
+  var L=shiftsDone().slice().reverse().slice(0,30),h='<h3>Các ca trước</h3>';
+  if(!L.length)h+='<div class="empty">Chưa có ca nào đóng.</div>';
+  L.forEach(function(x){var d=x.counted==null?null:Math.round((x.counted-x.r.drawer)*1000)/1000;
+    h+='<div class="hi"><div><b>'+tm(x.at)+' → '+new Date(x.end).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+'</b><br><small>'+(x.who?esc(x.who)+' · ':'')+x.r.orders+' đơn · doanh thu '+fmt(x.r.rev)+'</small><br><small>Két phải có '+fmt(x.r.drawer)+(d==null?'':d===0?' · khớp':' · '+(d>0?'thừa ':'thiếu ')+fmt(Math.abs(d)))+'</small></div><button onclick="printShift(\''+x.id+'\')">🖨️ In</button></div>'});
+  h+='<button class="btn o" style="width:100%;margin-top:14px" onclick="'+(SH?'drawShiftOpen()':'closeSheet()')+'">Quay lại</button>';
+  show(h,true);
+}
+function printShift(id){
+  var x=shiftsDone().filter(function(s){return s.id===id})[0];if(!x)return;var r=x.r,I=CFG.info;
+  var row=function(a,b,c){return '<div class="r'+(c?' tt':'')+'"><span>'+a+'</span><span>'+b+'</span></div>'};
+  var h='<div class="pg"><div class="c"><h1>'+esc(I.name||'')+'</h1><h2>PHIẾU ĐÓNG CA</h2></div>'
+    +row('Bắt đầu',tm(x.at))+row('Kết thúc',tm(x.end))+(x.who?row('Người trực',esc(x.who)):'')+row('Số đơn / số ly',r.orders+' / '+r.cups)+'<hr>'
+    +row('Tiền mặt đầu ca',fmt(x.cash0))+row('Bán tiền mặt','+'+fmt(r.cash))+row('Bán chuyển khoản',fmt(r.bank))+(r.disc?row('Đã giảm giá',fmt(r.disc)):'')+row('Doanh thu ca',fmt(r.rev))+'<hr>'
+    +row('KÉT PHẢI CÓ',fmt(r.drawer),1)+row('Tiền vào tài khoản',fmt(r.bank))+row('Nếu không có CK, két phải có',fmt(r.all));
+  if(x.counted!=null){var d=Math.round((x.counted-r.drawer)*1000)/1000;h+='<hr>'+row('Tiền mặt đếm được',fmt(x.counted))+row('Chênh lệch',d===0?'Khớp':(d>0?'Thừa ':'Thiếu ')+fmt(Math.abs(d)),1)}
+  h+='<hr><div class="c">Ký nhận: ...................</div></div>';
+  doPrint(h);
+}
 
 /* ---------- Cài đặt ---------- */
 function setS(k,v){ST[k]=v;ls.set('pos_set',ST);openSet()}
