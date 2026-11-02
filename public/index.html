@@ -51,10 +51,20 @@ button.tile.on{outline:2px solid var(--mr)}
 .btn{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:640px;margin:0 auto;border:0;border-radius:99px;background:var(--mr);color:#fff;padding:14px 22px;font:600 15px "Be Vietnam Pro",sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(110,15,34,.3)}
 .btn[disabled]{opacity:.5;box-shadow:none}
 #gate{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;display:none}
-#gate .gw{max-width:420px;margin:0 auto;padding:40px 20px calc(30px + env(safe-area-inset-bottom,0px))}
-#gate h2{font:700 26px "Baloo 2",sans-serif;margin:0 0 4px;color:var(--mr)}
-#gate .gt{display:flex;gap:6px;margin:18px 0 14px}#gate .gt button{flex:1;border:1.5px solid var(--mr);background:none;color:var(--mr);border-radius:99px;padding:9px;font:600 14px "Be Vietnam Pro",sans-serif;cursor:pointer}#gate .gt button.on{background:var(--mr);color:#fff}
-#gerr{color:var(--mr);font-size:14px;min-height:20px;margin:0 0 8px}
+#gate .gtop{height:300px;background:var(--mr);border-radius:0 0 36px 36px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0 20px 50px;text-align:center}
+#gate .glogo{width:76px;height:76px;border-radius:22px;background:#8d1a31;border:3px solid rgba(255,255,255,.9);display:grid;place-items:center;font-size:38px;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+#gate .glogo img{width:100%;height:100%;object-fit:cover}
+#gate h2{font:700 30px/1.1 "Baloo 2",sans-serif;margin:4px 0 0}#gate .gtop p{margin:0;opacity:.85;font-size:14px}
+#gate .gcard{max-width:420px;margin:-70px auto 30px;background:var(--cd);border-radius:26px;padding:22px 18px;box-shadow:0 14px 34px rgba(60,20,25,.14);width:calc(100% - 36px)}
+#gate .gseg{display:flex;background:var(--pk);border-radius:99px;padding:4px;margin-bottom:18px}#gate .gseg button{flex:1;border:0;background:none;padding:10px;border-radius:99px;font:600 15px "Be Vietnam Pro",sans-serif;color:var(--mr);cursor:pointer}#gate .gseg button.on{background:var(--cd);box-shadow:0 2px 8px rgba(110,15,34,.15)}
+#gate .glb{font-size:13px;font-weight:600;color:var(--mut);margin:0 0 6px}
+#gate input.gi{background:var(--bg);border-radius:14px;padding:13px 14px;margin-bottom:12px}
+#gate .gpin{position:relative;display:flex;gap:10px;margin-bottom:14px}#gate .gpin div{flex:1;height:56px;border:1.5px solid var(--ln);background:var(--bg);border-radius:14px;display:grid;place-items:center;font-size:26px;font-weight:700;color:var(--mr);transition:border-color .15s}#gate .gpin div.f,#gate .gpin div.cur{border-color:var(--mr)}
+#gate .gpin input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;font-size:16px;caret-color:transparent}
+#gerr{color:var(--mr);font-size:14px;min-height:20px;margin:0 0 8px;text-align:center}
+#gate .gfg{display:block;margin:14px auto 0;border:0;background:none;color:var(--mr);font:600 14px "Be Vietnam Pro",sans-serif;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #gate .gseg button{color:var(--ink)}:root:not([data-theme="light"]) #gate .gseg button.on{background:var(--mr);color:#fff}:root:not([data-theme="light"]) #gate .gfg,:root:not([data-theme="light"]) #gerr,:root:not([data-theme="light"]) #gerr a{color:#ffb3c0!important}:root:not([data-theme="light"]) #gate .gpin div{color:#ffb3c0}:root:not([data-theme="light"]) #gate .gpin div.f,#gate .gpin div.cur{border-color:#ffb3c0}}
+:root[data-theme="dark"] #gate .gseg button{color:var(--ink)}:root[data-theme="dark"] #gate .gseg button.on{background:var(--mr);color:#fff}:root[data-theme="dark"] #gate .gfg,:root[data-theme="dark"] #gerr,:root[data-theme="dark"] #gerr a{color:#ffb3c0!important}:root[data-theme="dark"] #gate .gpin div{color:#ffb3c0}:root[data-theme="dark"] #gate .gpin div.f,#gate .gpin div.cur{border-color:#ffb3c0}
 .mo{display:block;margin:0 auto 8px;border:1.5px solid var(--mr);border-radius:99px;background:var(--cd);color:var(--mr);padding:7px 16px;font:600 13px "Be Vietnam Pro",sans-serif;cursor:pointer}
 .mi{background:var(--cd);border-radius:14px;padding:12px;margin:10px 0}.mi .mh{display:flex;justify-content:space-between;gap:8px;font-weight:600}.mi small{color:var(--mut);font-weight:500}.mi pre{background:var(--bg)}
 .ov{position:fixed;inset:0;background:rgba(30,10,14,.5);z-index:20;display:none;align-items:flex-end}
@@ -160,11 +170,14 @@ input[type=file]{padding:9px}
   <div class="foot" id="ft"></div>
 </main>
 
-<div id="gate"><div class="gw"><h2>Chào bạn 👋</h2><p style="color:var(--mut);margin:0">Đăng nhập hoặc đăng ký để đặt món và xem lại đơn ở bất kỳ đâu (Zalo, Facebook, TikTok, Chrome…).</p>
-<div class="gt"><button id="gt1" class="on" onclick="gTab(0)">Đăng nhập</button><button id="gt2" onclick="gTab(1)">Đăng ký</button></div>
-<input id="gnm" placeholder="Tên của bạn" autocomplete="name" style="display:none"><input id="gph" placeholder="Số điện thoại" inputmode="tel" autocomplete="tel"><input id="gpin" placeholder="Mã PIN 4 số" inputmode="numeric" maxlength="4" autocomplete="off" type="password"><input id="gpin2" placeholder="Nhập lại mã PIN" inputmode="numeric" maxlength="4" autocomplete="off" type="password" style="display:none">
+<div id="gate"><div class="gtop"><div class="glogo" id="glg">🐶</div><h2 id="gsn">Phéng</h2><p>Trà sữa · Trà trái cây · Cà phê</p></div>
+<div class="gcard"><div class="gseg"><button id="gt1" class="on" onclick="gTab(0)">Đăng nhập</button><button id="gt2" onclick="gTab(1)">Đăng ký</button></div>
+<div id="gnmw" style="display:none"><div class="glb">Tên của bạn</div><input class="gi" id="gnm" autocomplete="name"></div>
+<div class="glb">Số điện thoại</div><input class="gi" id="gph" inputmode="tel" autocomplete="tel">
+<div class="glb">Mã PIN 4 số</div><div class="gpin" id="gpinb"><div></div><div></div><div></div><div></div><input id="gpin" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Mã PIN 4 số"></div>
+<div id="gpin2w" style="display:none"><div class="glb">Nhập lại mã PIN</div><div class="gpin" id="gpin2b"><div></div><div></div><div></div><div></div><input id="gpin2" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Nhập lại mã PIN"></div></div>
 <p id="gerr"></p><button class="btn" id="gbtn" style="justify-content:center" onclick="gGo()">Đăng nhập</button>
-<p style="font-size:13px;color:var(--mut);margin-top:14px">Mã PIN gồm 4 số do bạn tự đặt, dùng để đăng nhập. Quên mã PIN? Gọi quán <span id="gtel"></span> để đặt lại.</p></div></div>
+<button class="gfg" id="gfg" onclick="gForgot()">Quên mã PIN?</button></div></div>
 <div class="bar"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
 
@@ -192,7 +205,7 @@ var CFG=defCfg(),dbDoc=null,admin=false,assetsNs=null,q=Promise.resolve(),tab='i
 function build(){
   var I=CFG.info,all=[];
   $('sn').textContent=I.name;if($('in'))$('in').textContent=I.name;$('stg').textContent=I.tag;$('th').textContent=I.hours;document.title=I.name+' · Đặt trà online';applySeason();
-  $('lg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'🐶';
+  $('lg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'🐶';if($('glg'))gBrand();
   CFG.cats.forEach(function(c){c.i.forEach(function(x){if(!x.off)all.push(x.p)})});
   $('tf').textContent=all.length?'Từ '+fmt(Math.min.apply(null,all)):'Thực đơn';
   $('ft').innerHTML=esc(I.name)+' · '+esc(I.addr)+' · Gọi / Zalo '+esc(I.phone)+'<br>Trang đặt hàng mẫu';
@@ -355,10 +368,15 @@ os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,ST[o.s]||o.s,i)});
 h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">Không kết nối được, thử lại sau</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')})}
 // Màn hình đăng nhập / đăng ký bắt buộc
 var GREG=0;
-function gTab(r){GREG=r;$('gt1').className=r?'':'on';$('gt2').className=r?'on':'';$('gnm').style.display=r?'block':'none';$('gpin2').style.display=r?'block':'none';$('gbtn').textContent=r?'Đăng ký':'Đăng nhập';$('gerr').textContent=''}
-function gShow(err){if(location.hash==='#admin')return;$('gate').style.display='block';$('gerr').textContent=err||'';$('gtel').textContent=CFG.info.phone||'';var me=meGet();if(me.ph&&!$('gph').value)$('gph').value=me.ph}
+function gTab(r){GREG=r;$('gt1').className=r?'':'on';$('gt2').className=r?'on':'';$('gnmw').style.display=r?'block':'none';$('gpin2w').style.display=r?'block':'none';$('gbtn').textContent=r?'Đăng ký':'Đăng nhập';$('gerr').textContent='';gPinClr()}
+function gPinDraw(id){var v=$(id).value,b=$(id+'b').children;for(var k=0;k<4;k++){b[k].textContent=k<v.length?'•':'';b[k].className=k<v.length?'f':(k===v.length&&document.activeElement===$(id)?'cur':'')}}
+function gPinClr(){['gpin','gpin2'].forEach(function(id){$(id).value='';gPinDraw(id)})}
+['gpin','gpin2'].forEach(function(id){var e=$(id);e.addEventListener('input',function(){e.value=e.value.replace(/\D/g,'').slice(0,4);gPinDraw(id);if(e.value.length===4){if(id==='gpin'&&GREG)$('gpin2').focus();else e.blur()}});e.addEventListener('focus',function(){gPinDraw(id)});e.addEventListener('blur',function(){gPinDraw(id)})});
+function gForgot(){var t=CFG.info.phone||'';$('gerr').innerHTML='Gọi quán <a href="tel:'+esc(t.replace(/\s/g,''))+'" style="color:var(--mr);font-weight:700">'+esc(t)+'</a> để đặt lại mã PIN.'}
+function gBrand(){var I=CFG.info;$('glg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'🐶';$('gsn').textContent=I.name||''}
+function gShow(err){if(location.hash==='#admin')return;gBrand();$('gate').style.display='block';$('gerr').textContent=err||'';var me=meGet();if(me.ph&&!$('gph').value)$('gph').value=me.ph}
 function gHide(){$('gate').style.display='none'}
-function gOut(){meSet(null);closeSheet();$('gpin').value='';gShow('')}
+function gOut(){meSet(null);closeSheet();gTab(0);gShow('')}
 function gGo(){var nm=$('gnm').value.trim(),ph=$('gph').value.trim(),pin=$('gpin').value.trim(),er=$('gerr');
 if(GREG&&!nm){er.textContent='Hãy nhập tên.';$('gnm').focus();return}
 if(ph.replace(/\D/g,'').length<9){er.textContent='Số điện thoại không hợp lệ.';$('gph').focus();return}
@@ -366,7 +384,7 @@ if(!/^\d{4}$/.test(pin)){er.textContent='Mã PIN phải gồm đúng 4 số.';$(
 if(GREG&&$('gpin2').value.trim()!==pin){er.textContent='Hai lần nhập mã PIN không khớp.';$('gpin2').focus();return}
 er.textContent='Đang xử lý…';$('gbtn').disabled=true;
 fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(GREG?{action:'register',name:nm,phone:ph,pin:pin}:{phone:ph,pin:pin})}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){$('gbtn').disabled=false;if(!r.ok){er.textContent=d.err||'Không thành công';return}
-meSet({ph:ph,pin:pin,name:d.name||nm});$('gpin').value='';$('gpin2').value='';er.textContent='';gHide()})}).catch(function(){$('gbtn').disabled=false;er.textContent='Không kết nối được, thử lại sau.'})}
+meSet({ph:ph,pin:pin,name:d.name||nm});gTab(0);gHide()})}).catch(function(){$('gbtn').disabled=false;er.textContent='Không kết nối được, thử lại sau.'})}
 // Mở web: chưa đăng nhập thì hiện màn hình đăng nhập; đã đăng nhập thì kiểm tra lại ngầm
 function gInit(){if(location.hash==='#admin')return;var me=meGet();if(!me.ph||!me.pin)return gShow('');
 fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){if(r.status===403||r.status===429)return r.json().catch(function(){return {}}).then(function(d){meSet(null);gShow(d.err||'Hãy đăng nhập lại.')});if(r.ok)return r.json().then(function(d){if(d.name){me.name=d.name;meSet(me)}})}).catch(function(){})}
