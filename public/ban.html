@@ -130,6 +130,14 @@ header button{border:0;border-radius:10px;background:rgba(255,255,255,.16);color
 #bill .o{font-size:11px;padding-left:6px}
 #bill .tt{font-size:16px;font-weight:700}
 #bill img{display:block;margin:4px auto;width:70%}
+#bill .lbl{width:var(--lw,50mm);height:var(--lh,30mm);padding:1.5mm 2mm;display:flex;flex-direction:column;gap:.6mm;overflow:hidden;font:10px/1.2 Arial,Helvetica,sans-serif;color:#000;background:#fff}
+#bill .lbl+.lbl{page-break-before:always;break-before:page}
+#bill .lbl .lt{display:flex;justify-content:space-between;font-size:9px;border-bottom:1px solid #000;padding-bottom:.5mm}
+#bill .lbl .ln1{font-size:15px;font-weight:700;line-height:1.1}
+#bill .lbl .lo{font-size:11.5px;flex:1;overflow:hidden}
+#bill .lbl.md .ln1{font-size:13px}#bill .lbl.md .lo{font-size:10.5px}
+#bill .lbl .lf{display:flex;justify-content:space-between;gap:4px;font-size:9px;border-top:1px dashed #000;padding-top:.5mm}
+#bill .lbl.sm{padding:1mm 1.5mm}#bill .lbl.sm .ln1{font-size:11px}#bill .lbl.sm .lo{font-size:8.5px}#bill .lbl.sm .lt,#bill .lbl.sm .lf{font-size:8px}
 #bill .tk .r{font-size:15px;font-weight:700}
 #bill .tk .o{font-size:13px}
 </style></head><body>
@@ -179,7 +187,7 @@ var plain=function(s){return String(s).toLowerCase().normalize('NFD').replace(/[
 var ls={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
 var FORCE=0,PW='',CFG=null,BANK=null,CAT=0,cart=[],cur=null,payM='cash',HDAY=0;
-var ST=Object.assign({paper:58,qr:1,ticket:0,quick:0,copies:1,foot:'Cảm ơn quý khách! Hẹn gặp lại ❤'},ls.get('pos_set',{}));
+var ST=Object.assign({lbl:'50x30',lblAuto:0,lblPrice:1,paper:58,qr:1,ticket:0,quick:0,copies:1,foot:'Cảm ơn quý khách! Hẹn gặp lại ❤'},ls.get('pos_set',{}));
 
 function toast(t){var e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){e.style.display='none'},2200)}
 
@@ -344,7 +352,8 @@ function finish(doPrint){
   var H=hist();H.push(o);ls.set('pos_orders',H.slice(-2000));
   cart=[];closeSheet();afterCart();
   toast('Đã lưu đơn số '+no);
-  if(doPrint)printOrder(o,false);
+  if(doPrint)printOrder(o,false,ST.lblAuto?function(){printLabels(o)}:null);
+  else if(ST.lblAuto)printLabels(o);
 }
 
 /* ---------- In ---------- */
@@ -373,19 +382,34 @@ function ticketHtml(o){
   o.lines.forEach(function(l){h+='<div class="r"><span>'+esc(l.n)+'</span><span>x'+l.q+'</span></div>'+(desc(l)?'<div class="o">'+esc(desc(l))+'</div>':'')+'<hr>'});
   return h+'</div>';
 }
-function doPrint(html){
-  var b=$('bill');b.style.setProperty('--bw',ST.paper==80?'72mm':'48mm');b.innerHTML=html;
-  $('pg').textContent='@page{size:'+ST.paper+'mm auto;margin:0}';
+var LBL={'50x30':[50,30],'40x30':[40,30],'35x22':[35,22]};
+// kind: 'bill' (máy in bill) hoặc 'label' (máy in tem). then: chạy sau khi in xong (vd. in tem sau bill)
+function doPrint(html,kind,then){
+  var b=$('bill');b.innerHTML=html;
+  if(kind==='label'){var z=LBL[ST.lbl]||LBL['50x30'];b.style.setProperty('--lw',z[0]+'mm');b.style.setProperty('--lh',z[1]+'mm');$('pg').textContent='@page{size:'+z[0]+'mm '+z[1]+'mm;margin:0}'}
+  else{b.style.setProperty('--bw',ST.paper==80?'72mm':'48mm');$('pg').textContent='@page{size:'+ST.paper+'mm auto;margin:0}'}
   var imgs=[].slice.call(b.querySelectorAll('img')),left=imgs.length,done=false;
-  var go=function(){if(done)return;done=true;setTimeout(function(){window.print()},50)};
+  var go=function(){if(done)return;done=true;setTimeout(function(){window.print();if(then)setTimeout(then,300)},50)};
   if(!left)return go();
   imgs.forEach(function(i){if(i.complete){if(--left<=0)go()}else i.onload=i.onerror=function(){if(--left<=0)go()}});
   setTimeout(go,4000);
 }
-function printOrder(o,reprint){
+// Tem dán ly: mỗi ly một tem
+function labelsHtml(o){
+  var n=o.lines.reduce(function(a,l){return a+l.q},0),k=0,h='',I=CFG.info,sm=ST.lbl==='35x22'?' sm':ST.lbl==='40x30'?' md':'';
+  var tmS=new Date(o.at).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
+  o.lines.forEach(function(l){for(var j=0;j<l.q;j++){k++;
+    h+='<div class="lbl'+sm+'"><div class="lt"><b>'+esc(I.name||'')+'</b><span>'+(o.no?'#'+o.no+' · ':'')+'Ly '+k+'/'+n+'</span></div>'
+      +'<div class="ln1">'+esc(l.n)+'</div><div class="lo">'+esc(l.t?(l.note||'Topping'):lblDesc(l))+'</div>'
+      +'<div class="lf"><span>'+esc(o.who||'')+'</span><span>'+tmS+'</span>'+(ST.lblPrice?'<span>'+fmt(unit(l))+'</span>':'')+'</div></div>'}});
+  return h}
+// Trên tem ghi đủ đường/đá (kể cả mặc định) để người pha khỏi đoán
+function lblDesc(l){var a=[l.s+'% đường',l.ice==='Vừa'?'đá vừa':l.ice.toLowerCase()];l.tops.forEach(function(t){a.push('+'+(tq(t)>1?tq(t)+' ':'')+t.n)});if(l.note)a.push(l.note);return a.join(', ')}
+function printLabels(o){doPrint(labelsHtml(o),'label')}
+function printOrder(o,reprint,then){
   var h='';for(var c=0;c<Math.max(1,+ST.copies||1);c++)h+=billHtml(o,false);
   if(ST.ticket&&!reprint)h+=ticketHtml(o);
-  doPrint(h);
+  doPrint(h,'bill',then);
 }
 function printTemp(){if(!cart.length)return;doPrint(billHtml({at:Date.now(),lines:cart,sub:sub(),disc:0,total:sub(),who:''},true))}
 
@@ -441,7 +465,7 @@ function drawHist(){
   L.slice().reverse().forEach(function(o){
     var t=new Date(o.at).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
     h+='<div class="hi'+(o.void?' void':'')+'"><div><b>Số '+o.no+' · '+fmt(o.total)+'</b><br><small>'+t+' · '+(o.m==='cash'?'Tiền mặt':'Chuyển khoản')+(o.who?' · '+esc(o.who):'')+'</small><br><small>'+esc(o.lines.map(function(l){return l.q+' '+l.n}).join(', '))+'</small></div>'
-      +(o.void?'<small>Đã huỷ</small>':'<div style="display:grid;gap:4px"><button onclick="reprint(\''+o.id+'\')">🖨️ In lại</button><button onclick="voidO(\''+o.id+'\')">Huỷ đơn</button></div>')+'</div>';
+      +(o.void?'<small>Đã huỷ</small>':'<div style="display:grid;gap:4px"><button onclick="reprint(\''+o.id+'\')">🖨️ In lại</button><button onclick="var o=findO(\''+o.id+'\');if(o)printLabels(o)">🏷️ In tem</button><button onclick="voidO(\''+o.id+'\')">Huỷ đơn</button></div>')+'</div>';
   });
   h+='<button class="btn o" style="width:100%;margin-top:14px" onclick="closeSheet()">Đóng</button>';
   show(h);
@@ -541,6 +565,10 @@ function openSet(){
   h+='<div class="lb">Số bản bill mỗi lần in</div>'+opt('copies',[[1,'1 bản'],[2,'2 bản']]);
   h+='<div class="lb">In thêm phiếu pha chế</div>'+opt('ticket',[[0,'Không'],[1,'Có']]);
   h+='<div class="lb">In mã QR chuyển khoản trên phiếu tạm tính</div>'+opt('qr',[[1,'Có'],[0,'Không']]);
+  h+='<div class="lb">Khổ tem dán ly</div>'+opt('lbl',[['50x30','50×30mm'],['40x30','40×30mm'],['35x22','35×22mm']]);
+  h+='<div class="lb">Tự in tem khi thanh toán</div>'+opt('lblAuto',[[0,'Không'],[1,'Có (mỗi ly một tem)']]);
+  h+='<div class="lb">In giá trên tem</div>'+opt('lblPrice',[[1,'Có'],[0,'Không']]);
+  h+='<button class="btn o" style="width:100%;margin-top:10px" onclick="printLabels({no:12,at:Date.now(),who:\'Chị Lan\',lines:[{n:\'Trà Sữa Nguyên Lá\',p:18,s:50,ice:\'Ít đá\',tops:[{n:\'Trân Châu Trắng\',p:5,q:2}],q:2,note:\'\'},{n:\'Trà Đào\',p:22,s:70,ice:\'Vừa\',tops:[],q:1,note:\'Không lấy ống hút\'}]})">🏷️ In thử tem (3 ly)</button>';
   h+='<div class="lb">Bấm vào món thì</div>'+opt('quick',[[0,'Mở chọn đường, đá, topping'],[1,'Thêm ngay (sửa sau ở giỏ)']]);
   h+='<div class="lb">Dòng cuối bill</div><input class="inp" value="'+esc(ST.foot)+'" onchange="ST.foot=this.value;ls.set(\'pos_set\',ST)">';
   h+='<div class="acts"><button class="btn o" onclick="doPrint(billHtml({no:0,at:Date.now(),lines:[{n:\'Trà Sữa (in thử)\',p:20,s:50,ice:\'Ít đá\',tops:[{n:\'Trân Châu\',p:5}],q:2,note:\'\'}],sub:50,disc:0,total:50,m:\'cash\',given:100,change:50,who:\'\'},false))">🖨️ In thử</button>'
