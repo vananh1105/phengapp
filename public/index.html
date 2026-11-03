@@ -186,11 +186,18 @@ input[type=file]{padding:9px}
 .mcard .cat{position:absolute;right:-3%;bottom:-9%;width:42%;aspect-ratio:1;z-index:1}
 .mc-kem{--cbg:linear-gradient(135deg,#FFF6E4,#F4E2C2);--ctx:#14213D;--clogo:#1F63C9;--clsh:1.5px 1.5px 0 #14110F;--cslot:rgba(31,99,201,.06);--cline:rgba(31,99,201,.28);--con:#1F63C9;--cpaw:#FFF3DC;--cacc:#E3342F;--cnb:#1F63C9;--cnt:#FFF3DC;--cedge:#F4E2C2}
 .mc-do{--cbg:linear-gradient(135deg,#E5473F,#C9332D);--ctx:#FFF3DC;--clogo:#FFF3DC;--clsh:2px 2px 0 #14110F;--cslot:rgba(255,243,220,.12);--cline:rgba(255,243,220,.4);--con:#FFF3DC;--cpaw:#C9332D;--cacc:#14213D;--cnb:#FFF3DC;--cnt:#C9332D;--cedge:#C9332D}
-.mcsw{display:flex;gap:8px;justify-content:center;margin:8px 0 4px;font-size:13px;color:var(--mut)}
-.mcsw button{border:0;border-radius:99px;padding:6px 12px 6px 6px;display:flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:13px;background:var(--cd);color:var(--ink);cursor:pointer;box-shadow:inset 0 0 0 1.5px var(--ln)}
-.mcsw button.on{box-shadow:inset 0 0 0 2px var(--ink)}
-.mcsw i{width:22px;height:16px;border-radius:4px}
-.slog{display:grid;gap:4px;font-size:13px;margin:6px 0 14px}.slog div{display:flex;justify-content:space-between;border-top:1px dashed var(--ln);padding-top:5px}.slog i{font-style:normal;font-weight:700;color:#2E7D5B}.slog i.u{color:#E3342F}
+.mch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.mcdots{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut);font-weight:600}
+.mcdots button{width:26px;height:26px;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.12)}
+.mcdots button.kem{background:linear-gradient(135deg,#FFF6E4,#F4E2C2)}.mcdots button.do{background:linear-gradient(135deg,#E5473F,#C9332D)}
+.mcdots button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #14213D}
+.mchint{text-align:center;font-size:14px;margin:12px 0 2px;color:var(--ink)}.mchint b{color:#E3342F}
+.mcrule{text-align:center;font-size:12px;color:var(--mut);margin:0 0 14px}
+.slogb{background:var(--cd);border-radius:16px;padding:12px 14px;margin-bottom:6px}
+.slt{font-weight:700;font-size:14px;margin-bottom:4px}
+.sle{font-size:13px;color:var(--mut)}
+.slog{display:grid;gap:0;font-size:13px}.slog div{display:flex;justify-content:space-between;gap:8px;border-top:1px dashed var(--ln);padding:6px 0}.slog div:first-child{border-top:0}.slog i{font-style:normal;font-weight:700;color:#2E7D5B}.slog i.u{color:#E3342F}
+.myh{margin-top:18px;padding-top:16px;border-top:1.5px solid var(--ln)}
 .freeb{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px 12px;border-radius:14px;background:#FFF3DC;color:#14213D;font-size:14px;cursor:pointer}
 .freeb input{width:20px;height:20px;accent-color:#E3342F;margin:0}
 .freeb b{color:#E3342F}
@@ -498,8 +505,10 @@ function cardHtml(n,name,ph){var full=n>=10,k=Math.min(n,10),h='<div class="mcar
   h+='</div><div class="mcb"><small>THÀNH VIÊN</small><div class="nm">'+esc(name||'Khách')+'</div><div class="ph">'+esc(p)+'</div></div>';
   h+=full?'<div class="mcr"><b>10/10</b>🎁 Đổi ly free!</div>':'<div class="mcn"><b>'+k+'/10</b>còn '+(10-k)+' ly</div>';
   return h+'<svg class="cat" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC" aria-hidden="true"><use href="#p-'+(cardColor()==='do'?'wave':'hug')+'"/></svg></div>'}
-function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}var w=$('mcw');if(w){var me=meGet();w.innerHTML=cardBlock(me)}}
-function cardBlock(me){var n=+me.stamps||0;return cardHtml(n,me.name,me.ph)+'<div class="mcsw">Màu thẻ: <button class="'+(cardColor()==='kem'?'on':'')+'" onclick="cardSet(\'kem\')"><i style="background:linear-gradient(135deg,#FFF6E4,#F4E2C2);box-shadow:inset 0 0 0 1px #E3D3B4"></i>Kem Sữa</button><button class="'+(cardColor()==='do'?'on':'')+'" onclick="cardSet(\'do\')"><i style="background:linear-gradient(135deg,#E5473F,#C9332D)"></i>Đỏ Kem</button></div>'}
+function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}var me=meGet(),w=$('mcw'),d=$('mcdots');if(w)w.innerHTML=cardBlock(me);if(d)d.innerHTML=cardDots()}
+function cardBlock(me){return cardHtml(+me.stamps||0,me.name,me.ph)}
+function cardDots(){var c=cardColor();return '<span>Màu thẻ</span><button aria-label="Kem Sữa" class="kem'+(c==='kem'?' on':'')+'" onclick="cardSet(\'kem\')"></button><button aria-label="Đỏ Kem" class="do'+(c==='do'?' on':'')+'" onclick="cardSet(\'do\')"></button>'}
+function cardHint(n){return n>=10?'🎁 Đủ 10 dấu! Đơn tiếp theo được <b>1 ly miễn phí</b>':'Còn <b>'+(10-n)+' ly</b> nữa là được 1 ly miễn phí'}
 function sbarDraw(){var b=$('sbar'),me=meGet();if(!b)return;if(!me.ph||!me.pin){b.style.display='none';return}var n=+me.stamps||0;b.style.display='flex';b.className='sbar'+(n>=10?' full':'');
   b.innerHTML='<svg aria-hidden="true"><use href="#paw"/></svg>'+(n>=10?'<span style="flex:1">🎁 Đủ 10 dấu! Đơn này được 1 ly miễn phí</span>':'<span><b>'+n+'/10 dấu</b></span><span class="pb"><i style="width:'+n*10+'%"></i></span><span>còn '+(10-n)+' ly</span>')}
 function stampsSet(n){var me=meGet();if(!me.ph)return;me.stamps=n;meSet(me);sbarDraw()}
@@ -660,11 +669,11 @@ function stOf(o){if(o.s==='pay')return Date.now()-new Date(o.at).getTime()<15*60
 function myItem(r,st,i){var d=new Date(r.at);return '<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div style="font-size:14px;margin-top:4px;color:'+(r.s==='done'?'var(--mr)':'var(--mut)')+'">'+st+'</div><pre>'+esc(r.t)+'</pre>'+(r.s==='pay'&&Date.now()-new Date(r.at).getTime()<15*60000?'<button class="btn" style="justify-content:center;margin-bottom:8px" onclick="payAgain('+i+')">Thanh toán ngay</button>':'')+'<button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'}
 var MYL=[];
 function myCopy(i,b){var r=MYL[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
-function slogHtml(L){if(!L||!L.length)return '';return '<div class="slog">'+L.slice(0,5).map(function(x){var t=new Date(x.at);return '<div><span>'+t.toLocaleDateString('vi-VN')+' · Đơn #'+esc(x.code)+'</span>'+(x.use?'<i class="u">🎁 đổi 1 ly</i>':'')+(x.add?'<i>+'+x.add+' dấu</i>':'')+'</div>'}).join('')+'</div>'}
+function slogHtml(L){var h='<div class="slogb"><div class="slt">Lịch sử tích dấu</div>';if(!L||!L.length)return h+'<div class="sle">Chưa có dấu nào. Mua ly đầu tiên để bắt đầu nhé!</div></div>';return h+'<div class="slog">'+L.slice(0,5).map(function(x){var t=new Date(x.at);return '<div><span>'+t.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'})+' · Đơn #'+esc(x.code)+'</span><span>'+(x.use?'<i class="u">🎁 đổi 1 ly</i> ':'')+(x.add?'<i>+'+x.add+' dấu</i>':'')+'</span></div>'}).join('')+'</div></div>'}
 function myOrders(){var me=meGet();if(!me.ph||!me.pin)return gShow('');myLoad(me.ph,me.pin)}
 function myLocal(ids){var l=myGet().filter(function(r){return r.ph===meGet().ph&&(!r.id||ids.indexOf(r.id)<0)});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
 function myLoad(ph,pin){MYL=[];show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut)">Đang tải…</p>');fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429){meSet(null);closeSheet();return gShow(d.err||'')}return show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">'+esc(d.err||'Không xem được đơn')+'</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')}
-var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],h='<h3>Thẻ tích điểm</h3><div id="mcw">'+cardBlock(me)+'</div><p style="color:var(--mut);font-size:13px;margin:4px 0 6px;text-align:center">Mỗi ly đã thanh toán được 1 dấu · đủ 10 dấu tặng 1 ly (ly đắt nhất trong đơn)</p>'+slogHtml(d.stampLog)+'<h3 style="margin-top:10px">Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
+var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],h='<div class="mch"><h3>Thẻ tích điểm</h3><div class="mcdots" id="mcdots">'+cardDots()+'</div></div><div id="mcw">'+cardBlock(me)+'</div><p class="mchint">'+cardHint(+me.stamps||0)+'</p><p class="mcrule">Mỗi ly đã thanh toán = 1 dấu · đủ 10 dấu tặng ly đắt nhất trong đơn</p>'+slogHtml(d.stampLog)+'<h3 class="myh">Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
 if(!os.length)h+='<p style="color:var(--mut)">Chưa có đơn nào.</p>';
 os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,stOf(o),i)});
 h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">Không kết nối được, thử lại sau</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')})}
