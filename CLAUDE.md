@@ -13,6 +13,7 @@
 - Không xoá hay bỏ chức năng đang có của trang đặt hàng (`index.html`), trang quản lý đơn (`don.html`) và phần mềm bán hàng (`ban.html`) khi chưa hỏi chủ repo.
 - Chưa rõ ý thì hỏi lại trước khi làm (ví dụ "ứng dụng bán hàng" là trang đặt hàng hay phần mềm bán tại quầy, "mẫu B" là mẫu nào).
 - Thay đổi giao diện lớn: làm vài mẫu xem trước cho chủ repo chọn rồi mới áp vào code thật.
+- Luôn sửa tiếp trên bản mới nhất mà chủ repo đã chốt (ví dụ đã chọn mẫu B thì mọi chỉnh sửa sau chèn vào mẫu B), không quay lại bản cũ hay mẫu ban đầu. Trước khi sửa, kiểm tra bản hiện tại (file, commit hoặc trang mẫu mới nhất) và nói rõ đang sửa trên bản nào.
 - Không chép linh vật, logo hay thương hiệu của quán khác; chỉ lấy cảm hứng phong cách rồi vẽ mới cho O Sugar.
 
 ## Netlify và credit
