@@ -198,22 +198,6 @@ input[type=file]{padding:9px}
 .sle{font-size:13px;color:var(--mut)}
 .slog{display:grid;gap:0;font-size:13px}.slog div{display:flex;justify-content:space-between;gap:8px;border-top:1px dashed var(--ln);padding:6px 0}.slog div:first-child{border-top:0}.slog i{font-style:normal;font-weight:700;color:#2E7D5B}.slog i.u{color:#E3342F}
 .myh{margin-top:18px;padding-top:16px;border-top:1.5px solid var(--ln)}
-#stv{position:fixed;inset:0;z-index:30;background:#1F63C9;overflow-y:auto;display:none;padding:env(safe-area-inset-top,0px) 0 calc(24px + env(safe-area-inset-bottom,0px))}
-#stv.show{display:block}
-.sttop{display:flex;align-items:center;gap:10px;margin-top:12px;padding:8px 10px;background:#FFF3DC;border-radius:20px}
-.stlg{width:46px;height:46px;border-radius:50%;background:#1F63C9;padding:2px;flex:none}.stlg svg{width:100%;height:100%}
-.sttop b{flex:1;font:400 24px/1 "Coiny",sans-serif;color:#1F63C9;text-shadow:2px 2px 0 #14110F}
-.sttop button{border:0;border-radius:12px;background:#3B7BD8;color:#FFF3DC;padding:9px 14px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
-.sth{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 2px 0}
-.sth h2{color:#FFF3DC;font-size:26px}
-#stv .mcdots{color:#FFF3DC}
-#stv .mcdots button.on{box-shadow:0 0 0 2px #1F63C9,0 0 0 4px #FFF3DC}
-.sthi{margin:2px 2px 14px;color:#FFF3DC;opacity:.9;font-size:14px}
-#stv .mcard{margin:0 auto}
-#stv .mchint{color:#FFF3DC;font-size:15px}#stv .mchint b{color:#FFE08A}
-#stv .mcrule{color:#FFF3DC;opacity:.75;margin-top:10px}
-#stact .btn{margin-top:12px;justify-content:center}
-#stv .slogb{background:#FFF3DC;color:#14213D}
 .conf{position:fixed;inset:0;pointer-events:none;z-index:31;overflow:hidden}
 .conf i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:cf 2.6s ease-in forwards}
 @keyframes cf{to{transform:translateY(110vh) rotate(540deg)}}
@@ -383,16 +367,7 @@ main.w{padding-top:12px}
 <div id="gpin2w" style="display:none"><div class="glb">Nhập lại mã PIN</div><div class="gpin" id="gpin2b"><div></div><div></div><div></div><div></div><input id="gpin2" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Nhập lại mã PIN"></div></div>
 <p id="gerr"></p><button class="btn" id="gbtn" style="justify-content:center" onclick="gGo()">Đăng nhập</button>
 <button class="gfg" id="gfg" onclick="gForgot()">Quên mã PIN?</button></div></div>
-<div id="stv" role="dialog" aria-label="Thẻ tích điểm"><div class="w">
-  <div class="sttop"><span class="stlg"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-hug"/></svg></span><b id="stsn">O Sugar</b><button onclick="closeStamps()">‹ Menu</button></div>
-  <div class="sth"><h2>Thẻ tích điểm</h2><div class="mcdots" id="mcdots"></div></div>
-  <p class="sthi" id="sthi"></p>
-  <div id="mcw"></div>
-  <p class="mchint" id="sthint"></p>
-  <div id="stact"></div>
-  <p class="mcrule">Mỗi ly đã thanh toán = 1 dấu · đủ 10 dấu tặng 1 ly (ly đắt nhất trong đơn)</p>
-  <div id="stlog"></div>
-</div><div class="conf" id="conf" aria-hidden="true"></div></div>
+<div class="conf" id="conf" aria-hidden="true"></div>
 <div id="stoast" role="status"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-wave"/></svg><div><b id="stt1"></b><span id="stt2"></span></div></div>
 <div class="bar"><div class="mob"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="mo" id="mst" onclick="openStamps()" style="display:none">🐾 Thẻ tích điểm</button></div><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
@@ -544,19 +519,12 @@ function cardHtml(n,name,ph){var full=n>=10,k=Math.min(n,10),h='<div class="mcar
   return h+'<svg class="cat" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC" aria-hidden="true"><use href="#p-'+(cardColor()==='do'?'wave':'hug')+'"/></svg></div>'}
 // ---- Màn hình Thẻ tích điểm ----
 var SLOG=null;
-function stDraw(){var me=meGet(),n=+me.stamps||0;$('stsn').textContent=(CFG.info&&CFG.info.name)||'O Sugar';$('sthi').textContent='Chào '+((me.name||'bạn').split(' ').slice(-1)[0])+' 👋 · mỗi ly là 1 dấu';
-  $('mcdots').innerHTML=cardDots();$('mcw').innerHTML=cardBlock(me);$('sthint').innerHTML=cardHint(n);
-  $('stact').innerHTML=n>=10?'<button class="btn" onclick="useFree()">🎁 Dùng ly miễn phí ở đơn tiếp theo</button>':'';
-  $('stlog').innerHTML=slogHtml(SLOG)}
-function openStamps(){var me=meGet();if(!me.ph||!me.pin)return gShow('');$('stv').className='show';stDraw();var was=+me.stamps||0;
-  fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(!d)return;var m=meGet();if(d.stamps!=null)m.stamps=d.stamps;meSet(m);SLOG=d.stampLog||[];sbarDraw();stDraw();if((+m.stamps||0)>=10)confetti()}).catch(function(){});
-  if(was>=10)confetti()}
-function closeStamps(){$('stv').className=''}
-function useFree(){FREE_ON=true;closeStamps();stToast('🎁 Đã sẵn sàng!','Chọn món rồi mở giỏ hàng, ly đắt nhất sẽ thành 0đ')}
+function openStamps(){myOrders()}
+function useFree(){FREE_ON=true;closeSheet();stToast('🎁 Đã sẵn sàng!','Chọn món rồi mở giỏ hàng, ly đắt nhất sẽ thành 0đ')}
 function confetti(){var c=$('conf'),C=['#F5B82E','#E3342F','#FFF3DC','#3B7BD8'],h='';for(var i=0;i<40;i++)h+='<i style="left:'+(Math.random()*100)+'%;background:'+C[i%4]+';animation-delay:'+(Math.random()*.8)+'s;animation-duration:'+(2+Math.random()*1.5)+'s"></i>';c.innerHTML=h;setTimeout(function(){c.innerHTML=''},4200)}
 var STT=null;
 function stToast(a,b){$('stt1').textContent=a;$('stt2').textContent=b;var t=$('stoast');t.className='show';clearTimeout(STT);STT=setTimeout(function(){t.className=''},4500)}
-function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}stDraw()}
+function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}var me=meGet(),w=$('mcw'),d=$('mcdots');if(w)w.innerHTML=cardBlock(me);if(d)d.innerHTML=cardDots()}
 function cardBlock(me){return cardHtml(+me.stamps||0,me.name,me.ph)}
 function cardDots(){var c=cardColor();return '<span>Màu thẻ</span><button aria-label="Kem Sữa" class="kem'+(c==='kem'?' on':'')+'" onclick="cardSet(\'kem\')"></button><button aria-label="Đỏ Kem" class="do'+(c==='do'?' on':'')+'" onclick="cardSet(\'do\')"></button>'}
 function cardHint(n){return n>=10?'🎁 Đủ 10 dấu! Đơn tiếp theo được <b>1 ly miễn phí</b>':'Còn <b>'+(10-n)+' ly</b> nữa là được 1 ly miễn phí'}
@@ -724,7 +692,7 @@ function slogHtml(L){var h='<div class="slogb"><div class="slt">Lịch sử tíc
 function myOrders(){var me=meGet();if(!me.ph||!me.pin)return gShow('');myLoad(me.ph,me.pin)}
 function myLocal(ids){var l=myGet().filter(function(r){return r.ph===meGet().ph&&(!r.id||ids.indexOf(r.id)<0)});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
 function myLoad(ph,pin){MYL=[];show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut)">Đang tải…</p>');fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429){meSet(null);closeSheet();return gShow(d.err||'')}return show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">'+esc(d.err||'Không xem được đơn')+'</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')}
-var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],SLOG=d.stampLog||[];h='<h3>Đơn bạn đã đặt</h3><button class="stlink" onclick="closeSheet();openStamps()">🐾 Thẻ tích điểm: <b>'+Math.min(10,+me.stamps||0)+'/10 dấu</b> · xem thẻ ›</button><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
+var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],SLOG=d.stampLog||[];var sn=+me.stamps||0;if(sn>=10)setTimeout(confetti,300);h='<div class="mch"><h3>Thẻ tích điểm</h3><div class="mcdots" id="mcdots">'+cardDots()+'</div></div><div id="mcw">'+cardBlock(me)+'</div><p class="mchint">'+cardHint(sn)+'</p>'+(sn>=10?'<button class="btn" style="justify-content:center;margin:4px 0 10px" onclick="useFree()">🎁 Dùng ly miễn phí ở đơn tiếp theo</button>':'')+'<p class="mcrule">Mỗi ly đã thanh toán = 1 dấu · đủ 10 dấu tặng ly đắt nhất trong đơn</p>'+slogHtml(SLOG)+'<h3 class="myh">Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
 if(!os.length)h+='<p style="color:var(--mut)">Chưa có đơn nào.</p>';
 os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,stOf(o),i)});
 h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">Không kết nối được, thử lại sau</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')})}
