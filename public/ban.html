@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bán hàng · Phéng</title>
+<title>Bán hàng · O Sugar</title>
 <link rel="manifest" href="/manifest-ban.webmanifest">
 <link rel="apple-touch-icon" href="/ban-icon-180.png">
 <meta name="theme-color" content="#1F63C9">
@@ -223,7 +223,7 @@ header button{border:0;border-radius:12px;background:var(--blue2);color:var(--cr
 
 <div id="app">
   <header>
-    <h1><svg aria-hidden="true"><use href="#p-hug"/></svg><span id="shop">Phéng</span></h1>
+    <h1><svg aria-hidden="true"><use href="#p-hug"/></svg><span id="shop">O Sugar</span></h1>
     <input id="q" type="search" placeholder="🔍 Tìm món" oninput="drawGrid()">
     <button id="shBtn" onclick="openShift()">🕐 <span class="tx">Ca</span></button>
     <button onclick="openStats()">📊 <span class="tx">Số liệu</span></button>
@@ -244,12 +244,11 @@ var SUGAR=[0,30,50,70,100], ICE=['Không đá','Ít đá','Vừa','Nhiều đá'
 var DEF_TOPS=[['Trân Châu Trắng',5],['Trân Châu Đen',5],['Thạch Trái Cây',5],['Sương Sáo',5],['Hạt Đác',5],['Củ Năng',7],['Phô Mai Dằm',7],['Bánh Plan',7],['Trân Châu Olong',7],['Pudding Trứng',10],['Phô Mai Viên',10],['Macchiato',10],['Thốt Nốt',10],['Hạt Sen',10]];
 var DEF_M=[
 {n:'Trà sữa pha tươi',p:18,e:'🧋',bg:'#f6dcc8',i:[['Trà Sữa Nguyên Lá'],['Trà Sữa Hokkaido'],['Trà Sữa Olong'],['Trà Sữa Lài'],['Trà Sữa Lài Hạnh Nhân'],['Trà Sữa Sen'],['Cacao Sữa'],['Matcha Sữa'],['Trà Sữa Bơ',30]]},
-{n:'Trà sữa phô mai',p:25,e:'🧀',bg:'#f3e2b8',i:[['Trà Sữa Nguyên Lá Phô Mai'],['Trà Sữa Hokkaido Phô Mai'],['Phéng Latte Tea']]},
+{n:'Trà sữa phô mai',p:25,e:'🧀',bg:'#f3e2b8',i:[['Trà Sữa Nguyên Lá Phô Mai'],['Trà Sữa Hokkaido Phô Mai'],['O Sugar Latte Tea']]},
 {n:'Trà bọt kem',p:25,e:'🍵',bg:'#dcead0',i:[['Trà Đen Bọt Kem'],['Trà Olong Bọt Kem'],['Trà Sen Bọt Kem']]},
 {n:'Sữa tươi',e:'🥛',bg:'#e3ecf2',i:[['STTC Đường Đen',22],['STTC Đường Đen Kem Cheese',30],['Sữa Tươi Thốt Nốt',22]]},
-{n:'Cà phê',e:'☕',bg:'#e7d3c0',i:[['Cà Phê Đá / Sữa',13],['Cà Phê Muối',15],['Cà Phê Hạnh Nhân',22],['Cà Phê Caramel',22],['Cà Phê Bọt Kem',22]]},
 {n:'Trà trái cây',p:22,e:'🍹',bg:'#f7d6dc',i:[['Trà Dâu'],['Trà Đào'],['Trà Vải'],['Trà Lài Tắc'],['Olong Chanh Vàng'],['Trà Măng Cầu',25],['Trà Me Đác Rim',25],['Trà Lài Đác Thơm',25],['Trà Mận Bắc',25],['Trà Long Nhãn',25],['Bánh Que Kem Trứng',15]]}];
-var DEF_INFO={name:'Phéng',addr:'40 Nguyễn Văn Linh, P. Phước Hiệp, BR',phone:'0928 0789 25'};
+var DEF_INFO={name:'O Sugar',addr:'40 Nguyễn Văn Linh, P. Phước Hiệp, BR',phone:'0928 0789 25'};
 
 var $=function(s){return document.getElementById(s)};
 var fmt=function(k){return (Math.round(k*1000)).toLocaleString('vi-VN')+'đ'};
@@ -281,7 +280,7 @@ function start(){
     if(d&&Array.isArray(d.cats)&&d.cats.length){CFG={info:Object.assign({},DEF_INFO,d.info||{}),cats:d.cats,tops:d.tops||[]};ls.set('pos_menu',CFG);ls.set('pos_bank',BANK);drawAll()}
   }).catch(function(){BANK=ls.get('pos_bank',null);toast('Mất mạng: đang dùng menu đã lưu trên máy')});
 }
-function drawAll(){$('shop').textContent=CFG.info.name||'Phéng';if(CAT>CFG.cats.length||(CAT===CFG.cats.length&&!CFG.tops.length))CAT=0;drawCats();drawGrid();drawCart()}
+function drawAll(){$('shop').textContent=CFG.info.name||'O Sugar';if(CAT>CFG.cats.length||(CAT===CFG.cats.length&&!CFG.tops.length))CAT=0;drawCats();drawGrid();drawCart()}
 
 /* ---------- Menu ---------- */
 function drawCats(){

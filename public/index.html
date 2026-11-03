@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Phéng · Đặt trà online</title>
+<title>O Sugar · Đặt trà online</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
 <style>
 :root{--bg:#fbf4ee;--sky:#cfe3ea;--sage:#c9d8b0;--cd:#fffaf6;--ink:#3b2a2a;--mut:#8a7370;--ln:#eadbd2;--mr:#6e0f22;--pk:#f7e3e6;--on:#fff;color-scheme:light}
@@ -162,15 +162,15 @@ input[type=file]{padding:9px}
 </head>
 <body>
 <div id="intro" onclick="endIntro()"><button class="in-skip" onclick="event.stopPropagation();endIntro()">Bỏ qua ›</button>
-<div class="in-top"><h1 id="in">Phéng</h1><p>Trà sữa · Trà trái cây · Cà phê</p></div><div class="in-sun"></div>
+<div class="in-top"><h1 id="in">O Sugar</h1><p>Trà sữa · Trà trái cây</p></div><div class="in-sun"></div>
 <svg class="in-hill" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70 C80 20 160 30 240 60 S360 70 400 40 V200 H0Z" fill="#b5cf93"/><path d="M0 120 C100 80 200 100 280 115 S370 105 400 90 V200 H0Z" fill="#8fb56a"/></svg>
 <svg class="in-cup" viewBox="0 0 120 180" aria-hidden="true"><rect x="57" y="2" width="7" height="58" rx="3" fill="#f3ead6" stroke="#8a7370" stroke-width="2" transform="rotate(6 60 30)"/><path d="M26 62 H94 L86 160 Q85 170 75 170 H45 Q35 170 34 160Z" fill="#f4b27a" stroke="#6e0f22" stroke-width="3"/><rect x="22" y="52" width="76" height="14" rx="7" fill="#fffaf6" stroke="#6e0f22" stroke-width="3"/><rect x="48" y="92" width="24" height="24" rx="6" fill="#6e0f22"/><circle cx="60" cy="102" r="5" fill="#fffaf6"/><g fill="#3b2a2a"><circle cx="44" cy="156" r="5"/><circle cx="56" cy="158" r="5"/><circle cx="68" cy="156" r="5"/><circle cx="78" cy="158" r="4"/></g></svg></div>
 <div class="stripe"></div>
 <div class="lights" id="lights"></div>
 <div class="w">
-  <div class="top"><div class="logo" id="lg">🐶</div><div><h1 id="sn">Phéng</h1><p id="stg"></p></div><button class="adm" id="adm" onclick="openAdmin()" style="display:none">⚙ Quản lý</button></div>
+  <div class="top"><div class="logo" id="lg">🐶</div><div><h1 id="sn">O Sugar</h1><p id="stg"></p></div><button class="adm" id="adm" onclick="openAdmin()" style="display:none">⚙ Quản lý</button></div>
   <div class="tiles">
-    <div class="tile hl"><i>🧋</i><div><b id="tf">Từ 13.000đ</b><small>trà, sữa, cà phê</small></div></div>
+    <div class="tile hl"><i>🧋</i><div><b id="tf">Từ 13.000đ</b><small>trà sữa, trà trái cây</small></div></div>
     <div class="tile"><i>🕗</i><div><b id="th">08h – 21h</b><small>mở cửa mỗi ngày</small></div></div>
     <div class="tile"><i>📲</i><div><b>Quét QR</b><small>chuyển khoản</small></div></div>
     <button class="tile" id="gt" onclick="setMode(!group)"><i>👯</i><div><b>Đặt theo nhóm</b><small id="gs">ai chọn ly nấy · bấm để bật</small></div></button>
@@ -185,7 +185,7 @@ input[type=file]{padding:9px}
   <div class="foot" id="ft"></div>
 </main>
 
-<div id="gate"><div class="gtop"><div class="glogo" id="glg">🐶</div><h2 id="gsn">Phéng</h2><p>Trà sữa · Trà trái cây · Cà phê</p></div>
+<div id="gate"><div class="gtop"><div class="glogo" id="glg">🐶</div><h2 id="gsn">O Sugar</h2><p>Trà sữa · Trà trái cây</p></div>
 <div class="gcard"><div class="gseg"><button id="gt1" class="on" onclick="gTab(0)">Đăng nhập</button><button id="gt2" onclick="gTab(1)">Đăng ký</button></div>
 <div id="gnmw" style="display:none"><div class="glb">Tên của bạn</div><input class="gi" id="gnm" autocomplete="name"></div>
 <div class="glb">Số điện thoại</div><input class="gi" id="gph" inputmode="tel" autocomplete="tel">
@@ -209,10 +209,9 @@ var TOPS=[['Trân Châu Trắng',5],['Trân Châu Đen',5],['Thạch Trái Cây'
 // món: [tên, bestseller, giá riêng]
 var M=[
 {id:'ts',n:'Trà sữa pha tươi',en:'Milk Tea',p:18,e:'🧋',bg:'#f6dcc8',i:[['Trà Sữa Nguyên Lá',1],['Trà Sữa Hokkaido'],['Trà Sữa Olong'],['Trà Sữa Lài'],['Trà Sữa Lài Hạnh Nhân',1],['Trà Sữa Sen'],['Cacao Sữa'],['Matcha Sữa'],['Trà Sữa Bơ',0,30]]},
-{id:'pm',n:'Trà sữa phô mai',en:'Milk Tea Cheese',p:25,e:'🧀',bg:'#f3e2b8',i:[['Trà Sữa Nguyên Lá Phô Mai'],['Trà Sữa Hokkaido Phô Mai',1],['Phéng Latte Tea']]},
+{id:'pm',n:'Trà sữa phô mai',en:'Milk Tea Cheese',p:25,e:'🧀',bg:'#f3e2b8',i:[['Trà Sữa Nguyên Lá Phô Mai'],['Trà Sữa Hokkaido Phô Mai',1],['O Sugar Latte Tea']]},
 {id:'bk',n:'Trà bọt kem',en:'Tea With Macchiato',p:25,e:'🍵',bg:'#dcead0',i:[['Trà Đen Bọt Kem',1],['Trà Olong Bọt Kem'],['Trà Sen Bọt Kem']]},
 {id:'st',n:'Sữa tươi',en:'Fresh Milk',e:'🥛',bg:'#e3ecf2',i:[['STTC Đường Đen',0,22],['STTC Đường Đen Kem Cheese',0,30],['Sữa Tươi Thốt Nốt',1,22]]},
-{id:'cf',n:'Cà phê',en:'Coffee',e:'☕',bg:'#e7d3c0',i:[['Cà Phê Đá / Sữa',0,13],['Cà Phê Muối',0,15],['Cà Phê Hạnh Nhân',1,22],['Cà Phê Caramel',0,22],['Cà Phê Bọt Kem',0,22]]},
 {id:'tc',n:'Trà trái cây',en:'Fruit Tea',p:22,e:'🍹',bg:'#f7d6dc',i:[['Trà Dâu'],['Trà Đào'],['Trà Vải',1],['Trà Lài Tắc'],['Olong Chanh Vàng'],['Trà Măng Cầu',1,25],['Trà Me Đác Rim',1,25],['Trà Lài Đác Thơm',0,25],['Trà Mận Bắc',0,25],['Trà Long Nhãn',1,25],['Bánh Que Kem Trứng',0,15]]}
 ];
 var cart=[],group=false,cur=null,done=null,delivery=false;
@@ -220,7 +219,7 @@ var $=function(s){return document.getElementById(s)};
 var fmt=function(k){return (k*1000).toLocaleString('vi-VN')+'đ'};
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
 
-var DEF_INFO={name:'Phéng',tag:'Chọn món, chọn đường và đá, rồi bấm hoàn tất là xong!',addr:'40 Nguyễn Văn Linh, P. Phước Hiệp, BR',phone:'0928 0789 25',zalo:'0928078925',hours:'08h – 21h',logo:'',qr:'',season:'',gifts:[{n:'Giảm 5k',t:'sub',v:5},{n:'Giảm 10k',t:'sub',v:10},{n:'Tặng 1 topping trân châu trắng',t:'free',v:0}]};
+var DEF_INFO={name:'O Sugar',tag:'Chọn món, chọn đường và đá, rồi bấm hoàn tất là xong!',addr:'40 Nguyễn Văn Linh, P. Phước Hiệp, BR',phone:'0928 0789 25',zalo:'0928078925',hours:'08h – 21h',logo:'',qr:'',season:'',gifts:[{n:'Giảm 5k',t:'sub',v:5},{n:'Giảm 10k',t:'sub',v:10},{n:'Tặng 1 topping trân châu trắng',t:'free',v:0}]};
 function defCfg(){return {info:JSON.parse(JSON.stringify(DEF_INFO)),cats:M.map(function(c){return {id:c.id,n:c.n,en:c.en,e:c.e,bg:c.bg,i:c.i.map(function(it){return {n:it[0],b:it[1]?1:0,p:it[2]||c.p,img:'',off:0}})}}),tops:TOPS.map(function(t){return {n:t[0],p:t[1]}})}}
 function norm(d){d.info=Object.assign({},DEF_INFO,d.info);if(!Array.isArray(d.info.gifts))d.info.gifts=JSON.parse(JSON.stringify(DEF_INFO.gifts));d.cats=d.cats||[];d.cats.forEach(function(c){c.i=c.i||[]});d.tops=d.tops||[];return d}
 var CFG=defCfg(),dbDoc=null,admin=false,assetsNs=null,q=Promise.resolve(),tab='info',ed=null,delArm=0;
