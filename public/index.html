@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>O Sugar · Đặt trà online</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coiny&family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
 <style>
 :root{--bg:#fbf4ee;--sky:#cfe3ea;--sage:#c9d8b0;--cd:#fffaf6;--ink:#3b2a2a;--mut:#8a7370;--ln:#eadbd2;--mr:#6e0f22;--pk:#f7e3e6;--on:#fff;color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#231517;--sky:#26363b;--sage:#3e4a35;--cd:#2f1d20;--ink:#f6e7e3;--mut:#b79b98;--ln:#4a3236;--mr:#a8283f;--pk:#3d2429;color-scheme:dark}}
@@ -158,9 +158,81 @@ input[type=file]{padding:9px}
 .gift{flex-wrap:wrap}.gift small{display:block;font-weight:400;color:var(--mut);font-size:12px}
 .gk{border:0;border-radius:99px;background:var(--mr);color:#fff;padding:8px 16px;font:600 13px "Be Vietnam Pro",sans-serif;cursor:pointer}
 .gk.o{background:none;color:var(--mr);border:1.5px solid var(--mr)}
+
+/* ===== Thẻ tích điểm (mua 10 ly tặng 1 ly) ===== */
+.sbar{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px;border:0;border-radius:16px;padding:10px 14px;background:#FFF3DC;color:#14213D;font:inherit;font-weight:600;font-size:14px;cursor:pointer;text-align:left;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sbar svg{width:22px;height:22px;color:#E3342F;flex:none}
+.sbar .pb{flex:1;height:9px;border-radius:99px;background:#EADCC2;overflow:hidden}.sbar .pb i{display:block;height:100%;border-radius:99px;background:#E3342F}
+.sbar.full{background:#E3342F;color:#FFF3DC}.sbar.full svg{color:#FFF3DC}
+.mcard{width:100%;max-width:380px;margin:6px auto 4px;aspect-ratio:85.6/54;border-radius:18px;position:relative;overflow:hidden;color:var(--ctx);background:var(--cbg);display:grid;grid-template-rows:auto 1fr auto;padding:5.5% 6% 5%;box-shadow:0 1px 1px rgba(0,0,0,.1),0 4px 8px rgba(0,0,0,.08),0 16px 28px -10px rgba(60,20,20,.4)}
+.mcard:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(118deg,rgba(255,255,255,.3),rgba(255,255,255,.05) 30%,rgba(255,255,255,0) 50%,rgba(255,255,255,.08));box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);pointer-events:none}
+.mcard>*{position:relative;z-index:1}
+.mcard .mct{display:flex;align-items:center}
+.mcard .mct b{font:400 clamp(18px,5.6vw,23px)/1 "Coiny","Baloo 2",sans-serif;color:var(--clogo);text-shadow:var(--clsh)}
+.mcard .mct span{margin-left:auto;font-weight:700;font-size:9px;letter-spacing:2px;opacity:.72}
+.mcard .mcp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7% 6%;width:58%;align-self:center}
+.mcard .mcp i{min-width:0;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-style:normal;background:var(--cslot);box-shadow:inset 0 0 0 1.6px var(--cline)}
+.mcard .mcp i svg{width:70%;height:70%;color:var(--cpaw)}
+.mcard .mcp i.on{background:var(--con);box-shadow:none}
+.mcard .mcp i:nth-child(odd) svg{transform:rotate(-14deg)}.mcard .mcp i:nth-child(even) svg{transform:rotate(12deg)}
+.mcard .mcp i.gift{box-shadow:inset 0 0 0 1.6px var(--cacc)}.mcard .mcp i.gift b{font-size:12px;line-height:1}
+.mcard .mcb small{display:block;font-weight:700;font-size:8px;letter-spacing:1.6px;opacity:.68;margin-bottom:3px}
+.mcard .mcb .nm{font-weight:700;font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.15}
+.mcard .mcb .ph{font-weight:600;font-size:11px;letter-spacing:1.8px;opacity:.85;margin-top:2px}
+.mcard .mcn{position:absolute;right:6%;top:24%;z-index:2;text-align:center;background:var(--cnb);color:var(--cnt);border-radius:12px;padding:5px 9px;font-weight:700;font-size:10px;line-height:1.15}
+.mcard .mcn b{display:block;font-size:19px;line-height:1}
+.mcard .mcr{position:absolute;right:6%;top:22%;z-index:2;background:var(--cacc);color:#FFF3DC;border-radius:12px;padding:6px 10px;font-weight:700;font-size:11px;line-height:1.15;text-align:center;transform:rotate(4deg);box-shadow:0 0 0 2px var(--cedge),0 6px 12px rgba(0,0,0,.2)}
+.mcard .mcr b{display:block;font-size:16px}
+.mcard .cat{position:absolute;right:-3%;bottom:-9%;width:42%;aspect-ratio:1;z-index:1}
+.mc-kem{--cbg:linear-gradient(135deg,#FFF6E4,#F4E2C2);--ctx:#14213D;--clogo:#1F63C9;--clsh:1.5px 1.5px 0 #14110F;--cslot:rgba(31,99,201,.06);--cline:rgba(31,99,201,.28);--con:#1F63C9;--cpaw:#FFF3DC;--cacc:#E3342F;--cnb:#1F63C9;--cnt:#FFF3DC;--cedge:#F4E2C2}
+.mc-do{--cbg:linear-gradient(135deg,#E5473F,#C9332D);--ctx:#FFF3DC;--clogo:#FFF3DC;--clsh:2px 2px 0 #14110F;--cslot:rgba(255,243,220,.12);--cline:rgba(255,243,220,.4);--con:#FFF3DC;--cpaw:#C9332D;--cacc:#14213D;--cnb:#FFF3DC;--cnt:#C9332D;--cedge:#C9332D}
+.mcsw{display:flex;gap:8px;justify-content:center;margin:8px 0 4px;font-size:13px;color:var(--mut)}
+.mcsw button{border:0;border-radius:99px;padding:6px 12px 6px 6px;display:flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:13px;background:var(--cd);color:var(--ink);cursor:pointer;box-shadow:inset 0 0 0 1.5px var(--ln)}
+.mcsw button.on{box-shadow:inset 0 0 0 2px var(--ink)}
+.mcsw i{width:22px;height:16px;border-radius:4px}
+.slog{display:grid;gap:4px;font-size:13px;margin:6px 0 14px}.slog div{display:flex;justify-content:space-between;border-top:1px dashed var(--ln);padding-top:5px}.slog i{font-style:normal;font-weight:700;color:#2E7D5B}.slog i.u{color:#E3342F}
+.freeb{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px 12px;border-radius:14px;background:#FFF3DC;color:#14213D;font-size:14px;cursor:pointer}
+.freeb input{width:20px;height:20px;accent-color:#E3342F;margin:0}
+.freeb b{color:#E3342F}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<!-- Thẻ tích điểm: dấu chân mèo + Mèo Đen -->
+<symbol id="paw" viewBox="0 0 40 40"><g fill="currentColor"><ellipse cx="20" cy="26" rx="10" ry="8.5"/><ellipse cx="9" cy="16" rx="4.2" ry="5.2"/><ellipse cx="16" cy="9.5" rx="4.2" ry="5.2"/><ellipse cx="24" cy="9.5" rx="4.2" ry="5.2"/><ellipse cx="31" cy="16" rx="4.2" ry="5.2"/></g></symbol>
+<symbol id="p-hug" viewBox="0 0 120 120">
+    <path d="M88 96q26-6 20-34q-3-12-12-10" fill="none" stroke="var(--cat,#14110F)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M28 40Q24 14 48 26Z M92 40Q96 14 72 26Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M16 92q0-28 44-28t44 28q0 22-44 22t-44-22Z" fill="var(--cat,#14110F)"/>
+    <ellipse cx="60" cy="54" rx="42" ry="32" fill="var(--cat,#14110F)"/>
+    <g fill="none" stroke="var(--face,#FFF3DC)" stroke-width="3" stroke-linecap="round"><path d="M40 52q6 5 12 0"/><path d="M68 52q6 5 12 0"/><path d="M55 63q2.5 3 5 0q2.5 3 5 0"/><path d="M22 58l-11-2M22 64l-11 2M98 58l11-2M98 64l11 2"/></g>
+    <ellipse cx="34" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="86" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <path d="M44 80h32l-3 26H47Z" fill="var(--cup,#E3342F)"/>
+    <path d="M76 86q10 0 10 7t-10 7" fill="none" stroke="var(--cup,#E3342F)" stroke-width="4.5"/>
+    <rect x="42" y="77" width="36" height="6" rx="3" fill="var(--lid,#FFF3DC)"/>
+    <circle cx="60" cy="94" r="6" fill="var(--lid,#FFF3DC)"/>
+    <ellipse cx="44" cy="88" rx="7" ry="6" fill="var(--cat,#14110F)"/>
+  </symbol>
+<symbol id="p-wave" viewBox="0 0 120 120">
+    <path d="M24 98q-20-2-18-24q1-10 10-10" fill="none" stroke="var(--cat,#14110F)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M90 74q14-14 14-32" fill="none" stroke="var(--cat,#14110F)" stroke-width="14" stroke-linecap="round"/>
+    <ellipse cx="104" cy="36" rx="10" ry="9" fill="var(--cat,#14110F)"/>
+    <path d="M100 30v-4M105 29v-5M110 31v-4" stroke="var(--face,#FFF3DC)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+    <g stroke="var(--face,#FFF3DC)" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".9"><path d="M114 18l4-4M118 28h5M108 12l1-5"/></g>
+    <path d="M24 42Q20 16 44 28Z M88 42Q92 16 68 28Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M14 94q0-28 42-28t42 28q0 20-42 20t-42-20Z" fill="var(--cat,#14110F)"/>
+    <ellipse cx="56" cy="56" rx="41" ry="32" fill="var(--cat,#14110F)"/>
+    <circle cx="42" cy="54" r="7" fill="var(--face,#FFF3DC)"/><circle cx="70" cy="54" r="7" fill="var(--face,#FFF3DC)"/>
+    <circle cx="43" cy="55.5" r="4.2" fill="var(--cat,#14110F)"/><circle cx="71" cy="55.5" r="4.2" fill="var(--cat,#14110F)"/>
+    <circle cx="44.6" cy="53.4" r="1.5" fill="var(--face,#FFF3DC)"/><circle cx="72.6" cy="53.4" r="1.5" fill="var(--face,#FFF3DC)"/>
+    <path d="M50 66q6 6 12 0" fill="var(--blush,#E3342F)" stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="30" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="82" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <g stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"><path d="M18 60l-10-2M18 66l-10 2"/></g>
+    <ellipse cx="38" cy="104" rx="9" ry="7" fill="var(--cat,#14110F)"/>
+      <path d="M35 106v-3M41 106v-3" stroke="var(--face,#FFF3DC)" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+</defs></svg>
+
 <div id="intro" onclick="endIntro()"><button class="in-skip" onclick="event.stopPropagation();endIntro()">Bỏ qua ›</button>
 <div class="in-top"><h1 id="in">O Sugar</h1><p>Trà sữa · Trà trái cây</p></div><div class="in-sun"></div>
 <svg class="in-hill" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70 C80 20 160 30 240 60 S360 70 400 40 V200 H0Z" fill="#b5cf93"/><path d="M0 120 C100 80 200 100 280 115 S370 105 400 90 V200 H0Z" fill="#8fb56a"/></svg>
@@ -175,6 +247,7 @@ input[type=file]{padding:9px}
     <div class="tile"><i>📲</i><div><b>Quét QR</b><small>chuyển khoản</small></div></div>
     <button class="tile" id="gt" onclick="setMode(!group)"><i>👯</i><div><b>Đặt theo nhóm</b><small id="gs">ai chọn ly nấy · bấm để bật</small></div></button>
   </div>
+  <button class="sbar" id="sbar" onclick="myOrders()" style="display:none"></button>
   <div id="tree" class="tree" style="display:none"></div>
 </div>
 <div class="stripe"></div>
@@ -322,7 +395,28 @@ function addCur(){
 }
 function lineTotal(l){return unit(l)*l.qty}
 function desc(l){return l.sugar+'% đường, '+l.ice.toLowerCase()+(l.tops.length?', +'+l.tops.map(function(i){return TOPS[i][0]}).join(', +'):'')}
-function total(){return sub()-disc()}
+function total(){return sub()-disc()-freeV()}
+// ---- Thẻ tích điểm: mua 10 ly tặng 1 ly ----
+var FREE_ON=true;
+function stampsGet(){var me=meGet();return +me.stamps||0}
+function cupsCart(){return cart.reduce(function(a,l){return a+l.qty},0)}
+// Ly miễn phí = ly đắt nhất trong giỏ (kể cả topping của ly đó)
+function freeLine(){var b=null;cart.forEach(function(l){if(!b||unit(l)>unit(b))b=l});return b}
+function canFree(){return stampsGet()>=10&&cupsCart()>0}
+function freeV(){if(!FREE_ON||!canFree())return 0;var l=freeLine();return l?Math.min(unit(l),sub()-disc()):0}
+function cardColor(){try{return localStorage.getItem('card_color')||'kem'}catch(e){return 'kem'}}
+function cardHtml(n,name,ph){var full=n>=10,k=Math.min(n,10),h='<div class="mcard mc-'+cardColor()+'"><div class="mct"><b>O Sugar</b><span>MEMBER CARD</span></div><div class="mcp">';
+  for(var i=1;i<=10;i++)h+='<i class="'+(i<=k?'on':(i===10?'gift':''))+'">'+(i<=k?'<svg><use href="#paw"/></svg>':(i===10?'<b>🎁</b>':''))+'</i>';
+  var p=String(ph||'').replace(/\D/g,'');p=p.length>6?p.slice(0,4)+' •••• '+p.slice(-3):p;
+  h+='</div><div class="mcb"><small>THÀNH VIÊN</small><div class="nm">'+esc(name||'Khách')+'</div><div class="ph">'+esc(p)+'</div></div>';
+  h+=full?'<div class="mcr"><b>10/10</b>🎁 Đổi ly free!</div>':'<div class="mcn"><b>'+k+'/10</b>còn '+(10-k)+' ly</div>';
+  return h+'<svg class="cat" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC" aria-hidden="true"><use href="#p-'+(cardColor()==='do'?'wave':'hug')+'"/></svg></div>'}
+function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}var w=$('mcw');if(w){var me=meGet();w.innerHTML=cardBlock(me)}}
+function cardBlock(me){var n=+me.stamps||0;return cardHtml(n,me.name,me.ph)+'<div class="mcsw">Màu thẻ: <button class="'+(cardColor()==='kem'?'on':'')+'" onclick="cardSet(\'kem\')"><i style="background:linear-gradient(135deg,#FFF6E4,#F4E2C2);box-shadow:inset 0 0 0 1px #E3D3B4"></i>Kem Sữa</button><button class="'+(cardColor()==='do'?'on':'')+'" onclick="cardSet(\'do\')"><i style="background:linear-gradient(135deg,#E5473F,#C9332D)"></i>Đỏ Kem</button></div>'}
+function sbarDraw(){var b=$('sbar'),me=meGet();if(!b)return;if(!me.ph||!me.pin){b.style.display='none';return}var n=+me.stamps||0;b.style.display='flex';b.className='sbar'+(n>=10?' full':'');
+  b.innerHTML='<svg aria-hidden="true"><use href="#paw"/></svg>'+(n>=10?'<span style="flex:1">🎁 Đủ 10 dấu! Đơn này được 1 ly miễn phí</span>':'<span><b>'+n+'/10 dấu</b></span><span class="pb"><i style="width:'+n*10+'%"></i></span><span>còn '+(10-n)+' ly</span>')}
+function stampsSet(n){var me=meGet();if(!me.ph)return;me.stamps=n;meSet(me);sbarDraw()}
+function freeHtml(){if(!canFree())return '';var l=freeLine();return '<label class="freeb"><input type="checkbox" '+(FREE_ON?'checked':'')+' onchange="FREE_ON=this.checked;openCart()"><span>🎁 Dùng <b>1 ly miễn phí</b> từ thẻ tích điểm<br><small style="color:var(--mut)">'+esc(l.name)+' · −'+fmt(Math.min(unit(l),sub()-disc()))+'</small></span></label>'}
 function upd(){
   var n=cart.reduce(function(a,l){return a+l.qty},0);
   $('cc').textContent=n?'Xem đơn · '+n+' ly':'Xem đơn của bạn';$('ct').textContent=fmt(total());$('cb').disabled=!n;
@@ -337,7 +431,7 @@ function openCart(){
       h+='<div class="ln"><div>'+l.qty+' × '+esc(l.name)+'<small>'+desc(l)+'</small></div><div>'+fmt(lineTotal(l))+'<br><button onclick="cart.splice('+i+',1);upd();cart.length?openCart():closeSheet()">Xóa</button></div></div>';
     });
   });
-  h+=giftHtml();
+  h+=giftHtml()+freeHtml();
   h+='<div class="tot"><span>Tổng cộng</span><span>'+fmt(total())+'</span></div>';
   h+='<div class="lb">Thông tin nhận hàng</div><div style="background:var(--cd);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:14px">Đặt bằng tài khoản: <b>'+esc(meGet().name||'')+'</b> · '+esc(meGet().ph||'')+'</div>';
   var L0=locGet();
@@ -422,13 +516,13 @@ function finish(){
     cart.forEach(function(l){if(!group||l.who===k)m+='- '+l.qty+' × '+l.name+' ('+desc(l)+') '+fmt(lineTotal(l))+'\n'});
   });
   var TT=total();m+='\nTổng: '+fmt(TT);
-  m+=' (chuyển khoản)';if(giftUse)m+='\n🎁 Quà Noel: '+giftUse.n+(giftUse.t==='sub'?' (đã trừ '+fmt(disc())+')':' (tặng kèm, 0đ)');var nt=$('nt').value.trim();if(nt)m+='\nGhi chú: '+nt;
+  m+=' (chuyển khoản)';if(freeV()){var fl=freeLine();m+='\n🎁 Ly miễn phí (thẻ tích điểm): '+fl.name+' −'+fmt(freeV())}if(giftUse)m+='\n🎁 Quà Noel: '+giftUse.n+(giftUse.t==='sub'?' (đã trừ '+fmt(disc())+')':' (tặng kèm, 0đ)');var nt=$('nt').value.trim();if(nt)m+='\nGhi chú: '+nt;
   done=m;sendOrder(m,nm,ph,TT,pin,LC);
   show('<h3>Đơn của bạn</h3><p id="sst" style="font-weight:600">Đang tạo đơn…</p>');
 }
 function sendOrder(m,nm,ph,tt,pin,lc){var e=function(t){var x=$('sst');if(x)x.innerHTML=t};
 var fail=function(t){e('❌ '+(t||'Chưa tạo được đơn, bạn thử lại giúp quán nhé.')+'<br><button class="btn" style="justify-content:center;margin-top:12px" onclick="openCart()">Quay lại giỏ hàng</button>')};
-fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr,lat:lc.lat,lng:lc.lng}:{text:m,name:nm,phone:ph,total:tt,pin:pin})}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr,lat:lc.lat,lng:lc.lng}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
 if(d&&d.login){meSet(null);fail(esc(d.err||'Cần đăng nhập lại')+'. Đăng nhập lại rồi đặt lại, giỏ hàng vẫn giữ nguyên.');setTimeout(function(){closeSheet();gShow(d.err||'')},2500);return}
 if(!r.ok||!d.id)return fail(d&&d.err?esc(d.err):'');
 if(giftUse&&giftUse.fromSaved)dropGift();
@@ -451,9 +545,9 @@ show('<h3>Quét mã để thanh toán</h3><div id="pst" style="font-weight:600;m
 '<button class="btn o" style="justify-content:center" onclick="clearInterval(PAYT);closeSheet()">Đóng (thanh toán sau ở 📋 Đơn đã đặt)</button>');
 var tick=function(){var x=$('pcd');if(!x){clearInterval(PAYT);return}var left=Math.max(0,Math.round((end-Date.now())/1000));x.textContent=left?'('+Math.floor(left/60)+':'+String(left%60).padStart(2,'0')+')':'';
 if(Date.now()>end+120000){clearInterval(PAYT);$('pst').innerHTML='⌛ Hết thời gian thanh toán. <span style="font-weight:500">Nếu bạn đã chuyển tiền, gọi quán '+esc(CFG.info.phone)+' để được xử lý.</span>';return}};
-var check=function(){if(!$('pcd'))return;fetch('/api/order?id='+encodeURIComponent(o.id),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.s&&d.s!=='pay')payDone(o)}).catch(function(){})};
+var check=function(){if(!$('pcd'))return;fetch('/api/order?id='+encodeURIComponent(o.id),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.s&&d.s!=='pay')payDone(o,d)}).catch(function(){})};
 var n=0;tick();PAYT=setInterval(function(){tick();if(++n%4===0)check()},1000)}
-function payDone(o){clearInterval(PAYT);cart=[];giftReset();upd();show('<h3>✅ Thanh toán thành công</h3><p style="font-weight:600">Quán đã nhận đơn #'+esc(o.code)+'.</p><p style="color:var(--mut)">Bạn xem trạng thái đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</p><pre>'+esc(o.t||'')+'</pre><button class="btn" style="justify-content:center" onclick="closeSheet()">Xong</button>')}
+function payDone(o,d){clearInterval(PAYT);cart=[];giftReset();FREE_ON=true;upd();if(d&&d.stamps!=null)stampsSet(d.stamps);var me=meGet();show('<h3>✅ Thanh toán thành công</h3><p style="font-weight:600">Quán đã nhận đơn #'+esc(o.code)+'.</p>'+(d&&d.stampAdd?'<p style="font-weight:700;color:#E3342F;margin:4px 0">🐾 +'+d.stampAdd+' dấu vào thẻ tích điểm!</p>':'')+(d&&d.stamps!=null?cardHtml(+d.stamps,me.name,me.ph):'')+'<p style="color:var(--mut)">Bạn xem trạng thái đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</p><pre>'+esc(o.t||'')+'</pre><button class="btn" style="justify-content:center" onclick="closeSheet()">Xong</button>')}
 function payQrErr(i){var a=i.getAttribute('data-alt');if(a){i.removeAttribute('data-alt');i.src=a;return}i.outerHTML='<p style="background:var(--pk);border-radius:12px;padding:10px;font-size:14px">Không tải được mã QR. Bạn mở app ngân hàng, chuyển khoản theo đúng thông tin bên dưới nhé.</p>'}
 function payDl(id,code){var b=$('pdl'),h=$('pdlh');if(!b)return;b.disabled=true;b.textContent='Đang tải mã QR…';
 fetch('/api/qr?id='+encodeURIComponent(id)).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(bl){
@@ -479,10 +573,11 @@ function stOf(o){if(o.s==='pay')return Date.now()-new Date(o.at).getTime()<15*60
 function myItem(r,st,i){var d=new Date(r.at);return '<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div style="font-size:14px;margin-top:4px;color:'+(r.s==='done'?'var(--mr)':'var(--mut)')+'">'+st+'</div><pre>'+esc(r.t)+'</pre>'+(r.s==='pay'&&Date.now()-new Date(r.at).getTime()<15*60000?'<button class="btn" style="justify-content:center;margin-bottom:8px" onclick="payAgain('+i+')">Thanh toán ngay</button>':'')+'<button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'}
 var MYL=[];
 function myCopy(i,b){var r=MYL[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
+function slogHtml(L){if(!L||!L.length)return '';return '<div class="slog">'+L.slice(0,5).map(function(x){var t=new Date(x.at);return '<div><span>'+t.toLocaleDateString('vi-VN')+' · Đơn #'+esc(x.code)+'</span>'+(x.use?'<i class="u">🎁 đổi 1 ly</i>':'')+(x.add?'<i>+'+x.add+' dấu</i>':'')+'</div>'}).join('')+'</div>'}
 function myOrders(){var me=meGet();if(!me.ph||!me.pin)return gShow('');myLoad(me.ph,me.pin)}
 function myLocal(ids){var l=myGet().filter(function(r){return r.ph===meGet().ph&&(!r.id||ids.indexOf(r.id)<0)});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
 function myLoad(ph,pin){MYL=[];show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut)">Đang tải…</p>');fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429){meSet(null);closeSheet();return gShow(d.err||'')}return show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">'+esc(d.err||'Không xem được đơn')+'</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')}
-var me=meGet();me.name=d.name||me.name;meSet(me);var os=d.orders||[],h='<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
+var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],h='<h3>Thẻ tích điểm</h3><div id="mcw">'+cardBlock(me)+'</div><p style="color:var(--mut);font-size:13px;margin:4px 0 6px;text-align:center">Mỗi ly đã thanh toán được 1 dấu · đủ 10 dấu tặng 1 ly (ly đắt nhất trong đơn)</p>'+slogHtml(d.stampLog)+'<h3 style="margin-top:10px">Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
 if(!os.length)h+='<p style="color:var(--mut)">Chưa có đơn nào.</p>';
 os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,stOf(o),i)});
 h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">Không kết nối được, thử lại sau</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')})}
@@ -504,10 +599,10 @@ if(!/^\d{4}$/.test(pin)){er.textContent='Mã PIN phải gồm đúng 4 số.';$(
 if(GREG&&$('gpin2').value.trim()!==pin){er.textContent='Hai lần nhập mã PIN không khớp.';$('gpin2').focus();return}
 er.textContent='Đang xử lý…';$('gbtn').disabled=true;
 fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(GREG?{action:'register',name:nm,phone:ph,pin:pin}:{phone:ph,pin:pin})}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){$('gbtn').disabled=false;if(!r.ok){er.textContent=d.err||'Không thành công';return}
-meSet({ph:ph,pin:pin,name:d.name||nm});gTab(0);gHide()})}).catch(function(){$('gbtn').disabled=false;er.textContent='Không kết nối được, thử lại sau.'})}
+meSet({ph:ph,pin:pin,name:d.name||nm,stamps:+d.stamps||0});sbarDraw();gTab(0);gHide()})}).catch(function(){$('gbtn').disabled=false;er.textContent='Không kết nối được, thử lại sau.'})}
 // Mở web: chưa đăng nhập thì hiện màn hình đăng nhập; đã đăng nhập thì kiểm tra lại ngầm
 function gInit(){if(location.hash==='#admin')return;var me=meGet();if(!me.ph||!me.pin)return gShow('');
-fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){if(r.status===403||r.status===429)return r.json().catch(function(){return {}}).then(function(d){meSet(null);gShow(d.err||'Hãy đăng nhập lại.')});if(r.ok)return r.json().then(function(d){if(d.name){me.name=d.name;meSet(me)}})}).catch(function(){})}
+fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){if(r.status===403||r.status===429)return r.json().catch(function(){return {}}).then(function(d){meSet(null);gShow(d.err||'Hãy đăng nhập lại.')});if(r.ok)return r.json().then(function(d){if(d.name)me.name=d.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw()})}).catch(function(){})}
 function copyMsg(b){
   var ok=function(){b.textContent='Đã sao chép'};
   try{navigator.clipboard.writeText(done).then(ok,fb)}catch(e){fb()}

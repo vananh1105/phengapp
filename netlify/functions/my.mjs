@@ -23,7 +23,7 @@ export default async (req) => {
     const name = String(d.name || "").trim().slice(0, 80);
     if (!name) return Response.json({ err: "Hãy nhập tên" }, { status: 400 });
     if ((await register(ph, d.pin, name)) === "exists") return Response.json({ err: MSG.exists }, { status: 409 });
-    return Response.json({ ok: true, name, orders: [] });
+    return Response.json({ ok: true, name, orders: [], stamps: 0, stampLog: [] });
   }
   const r = await checkPin(ph, d.pin);
   if (r.st !== "ok") return Response.json({ err: MSG[r.st] || "Lỗi" }, { status: r.st === "locked" ? 429 : 403 });
@@ -34,5 +34,5 @@ export default async (req) => {
       return v && typeof v === "object" ? { id, code: codeOf(id), s: v.s, at: v.at, total: v.total, t: v.t } : null;
     } catch { return null; }
   }));
-  return Response.json({ ok: true, name: r.m.name || "", orders: out.filter(Boolean) }, { headers: { "cache-control": "no-store" } });
+  return Response.json({ ok: true, name: r.m.name || "", orders: out.filter(Boolean), stamps: r.m.stamps || 0, stampLog: r.m.stampLog || [] }, { headers: { "cache-control": "no-store" } });
 };

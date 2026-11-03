@@ -1,6 +1,7 @@
 import { getStore } from "@netlify/blobs";
 import { findCode, codeOf } from "../lib/pay.mjs";
 import { notifyNewOrder } from "../lib/notify.mjs";
+import { normPhone, cupsOf, addStamps } from "../lib/member.mjs";
 export const config = { path: "/api/sepay" };
 
 // SePay gọi vào đây mỗi khi tài khoản có tiền vào.
@@ -36,6 +37,8 @@ export default async (req) => {
       if (v.exp && Date.now() > v.exp) v.late = 1;
       await orders.setJSON(link.id, v);
       await pays.setJSON(txKey, { ok: 1, id: link.id });
+      // Thẻ tích điểm: mỗi ly 1 dấu; đơn dùng ly miễn phí thì trừ 10 dấu
+      try { const st = await addStamps(normPhone(v.phone), codeOf(link.id), cupsOf(v.t), v.free); if (st) { v.stampAdd = st.add; v.stamps = st.stamps; await orders.setJSON(link.id, v); } } catch {}
       await notifyNewOrder(new URL(req.url).origin, codeOf(link.id), v.t, v);
       return Response.json({ success: true });
     }
