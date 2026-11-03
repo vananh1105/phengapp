@@ -111,22 +111,11 @@ pre{white-space:pre-wrap;background:var(--cd);border-radius:12px;padding:12px;fo
 .adm{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:9;border:0;border-radius:99px;background:var(--ink);color:var(--bg);padding:7px 14px;font:600 13px "Be Vietnam Pro",sans-serif;cursor:pointer}
 .bt[disabled]{opacity:.45;cursor:default}
 input[type=file]{padding:9px}
-#intro{position:fixed;inset:0;z-index:50;background:linear-gradient(var(--sky) 0,var(--bg) 64%);overflow:hidden;transition:opacity .6s;cursor:pointer}
-#intro.out{opacity:0;pointer-events:none}
-.in-top{position:relative;z-index:2;margin-top:20vh;text-align:center;padding:0 20px;animation:drop .9s ease-out both}
-.in-top h1{font-size:clamp(44px,14vw,72px);line-height:1;font-weight:700;color:var(--mr)}
-.in-top p{margin:10px 0 0;color:var(--mut);font-size:15px;animation:fade 1s .5s both}
-.in-sun{position:absolute;right:-40px;top:32vh;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,#ffe9a8 0,rgba(255,233,168,0) 70%);animation:pulse 3s ease-in-out infinite alternate}
-.in-hill{position:absolute;left:0;bottom:0;width:100%;height:42%}
-.in-cup{position:absolute;left:50%;bottom:19%;width:112px;margin-left:-56px;z-index:2;animation:bob 2.4s ease-in-out infinite}
-.bb{position:absolute;bottom:-30px;border-radius:50%;background:rgba(255,255,255,.75);animation:rise linear infinite}
-.in-skip{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;border:0;border-radius:99px;background:var(--cd);color:var(--ink);padding:10px 18px;font:600 15px "Baloo 2",sans-serif;cursor:pointer}
 @keyframes drop{from{opacity:0;transform:translateY(-24px)}}
 @keyframes fade{from{opacity:0}}
 @keyframes pulse{to{transform:scale(1.18);opacity:.8}}
 @keyframes bob{50%{transform:translateY(-12px) rotate(2deg)}}
 @keyframes rise{from{opacity:.9}to{transform:translateY(-110vh);opacity:0}}
-@media (prefers-reduced-motion:reduce){#intro *{animation:none!important}}
 .lights{display:none;justify-content:space-around;position:relative;height:34px;padding:0 6px;pointer-events:none}
 .lights::before{content:"";position:absolute;left:-2%;right:-2%;top:0;height:10px;border-bottom:2px solid #3f6b50;border-radius:0 0 50% 50%/0 0 100% 100%}
 .lights i{display:block;width:10px;height:15px;margin-top:8px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;background:var(--c);box-shadow:0 0 10px 2px var(--c);animation:tw 1.5s ease-in-out infinite alternate;animation-delay:calc(var(--i) * -.27s)}
@@ -270,10 +259,6 @@ main.w{padding-top:12px}
 #gate .gseg button.on{background:#1F63C9;color:#FFF3DC}
 #gate input.gi,#gate .gpin div{background:#FFFFFF}
 #gate .gpin div{color:#1F63C9}
-#intro{background:#1F63C9}
-.in-top h1{color:#FFF3DC;font-family:"Coiny",sans-serif;font-weight:400;text-shadow:3px 3px 0 #14110F}
-.in-top p{color:#FFF3DC}
-.in-skip{background:#FFF3DC;color:#14213D}
 </style>
 </head>
 <body>
@@ -334,10 +319,6 @@ main.w{padding-top:12px}
   </symbol>
 </defs></svg>
 
-<div id="intro" onclick="endIntro()"><button class="in-skip" onclick="event.stopPropagation();endIntro()">Bỏ qua ›</button>
-<div class="in-top"><h1 id="in">O Sugar</h1><p>Trà sữa · Trà trái cây</p></div><div class="in-sun"></div>
-<svg class="in-hill" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70 C80 20 160 30 240 60 S360 70 400 40 V200 H0Z" fill="#b5cf93"/><path d="M0 120 C100 80 200 100 280 115 S370 105 400 90 V200 H0Z" fill="#8fb56a"/></svg>
-<svg class="in-cup" viewBox="0 0 120 180" aria-hidden="true"><rect x="57" y="2" width="7" height="58" rx="3" fill="#f3ead6" stroke="#8a7370" stroke-width="2" transform="rotate(6 60 30)"/><path d="M26 62 H94 L86 160 Q85 170 75 170 H45 Q35 170 34 160Z" fill="#f4b27a" stroke="#6e0f22" stroke-width="3"/><rect x="22" y="52" width="76" height="14" rx="7" fill="#fffaf6" stroke="#6e0f22" stroke-width="3"/><rect x="48" y="92" width="24" height="24" rx="6" fill="#6e0f22"/><circle cx="60" cy="102" r="5" fill="#fffaf6"/><g fill="#3b2a2a"><circle cx="44" cy="156" r="5"/><circle cx="56" cy="158" r="5"/><circle cx="68" cy="156" r="5"/><circle cx="78" cy="158" r="4"/></g></svg></div>
 <div class="stripe"></div>
 <div class="lights" id="lights"></div>
 <div class="w">
@@ -404,7 +385,7 @@ var TEA=[[/matcha|bạc hà/i,'#9DBB6A'],[/cacao|socola|chocolate/i,'#6B4128'],[
 function teaColor(n){for(var i=0;i<TEA.length;i++)if(TEA[i][0].test(n))return TEA[i][1];return '#C98A4B'}
 function build(){
   var I=CFG.info,all=[];
-  $('sn').textContent=I.name;if($('in'))$('in').textContent=I.name;$('stg').textContent=I.tag;$('th').textContent=I.hours;document.title=I.name+' · Đặt trà online';applySeason();
+  $('sn').textContent=I.name;$('stg').textContent=I.tag;$('th').textContent=I.hours;document.title=I.name+' · Đặt trà online';applySeason();
   $('lg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'<svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-hug"/></svg>';if($('glg'))gBrand();
   CFG.cats.forEach(function(c){c.i.forEach(function(x){if(!x.off)all.push(x.p)})});
   $('tf').textContent=all.length?'Từ '+fmt(Math.min.apply(null,all)):'Thực đơn';
@@ -727,11 +708,6 @@ var PW='';try{PW=localStorage.getItem('pw')||''}catch(e){}
 build();upd();myBtn();gInit();
 if(location.hash==='#admin')$('adm').style.display='';
 fetch('/api/config').then(function(r){return r.ok?r.json():{}}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build()}}).catch(function(){});
-function endIntro(){var e=$('intro');if(!e||e.className==='out')return;e.className='out';setTimeout(function(){e.remove()},700);try{sessionStorage.setItem('seen','1')}catch(x){}}
-(function(){var e=$('intro'),seen=0;try{seen=sessionStorage.getItem('seen')}catch(x){}
-if(seen||location.hash==='#admin'){e.remove();return}
-for(var i=0;i<16;i++){var b=document.createElement('span');b.className='bb';var z=8+Math.random()*16;b.style.cssText='left:'+Math.random()*100+'%;width:'+z+'px;height:'+z+'px;animation-duration:'+(5+Math.random()*5)+'s;animation-delay:-'+Math.random()*8+'s';e.appendChild(b)}
-setTimeout(endIntro,5000)})();
 function cartQty(){return cart.reduce(function(a,l){return a+l.qty},0)}
 function applySeason(){
   var n=CFG.info.season==='noel';
