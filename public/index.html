@@ -198,6 +198,32 @@ input[type=file]{padding:9px}
 .sle{font-size:13px;color:var(--mut)}
 .slog{display:grid;gap:0;font-size:13px}.slog div{display:flex;justify-content:space-between;gap:8px;border-top:1px dashed var(--ln);padding:6px 0}.slog div:first-child{border-top:0}.slog i{font-style:normal;font-weight:700;color:#2E7D5B}.slog i.u{color:#E3342F}
 .myh{margin-top:18px;padding-top:16px;border-top:1.5px solid var(--ln)}
+#stv{position:fixed;inset:0;z-index:30;background:#1F63C9;overflow-y:auto;display:none;padding:env(safe-area-inset-top,0px) 0 calc(24px + env(safe-area-inset-bottom,0px))}
+#stv.show{display:block}
+.sttop{display:flex;align-items:center;gap:10px;margin-top:12px;padding:8px 10px;background:#FFF3DC;border-radius:20px}
+.stlg{width:46px;height:46px;border-radius:50%;background:#1F63C9;padding:2px;flex:none}.stlg svg{width:100%;height:100%}
+.sttop b{flex:1;font:400 24px/1 "Coiny",sans-serif;color:#1F63C9;text-shadow:2px 2px 0 #14110F}
+.sttop button{border:0;border-radius:12px;background:#3B7BD8;color:#FFF3DC;padding:9px 14px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.sth{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 2px 0}
+.sth h2{color:#FFF3DC;font-size:26px}
+#stv .mcdots{color:#FFF3DC}
+#stv .mcdots button.on{box-shadow:0 0 0 2px #1F63C9,0 0 0 4px #FFF3DC}
+.sthi{margin:2px 2px 14px;color:#FFF3DC;opacity:.9;font-size:14px}
+#stv .mcard{margin:0 auto}
+#stv .mchint{color:#FFF3DC;font-size:15px}#stv .mchint b{color:#FFE08A}
+#stv .mcrule{color:#FFF3DC;opacity:.75;margin-top:10px}
+#stact .btn{margin-top:12px;justify-content:center}
+#stv .slogb{background:#FFF3DC;color:#14213D}
+.conf{position:fixed;inset:0;pointer-events:none;z-index:31;overflow:hidden}
+.conf i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:cf 2.6s ease-in forwards}
+@keyframes cf{to{transform:translateY(110vh) rotate(540deg)}}
+#stoast{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));z-index:60;max-width:480px;margin:0 auto;background:#14110F;color:#FFF3DC;border-radius:18px;padding:10px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 28px rgba(0,0,0,.35);transform:translateY(-140%);transition:transform .35s}
+#stoast.show{transform:none}
+#stoast svg{width:50px;height:50px;flex:none;background:#FFF3DC;border-radius:50%;padding:3px}
+#stoast b{display:block;font:400 18px/1.1 "Coiny",sans-serif;color:#F5B82E}#stoast span{font-size:13px}
+@media (prefers-reduced-motion:reduce){.conf i{animation:none;display:none}#stoast{transition:none}}
+.mob{display:flex;gap:8px;justify-content:center;margin-bottom:8px}.mob .mo{margin:0}
+.stlink{display:block;width:100%;border:0;border-radius:14px;background:#FFF3DC;color:#14213D;padding:10px 12px;font:inherit;font-weight:700;text-align:left;cursor:pointer;margin:6px 0 4px}
 .freeb{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px 12px;border-radius:14px;background:#FFF3DC;color:#14213D;font-size:14px;cursor:pointer}
 .freeb input{width:20px;height:20px;accent-color:#E3342F;margin:0}
 .freeb b{color:#E3342F}
@@ -338,7 +364,7 @@ main.w{padding-top:12px}
     <div class="tile"><i>📲</i><div><b>Quét QR</b><small>chuyển khoản</small></div></div>
     <button class="tile" id="gt" onclick="setMode(!group)"><i>👯</i><div><b>Đặt theo nhóm</b><small id="gs">ai chọn ly nấy · bấm để bật</small></div></button>
   </div>
-  <button class="sbar" id="sbar" onclick="myOrders()" style="display:none"></button>
+  <button class="sbar" id="sbar" onclick="openStamps()" style="display:none"></button>
   <div id="tree" class="tree" style="display:none"></div>
 </div>
 <div class="stripe"></div>
@@ -357,7 +383,18 @@ main.w{padding-top:12px}
 <div id="gpin2w" style="display:none"><div class="glb">Nhập lại mã PIN</div><div class="gpin" id="gpin2b"><div></div><div></div><div></div><div></div><input id="gpin2" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Nhập lại mã PIN"></div></div>
 <p id="gerr"></p><button class="btn" id="gbtn" style="justify-content:center" onclick="gGo()">Đăng nhập</button>
 <button class="gfg" id="gfg" onclick="gForgot()">Quên mã PIN?</button></div></div>
-<div class="bar"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
+<div id="stv" role="dialog" aria-label="Thẻ tích điểm"><div class="w">
+  <div class="sttop"><span class="stlg"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-hug"/></svg></span><b id="stsn">O Sugar</b><button onclick="closeStamps()">‹ Menu</button></div>
+  <div class="sth"><h2>Thẻ tích điểm</h2><div class="mcdots" id="mcdots"></div></div>
+  <p class="sthi" id="sthi"></p>
+  <div id="mcw"></div>
+  <p class="mchint" id="sthint"></p>
+  <div id="stact"></div>
+  <p class="mcrule">Mỗi ly đã thanh toán = 1 dấu · đủ 10 dấu tặng 1 ly (ly đắt nhất trong đơn)</p>
+  <div id="stlog"></div>
+</div><div class="conf" id="conf" aria-hidden="true"></div></div>
+<div id="stoast" role="status"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-wave"/></svg><div><b id="stt1"></b><span id="stt2"></span></div></div>
+<div class="bar"><div class="mob"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="mo" id="mst" onclick="openStamps()" style="display:none">🐾 Thẻ tích điểm</button></div><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
 <div id="mapov" role="dialog" aria-label="Bản đồ">
   <div class="mt"><h3 id="mtt">Chọn vị trí giao hàng</h3>
@@ -505,11 +542,25 @@ function cardHtml(n,name,ph){var full=n>=10,k=Math.min(n,10),h='<div class="mcar
   h+='</div><div class="mcb"><small>THÀNH VIÊN</small><div class="nm">'+esc(name||'Khách')+'</div><div class="ph">'+esc(p)+'</div></div>';
   h+=full?'<div class="mcr"><b>10/10</b>🎁 Đổi ly free!</div>':'<div class="mcn"><b>'+k+'/10</b>còn '+(10-k)+' ly</div>';
   return h+'<svg class="cat" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC" aria-hidden="true"><use href="#p-'+(cardColor()==='do'?'wave':'hug')+'"/></svg></div>'}
-function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}var me=meGet(),w=$('mcw'),d=$('mcdots');if(w)w.innerHTML=cardBlock(me);if(d)d.innerHTML=cardDots()}
+// ---- Màn hình Thẻ tích điểm ----
+var SLOG=null;
+function stDraw(){var me=meGet(),n=+me.stamps||0;$('stsn').textContent=(CFG.info&&CFG.info.name)||'O Sugar';$('sthi').textContent='Chào '+((me.name||'bạn').split(' ').slice(-1)[0])+' 👋 · mỗi ly là 1 dấu';
+  $('mcdots').innerHTML=cardDots();$('mcw').innerHTML=cardBlock(me);$('sthint').innerHTML=cardHint(n);
+  $('stact').innerHTML=n>=10?'<button class="btn" onclick="useFree()">🎁 Dùng ly miễn phí ở đơn tiếp theo</button>':'';
+  $('stlog').innerHTML=slogHtml(SLOG)}
+function openStamps(){var me=meGet();if(!me.ph||!me.pin)return gShow('');$('stv').className='show';stDraw();var was=+me.stamps||0;
+  fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(!d)return;var m=meGet();if(d.stamps!=null)m.stamps=d.stamps;meSet(m);SLOG=d.stampLog||[];sbarDraw();stDraw();if((+m.stamps||0)>=10)confetti()}).catch(function(){});
+  if(was>=10)confetti()}
+function closeStamps(){$('stv').className=''}
+function useFree(){FREE_ON=true;closeStamps();stToast('🎁 Đã sẵn sàng!','Chọn món rồi mở giỏ hàng, ly đắt nhất sẽ thành 0đ')}
+function confetti(){var c=$('conf'),C=['#F5B82E','#E3342F','#FFF3DC','#3B7BD8'],h='';for(var i=0;i<40;i++)h+='<i style="left:'+(Math.random()*100)+'%;background:'+C[i%4]+';animation-delay:'+(Math.random()*.8)+'s;animation-duration:'+(2+Math.random()*1.5)+'s"></i>';c.innerHTML=h;setTimeout(function(){c.innerHTML=''},4200)}
+var STT=null;
+function stToast(a,b){$('stt1').textContent=a;$('stt2').textContent=b;var t=$('stoast');t.className='show';clearTimeout(STT);STT=setTimeout(function(){t.className=''},4500)}
+function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}stDraw()}
 function cardBlock(me){return cardHtml(+me.stamps||0,me.name,me.ph)}
 function cardDots(){var c=cardColor();return '<span>Màu thẻ</span><button aria-label="Kem Sữa" class="kem'+(c==='kem'?' on':'')+'" onclick="cardSet(\'kem\')"></button><button aria-label="Đỏ Kem" class="do'+(c==='do'?' on':'')+'" onclick="cardSet(\'do\')"></button>'}
 function cardHint(n){return n>=10?'🎁 Đủ 10 dấu! Đơn tiếp theo được <b>1 ly miễn phí</b>':'Còn <b>'+(10-n)+' ly</b> nữa là được 1 ly miễn phí'}
-function sbarDraw(){var b=$('sbar'),me=meGet();if(!b)return;if(!me.ph||!me.pin){b.style.display='none';return}var n=+me.stamps||0;b.style.display='flex';b.className='sbar'+(n>=10?' full':'');
+function sbarDraw(){var b=$('sbar'),me=meGet(),k=$('mst');if(!b)return;if(k)k.style.display=me.ph&&me.pin?'block':'none';if(!me.ph||!me.pin){b.style.display='none';return}var n=+me.stamps||0;b.style.display='flex';b.className='sbar'+(n>=10?' full':'');
   b.innerHTML='<svg aria-hidden="true"><use href="#paw"/></svg>'+(n>=10?'<span style="flex:1">🎁 Đủ 10 dấu! Đơn này được 1 ly miễn phí</span>':'<span><b>'+n+'/10 dấu</b></span><span class="pb"><i style="width:'+n*10+'%"></i></span><span>còn '+(10-n)+' ly</span>')}
 function stampsSet(n){var me=meGet();if(!me.ph)return;me.stamps=n;meSet(me);sbarDraw()}
 function freeHtml(){if(!canFree())return '';var l=freeLine();return '<label class="freeb"><input type="checkbox" '+(FREE_ON?'checked':'')+' onchange="FREE_ON=this.checked;openCart()"><span>🎁 Dùng <b>1 ly miễn phí</b> từ thẻ tích điểm<br><small style="color:var(--mut)">'+esc(l.name)+' · −'+fmt(Math.min(unit(l),sub()-disc()))+'</small></span></label>'}
@@ -643,7 +694,7 @@ var tick=function(){var x=$('pcd');if(!x){clearInterval(PAYT);return}var left=Ma
 if(Date.now()>end+120000){clearInterval(PAYT);$('pst').innerHTML='⌛ Hết thời gian thanh toán. <span style="font-weight:500">Nếu bạn đã chuyển tiền, gọi quán '+esc(CFG.info.phone)+' để được xử lý.</span>';return}};
 var check=function(){if(!$('pcd'))return;fetch('/api/order?id='+encodeURIComponent(o.id),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.s&&d.s!=='pay')payDone(o,d)}).catch(function(){})};
 var n=0;tick();PAYT=setInterval(function(){tick();if(++n%4===0)check()},1000)}
-function payDone(o,d){clearInterval(PAYT);cart=[];giftReset();FREE_ON=true;upd();if(d&&d.stamps!=null)stampsSet(d.stamps);var me=meGet();show('<h3>✅ Thanh toán thành công</h3><p style="font-weight:600">Quán đã nhận đơn #'+esc(o.code)+'.</p>'+(d&&d.stampAdd?'<p style="font-weight:700;color:#E3342F;margin:4px 0">🐾 +'+d.stampAdd+' dấu vào thẻ tích điểm!</p>':'')+(d&&d.stamps!=null?cardHtml(+d.stamps,me.name,me.ph):'')+'<p style="color:var(--mut)">Bạn xem trạng thái đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</p><pre>'+esc(o.t||'')+'</pre><button class="btn" style="justify-content:center" onclick="closeSheet()">Xong</button>')}
+function payDone(o,d){if(d&&d.stampAdd){var left=10-Math.min(10,+d.stamps||0);stToast('+'+d.stampAdd+' dấu mới! 🐾',left>0?'Còn '+left+' ly nữa là được ly miễn phí':'Đủ 10 dấu, đơn sau được 1 ly miễn phí!');if((+d.stamps||0)>=10)setTimeout(confetti,400)}clearInterval(PAYT);cart=[];giftReset();FREE_ON=true;upd();if(d&&d.stamps!=null)stampsSet(d.stamps);var me=meGet();show('<h3>✅ Thanh toán thành công</h3><p style="font-weight:600">Quán đã nhận đơn #'+esc(o.code)+'.</p>'+(d&&d.stamps!=null?'<button class="stlink" onclick="closeSheet();openStamps()">🐾 Thẻ tích điểm: <b>'+Math.min(10,+d.stamps)+'/10 dấu</b> · xem thẻ ›</button>':'')+'<p style="color:var(--mut)">Bạn xem trạng thái đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</p><pre>'+esc(o.t||'')+'</pre><button class="btn" style="justify-content:center" onclick="closeSheet()">Xong</button>')}
 function payQrErr(i){var a=i.getAttribute('data-alt');if(a){i.removeAttribute('data-alt');i.src=a;return}i.outerHTML='<p style="background:var(--pk);border-radius:12px;padding:10px;font-size:14px">Không tải được mã QR. Bạn mở app ngân hàng, chuyển khoản theo đúng thông tin bên dưới nhé.</p>'}
 function payDl(id,code){var b=$('pdl'),h=$('pdlh');if(!b)return;b.disabled=true;b.textContent='Đang tải mã QR…';
 fetch('/api/qr?id='+encodeURIComponent(id)).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(bl){
@@ -673,7 +724,7 @@ function slogHtml(L){var h='<div class="slogb"><div class="slt">Lịch sử tíc
 function myOrders(){var me=meGet();if(!me.ph||!me.pin)return gShow('');myLoad(me.ph,me.pin)}
 function myLocal(ids){var l=myGet().filter(function(r){return r.ph===meGet().ph&&(!r.id||ids.indexOf(r.id)<0)});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
 function myLoad(ph,pin){MYL=[];show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut)">Đang tải…</p>');fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429){meSet(null);closeSheet();return gShow(d.err||'')}return show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">'+esc(d.err||'Không xem được đơn')+'</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')}
-var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],h='<div class="mch"><h3>Thẻ tích điểm</h3><div class="mcdots" id="mcdots">'+cardDots()+'</div></div><div id="mcw">'+cardBlock(me)+'</div><p class="mchint">'+cardHint(+me.stamps||0)+'</p><p class="mcrule">Mỗi ly đã thanh toán = 1 dấu · đủ 10 dấu tặng ly đắt nhất trong đơn</p>'+slogHtml(d.stampLog)+'<h3 class="myh">Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
+var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],SLOG=d.stampLog||[];h='<h3>Đơn bạn đã đặt</h3><button class="stlink" onclick="closeSheet();openStamps()">🐾 Thẻ tích điểm: <b>'+Math.min(10,+me.stamps||0)+'/10 dấu</b> · xem thẻ ›</button><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
 if(!os.length)h+='<p style="color:var(--mut)">Chưa có đơn nào.</p>';
 os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,stOf(o),i)});
 h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">Không kết nối được, thử lại sau</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')})}
