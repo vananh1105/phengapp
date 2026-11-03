@@ -64,3 +64,19 @@ export async function resetPin(phone) {
   await s.setJSON(key, m);
   return true;
 }
+
+// ---- Thẻ tích điểm: mua 10 ly tặng 1 ly ----
+export const STAMP_GOAL = 10;
+// Số ly trong nội dung đơn (các dòng "- 2 × Tên món ...")
+export const cupsOf = (text) => [...String(text || "").matchAll(/^- (\d+) ×/gm)].reduce((a, m) => a + Number(m[1]), 0);
+// Cộng dấu khi đơn đã thanh toán. use = 1 nếu đơn dùng ly miễn phí (trừ 10 dấu, ly miễn phí không được dấu)
+export async function addStamps(phone, code, cups, use) {
+  const key = "m:" + phone, s = store();
+  const m = await s.get(key, { type: "json" });
+  if (!m) return null;
+  const add = Math.max(0, cups - (use ? 1 : 0));
+  m.stamps = Math.max(0, (m.stamps || 0) - (use ? STAMP_GOAL : 0) + add);
+  m.stampLog = [{ at: new Date().toISOString(), code, add, use: use ? 1 : 0 }, ...(m.stampLog || [])].slice(0, 20);
+  await s.setJSON(key, m);
+  return { stamps: m.stamps, add };
+}

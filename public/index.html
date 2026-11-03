@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Phéng · Đặt trà online</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<title>O Sugar · Đặt trà online</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Coiny&family=Baloo+2:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
 <style>
 :root{--bg:#fbf4ee;--sky:#cfe3ea;--sage:#c9d8b0;--cd:#fffaf6;--ink:#3b2a2a;--mut:#8a7370;--ln:#eadbd2;--mr:#6e0f22;--pk:#f7e3e6;--on:#fff;color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#231517;--sky:#26363b;--sage:#3e4a35;--cd:#2f1d20;--ink:#f6e7e3;--mut:#b79b98;--ln:#4a3236;--mr:#a8283f;--pk:#3d2429;color-scheme:dark}}
@@ -111,22 +111,11 @@ pre{white-space:pre-wrap;background:var(--cd);border-radius:12px;padding:12px;fo
 .adm{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:9;border:0;border-radius:99px;background:var(--ink);color:var(--bg);padding:7px 14px;font:600 13px "Be Vietnam Pro",sans-serif;cursor:pointer}
 .bt[disabled]{opacity:.45;cursor:default}
 input[type=file]{padding:9px}
-#intro{position:fixed;inset:0;z-index:50;background:linear-gradient(var(--sky) 0,var(--bg) 64%);overflow:hidden;transition:opacity .6s;cursor:pointer}
-#intro.out{opacity:0;pointer-events:none}
-.in-top{position:relative;z-index:2;margin-top:20vh;text-align:center;padding:0 20px;animation:drop .9s ease-out both}
-.in-top h1{font-size:clamp(44px,14vw,72px);line-height:1;font-weight:700;color:var(--mr)}
-.in-top p{margin:10px 0 0;color:var(--mut);font-size:15px;animation:fade 1s .5s both}
-.in-sun{position:absolute;right:-40px;top:32vh;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,#ffe9a8 0,rgba(255,233,168,0) 70%);animation:pulse 3s ease-in-out infinite alternate}
-.in-hill{position:absolute;left:0;bottom:0;width:100%;height:42%}
-.in-cup{position:absolute;left:50%;bottom:19%;width:112px;margin-left:-56px;z-index:2;animation:bob 2.4s ease-in-out infinite}
-.bb{position:absolute;bottom:-30px;border-radius:50%;background:rgba(255,255,255,.75);animation:rise linear infinite}
-.in-skip{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;border:0;border-radius:99px;background:var(--cd);color:var(--ink);padding:10px 18px;font:600 15px "Baloo 2",sans-serif;cursor:pointer}
 @keyframes drop{from{opacity:0;transform:translateY(-24px)}}
 @keyframes fade{from{opacity:0}}
 @keyframes pulse{to{transform:scale(1.18);opacity:.8}}
 @keyframes bob{50%{transform:translateY(-12px) rotate(2deg)}}
 @keyframes rise{from{opacity:.9}to{transform:translateY(-110vh);opacity:0}}
-@media (prefers-reduced-motion:reduce){#intro *{animation:none!important}}
 .lights{display:none;justify-content:space-around;position:relative;height:34px;padding:0 6px;pointer-events:none}
 .lights::before{content:"";position:absolute;left:-2%;right:-2%;top:0;height:10px;border-bottom:2px solid #3f6b50;border-radius:0 0 50% 50%/0 0 100% 100%}
 .lights i{display:block;width:10px;height:15px;margin-top:8px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;background:var(--c);box-shadow:0 0 10px 2px var(--c);animation:tw 1.5s ease-in-out infinite alternate;animation-delay:calc(var(--i) * -.27s)}
@@ -158,23 +147,189 @@ input[type=file]{padding:9px}
 .gift{flex-wrap:wrap}.gift small{display:block;font-weight:400;color:var(--mut);font-size:12px}
 .gk{border:0;border-radius:99px;background:var(--mr);color:#fff;padding:8px 16px;font:600 13px "Be Vietnam Pro",sans-serif;cursor:pointer}
 .gk.o{background:none;color:var(--mr);border:1.5px solid var(--mr)}
+
+/* ===== Thẻ tích điểm (mua 10 ly tặng 1 ly) ===== */
+.sbar{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px;border:0;border-radius:16px;padding:10px 14px;background:#FFF3DC;color:#14213D;font:inherit;font-weight:600;font-size:14px;cursor:pointer;text-align:left;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sbar svg{width:22px;height:22px;color:#E3342F;flex:none}
+.sbar .pb{flex:1;height:9px;border-radius:99px;background:#EADCC2;overflow:hidden}.sbar .pb i{display:block;height:100%;border-radius:99px;background:#E3342F}
+.sbar.full{background:#E3342F;color:#FFF3DC}.sbar.full svg{color:#FFF3DC}
+.mcard{width:100%;max-width:380px;margin:6px auto 4px;aspect-ratio:85.6/54;border-radius:18px;position:relative;overflow:hidden;color:var(--ctx);background:var(--cbg);display:grid;grid-template-rows:auto 1fr auto;padding:5.5% 6% 5%;box-shadow:0 1px 1px rgba(0,0,0,.1),0 4px 8px rgba(0,0,0,.08),0 16px 28px -10px rgba(60,20,20,.4)}
+.mcard:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(118deg,rgba(255,255,255,.3),rgba(255,255,255,.05) 30%,rgba(255,255,255,0) 50%,rgba(255,255,255,.08));box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);pointer-events:none}
+.mcard>*{position:relative;z-index:1}
+.mcard .mct{display:flex;align-items:center}
+.mcard .mct b{font:400 clamp(18px,5.6vw,23px)/1 "Coiny","Baloo 2",sans-serif;color:var(--clogo);text-shadow:var(--clsh)}
+.mcard .mct span{margin-left:auto;font-weight:700;font-size:9px;letter-spacing:2px;opacity:.72}
+.mcard .mcp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7% 6%;width:58%;align-self:center}
+.mcard .mcp i{min-width:0;min-height:0;overflow:hidden;line-height:0;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-style:normal;background:var(--cslot);box-shadow:inset 0 0 0 1.6px var(--cline)}
+.mcard .mcp i svg{width:70%;height:70%;color:var(--cpaw)}
+.mcard .mcp i.on{background:var(--con);box-shadow:none}
+.mcard .mcp i:nth-child(odd) svg{transform:rotate(-14deg)}.mcard .mcp i:nth-child(even) svg{transform:rotate(12deg)}
+.mcard .mcp i.gft{box-shadow:inset 0 0 0 1.6px var(--cacc)}.mcard .mcp i.gft b{font-size:11px;line-height:1;display:block}
+.mcard .mcb small{display:block;font-weight:700;font-size:8px;letter-spacing:1.6px;opacity:.68;margin-bottom:3px}
+.mcard .mcb .nm{font-weight:700;font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.15}
+.mcard .mcb .ph{font-weight:600;font-size:11px;letter-spacing:1.8px;opacity:.85;margin-top:2px}
+.mcard .mcn{position:absolute;right:6%;top:24%;z-index:2;text-align:center;background:var(--cnb);color:var(--cnt);border-radius:12px;padding:5px 9px;font-weight:700;font-size:10px;line-height:1.15}
+.mcard .mcn b{display:block;font-size:19px;line-height:1}
+.mcard .mcr{position:absolute;right:6%;top:22%;z-index:2;background:var(--cacc);color:#FFF3DC;border-radius:12px;padding:6px 10px;font-weight:700;font-size:11px;line-height:1.15;text-align:center;transform:rotate(4deg);box-shadow:0 0 0 2px var(--cedge),0 6px 12px rgba(0,0,0,.2)}
+.mcard .mcr b{display:block;font-size:16px}
+.mcard .cat{position:absolute;right:-3%;bottom:-9%;width:42%;aspect-ratio:1;z-index:1}
+.mc-kem{--cbg:linear-gradient(135deg,#FFF6E4,#F4E2C2);--ctx:#14213D;--clogo:#1F63C9;--clsh:1.5px 1.5px 0 #14110F;--cslot:rgba(31,99,201,.06);--cline:rgba(31,99,201,.28);--con:#1F63C9;--cpaw:#FFF3DC;--cacc:#E3342F;--cnb:#1F63C9;--cnt:#FFF3DC;--cedge:#F4E2C2}
+.mc-do{--cbg:linear-gradient(135deg,#E5473F,#C9332D);--ctx:#FFF3DC;--clogo:#FFF3DC;--clsh:2px 2px 0 #14110F;--cslot:rgba(255,243,220,.12);--cline:rgba(255,243,220,.4);--con:#FFF3DC;--cpaw:#C9332D;--cacc:#14213D;--cnb:#FFF3DC;--cnt:#C9332D;--cedge:#C9332D}
+.mch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.mcdots{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut);font-weight:600}
+.mcdots button{width:26px;height:26px;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.12)}
+.mcdots button.kem{background:linear-gradient(135deg,#FFF6E4,#F4E2C2)}.mcdots button.do{background:linear-gradient(135deg,#E5473F,#C9332D)}
+.mcdots button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px #14213D}
+.mchint{text-align:center;font-size:14px;margin:12px 0 2px;color:var(--ink)}.mchint b{color:#E3342F}
+.mcrule{text-align:center;font-size:12px;color:var(--mut);margin:0 0 14px}
+.slogb{background:var(--cd);border-radius:16px;padding:12px 14px;margin-bottom:6px}
+.slt{font-weight:700;font-size:14px;margin-bottom:4px}
+.sle{font-size:13px;color:var(--mut)}
+.slog{display:grid;gap:0;font-size:13px}.slog div{display:flex;justify-content:space-between;gap:8px;border-top:1px dashed var(--ln);padding:6px 0}.slog div:first-child{border-top:0}.slog i{font-style:normal;font-weight:700;color:#2E7D5B}.slog i.u{color:#E3342F}
+.myh{margin-top:18px;padding-top:16px;border-top:1.5px solid var(--ln)}
+.conf{position:fixed;inset:0;pointer-events:none;z-index:31;overflow:hidden}
+.conf i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:cf 2.6s ease-in forwards}
+@keyframes cf{to{transform:translateY(110vh) rotate(540deg)}}
+#stoast{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));z-index:60;max-width:480px;margin:0 auto;background:#14110F;color:#FFF3DC;border-radius:18px;padding:10px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 28px rgba(0,0,0,.35);transform:translateY(-140%);transition:transform .35s}
+#stoast.show{transform:none}
+#stoast svg{width:50px;height:50px;flex:none;background:#FFF3DC;border-radius:50%;padding:3px}
+#stoast b{display:block;font:400 18px/1.1 "Coiny",sans-serif;color:#F5B82E}#stoast span{font-size:13px}
+@media (prefers-reduced-motion:reduce){.conf i{animation:none;display:none}#stoast{transition:none}}
+.mob{display:flex;gap:8px;justify-content:center;margin-bottom:8px}.mob .mo{margin:0}
+.stlink{display:block;width:100%;border:0;border-radius:14px;background:#FFF3DC;color:#14213D;padding:10px 12px;font:inherit;font-weight:700;text-align:left;cursor:pointer;margin:6px 0 4px}
+.freeb{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px 12px;border-radius:14px;background:#FFF3DC;color:#14213D;font-size:14px;cursor:pointer}
+.freeb input{width:20px;height:20px;accent-color:#E3342F;margin:0}
+.freeb b{color:#E3342F}
+
+/* ===== Giao diện Mẫu A · Mèo Xanh (cùng bộ màu phần mềm bán hàng và trang quản lý) ===== */
+:root,:root[data-theme="dark"]{--bg:#FFFDF7;--sky:#1F63C9;--sage:#1F63C9;--cd:#FFF3DC;--ink:#14213D;--mut:#6E6A63;--ln:#E6D3AE;--mr:#E3342F;--pk:#DCE8F8;--on:#fff;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#FFFDF7;--sky:#1F63C9;--sage:#1F63C9;--cd:#FFF3DC;--ink:#14213D;--mut:#6E6A63;--ln:#E6D3AE;--mr:#E3342F;--pk:#DCE8F8;color-scheme:light}}
+html{background:#1F63C9}
+body{background:#1F63C9}
+h1,h2,h3{font-family:"Coiny","Baloo 2",sans-serif;font-weight:400}
+.top{margin-top:12px;padding:10px 12px;background:#FFF3DC;border-radius:20px;gap:10px}
+.logo{width:54px;height:54px;border-radius:50%;background:#1F63C9;border:0;box-shadow:none;padding:2px;font-size:28px}
+.logo svg{width:100%;height:100%}
+.top h1{font-size:28px;color:#1F63C9;text-shadow:2px 2px 0 #14110F}
+.top p{font-size:12.5px;line-height:1.35}
+.tiles{margin-top:10px;gap:8px}
+.tile,.tile.hl{background:rgba(255,243,220,.16);color:#FFF3DC;box-shadow:none;padding:10px}
+.tile i{background:rgba(255,243,220,.2)}
+button.tile.on{outline:2px solid #FFF3DC;background:rgba(255,243,220,.28)}
+.wave{display:none}
+main.w{padding-top:12px}
+.pills{padding-top:4px}
+.pl{background:#3B7BD8;color:#FFF3DC;box-shadow:none}
+.pl.on{background:#FFF3DC;color:#1F63C9}
+.cat h2{color:#FFF3DC;font-size:22px}
+.cat h2 small{color:#FFF3DC;opacity:.8}
+.grid{gap:10px}
+.cd{border-radius:20px;padding:8px 8px 10px;box-shadow:none;text-align:left}
+.im{aspect-ratio:16/11;border-radius:14px;background:#DCE8F8!important;margin-bottom:8px}
+.im svg{height:70%;width:auto;color:#14213D}
+.bd{background:#E3342F;color:#FFF3DC;font:800 10px/1.9 "Be Vietnam Pro",sans-serif;letter-spacing:.3px}
+.cd h3{font:700 15px/1.25 "Be Vietnam Pro",sans-serif;min-height:0;display:block;color:#14213D}
+.cd p{margin:2px 0 8px}
+.pp{align-self:flex-start;background:none;color:#E3342F;padding:0;font:400 18px/1 "Coiny",sans-serif;margin-bottom:8px}
+.bt{background:#E3342F;color:#FFF3DC;font-weight:700}
+.tp{background:#FFF3DC}
+.foot{color:#FFF3DC;opacity:.85}
+.bar{background:linear-gradient(rgba(31,99,201,0),#1F63C9 35%)}
+.btn{background:#E3342F;color:#FFF3DC;box-shadow:0 0 0 2px #14110F}
+.btn[disabled]{background:#3B7BD8;color:#FFF3DC;opacity:1;box-shadow:none}
+.mo{background:#FFF3DC;border-color:#14110F;color:#14213D}
+.sheet{background:#FFFDF7}
+.sheet h3{font-size:24px}
+.ch button.on{border-color:#1F63C9;background:#1F63C9;color:#FFF3DC}
+.q button{background:#DCE8F8;color:#1F63C9}
+.who{color:#1F63C9}
+.tot{font-family:"Coiny",sans-serif;font-weight:400}
+.sec2 .btn,.btn.o{box-shadow:none}
+.btn.o{color:#14213D;border-color:#14213D}
+.adm{background:#14110F;color:#FFF3DC}
+.tree{background:#FFF3DC}
+.gift{background:#FFF3DC;border-color:#E3342F}
+#gate{background:#1F63C9}
+#gate .gtop{background:#1F63C9;height:280px}
+#gate .glogo{width:120px;height:120px;border:0;background:none;box-shadow:none;border-radius:0;font-size:60px}
+#gate .glogo svg{width:100%;height:100%}
+#gate h2{font-family:"Coiny",sans-serif;font-weight:400;font-size:34px;text-shadow:2px 2px 0 #14110F}
+#gate .gcard{background:#FFF3DC}
+#gate .gseg{background:#F4E6C8}
+#gate .gseg button.on{background:#1F63C9;color:#FFF3DC}
+#gate input.gi,#gate .gpin div{background:#FFFFFF}
+#gate .gpin div{color:#1F63C9}
 </style>
 </head>
 <body>
-<div id="intro" onclick="endIntro()"><button class="in-skip" onclick="event.stopPropagation();endIntro()">Bỏ qua ›</button>
-<div class="in-top"><h1 id="in">Phéng</h1><p>Trà sữa · Trà trái cây · Cà phê</p></div><div class="in-sun"></div>
-<svg class="in-hill" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70 C80 20 160 30 240 60 S360 70 400 40 V200 H0Z" fill="#b5cf93"/><path d="M0 120 C100 80 200 100 280 115 S370 105 400 90 V200 H0Z" fill="#8fb56a"/></svg>
-<svg class="in-cup" viewBox="0 0 120 180" aria-hidden="true"><rect x="57" y="2" width="7" height="58" rx="3" fill="#f3ead6" stroke="#8a7370" stroke-width="2" transform="rotate(6 60 30)"/><path d="M26 62 H94 L86 160 Q85 170 75 170 H45 Q35 170 34 160Z" fill="#f4b27a" stroke="#6e0f22" stroke-width="3"/><rect x="22" y="52" width="76" height="14" rx="7" fill="#fffaf6" stroke="#6e0f22" stroke-width="3"/><rect x="48" y="92" width="24" height="24" rx="6" fill="#6e0f22"/><circle cx="60" cy="102" r="5" fill="#fffaf6"/><g fill="#3b2a2a"><circle cx="44" cy="156" r="5"/><circle cx="56" cy="158" r="5"/><circle cx="68" cy="156" r="5"/><circle cx="78" cy="158" r="4"/></g></svg></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<!-- Thẻ tích điểm: dấu chân mèo + Mèo Đen -->
+<symbol id="paw" viewBox="0 0 40 40"><g fill="currentColor"><ellipse cx="20" cy="26" rx="10" ry="8.5"/><ellipse cx="9" cy="16" rx="4.2" ry="5.2"/><ellipse cx="16" cy="9.5" rx="4.2" ry="5.2"/><ellipse cx="24" cy="9.5" rx="4.2" ry="5.2"/><ellipse cx="31" cy="16" rx="4.2" ry="5.2"/></g></symbol>
+<symbol id="p-hug" viewBox="0 0 120 120">
+    <path d="M88 96q26-6 20-34q-3-12-12-10" fill="none" stroke="var(--cat,#14110F)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M28 40Q24 14 48 26Z M92 40Q96 14 72 26Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M16 92q0-28 44-28t44 28q0 22-44 22t-44-22Z" fill="var(--cat,#14110F)"/>
+    <ellipse cx="60" cy="54" rx="42" ry="32" fill="var(--cat,#14110F)"/>
+    <g fill="none" stroke="var(--face,#FFF3DC)" stroke-width="3" stroke-linecap="round"><path d="M40 52q6 5 12 0"/><path d="M68 52q6 5 12 0"/><path d="M55 63q2.5 3 5 0q2.5 3 5 0"/><path d="M22 58l-11-2M22 64l-11 2M98 58l11-2M98 64l11 2"/></g>
+    <ellipse cx="34" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="86" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <path d="M44 80h32l-3 26H47Z" fill="var(--cup,#E3342F)"/>
+    <path d="M76 86q10 0 10 7t-10 7" fill="none" stroke="var(--cup,#E3342F)" stroke-width="4.5"/>
+    <rect x="42" y="77" width="36" height="6" rx="3" fill="var(--lid,#FFF3DC)"/>
+    <circle cx="60" cy="94" r="6" fill="var(--lid,#FFF3DC)"/>
+    <ellipse cx="44" cy="88" rx="7" ry="6" fill="var(--cat,#14110F)"/>
+  </symbol>
+<symbol id="p-wave" viewBox="0 0 120 120">
+    <path d="M24 98q-20-2-18-24q1-10 10-10" fill="none" stroke="var(--cat,#14110F)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M90 74q14-14 14-32" fill="none" stroke="var(--cat,#14110F)" stroke-width="14" stroke-linecap="round"/>
+    <ellipse cx="104" cy="36" rx="10" ry="9" fill="var(--cat,#14110F)"/>
+    <path d="M100 30v-4M105 29v-5M110 31v-4" stroke="var(--face,#FFF3DC)" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+    <g stroke="var(--face,#FFF3DC)" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".9"><path d="M114 18l4-4M118 28h5M108 12l1-5"/></g>
+    <path d="M24 42Q20 16 44 28Z M88 42Q92 16 68 28Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M14 94q0-28 42-28t42 28q0 20-42 20t-42-20Z" fill="var(--cat,#14110F)"/>
+    <ellipse cx="56" cy="56" rx="41" ry="32" fill="var(--cat,#14110F)"/>
+    <circle cx="42" cy="54" r="7" fill="var(--face,#FFF3DC)"/><circle cx="70" cy="54" r="7" fill="var(--face,#FFF3DC)"/>
+    <circle cx="43" cy="55.5" r="4.2" fill="var(--cat,#14110F)"/><circle cx="71" cy="55.5" r="4.2" fill="var(--cat,#14110F)"/>
+    <circle cx="44.6" cy="53.4" r="1.5" fill="var(--face,#FFF3DC)"/><circle cx="72.6" cy="53.4" r="1.5" fill="var(--face,#FFF3DC)"/>
+    <path d="M50 66q6 6 12 0" fill="var(--blush,#E3342F)" stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="30" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="82" cy="66" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <g stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"><path d="M18 60l-10-2M18 66l-10 2"/></g>
+    <ellipse cx="38" cy="104" rx="9" ry="7" fill="var(--cat,#14110F)"/>
+      <path d="M35 106v-3M41 106v-3" stroke="var(--face,#FFF3DC)" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+<symbol id="p-peek" viewBox="0 0 120 120">
+    <path d="M24 70Q18 40 44 52Z M96 70Q102 40 76 52Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M14 120q0-62 46-62t46 62Z" fill="var(--cat,#14110F)"/>
+    <circle cx="44" cy="84" r="9" fill="var(--face,#FFF3DC)"/><circle cx="76" cy="84" r="9" fill="var(--face,#FFF3DC)"/>
+    <circle cx="45" cy="82" r="5.4" fill="var(--cat,#14110F)"/><circle cx="77" cy="82" r="5.4" fill="var(--cat,#14110F)"/>
+    <circle cx="47" cy="79.6" r="1.8" fill="var(--face,#FFF3DC)"/><circle cx="79" cy="79.6" r="1.8" fill="var(--face,#FFF3DC)"/>
+    <ellipse cx="30" cy="96" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="90" cy="96" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <path d="M55 96q2.5 3 5 0q2.5 3 5 0" fill="none" stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"/>
+    <g stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"><path d="M20 90l-12-2M20 96l-12 2M100 90l12-2M100 96l12 2"/></g>
+    <ellipse cx="36" cy="112" rx="11" ry="7" fill="var(--cat,#14110F)"/>
+    <ellipse cx="84" cy="112" rx="11" ry="7" fill="var(--cat,#14110F)"/>
+    <g fill="var(--cup,#E3342F)"><path d="M60 26l2.4-7 2.4 7 7 2.4-7 2.4-2.4 7-2.4-7-7-2.4Z"/><circle cx="96" cy="26" r="3"/><circle cx="22" cy="30" r="2.4"/></g>
+      <path d="M32 115v-3M40 115v-3M80 115v-3M88 115v-3" stroke="var(--face,#FFF3DC)" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+<symbol id="cup" viewBox="0 0 60 70">
+    <path d="M40 4 34 20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <path d="M10 18h40l-5 48H15Z" fill="#FFFDF8" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M12.4 32h35.2l-3.4 32H15.8Z" fill="var(--tea,#C98A4B)"/>
+    <circle cx="22" cy="58" r="3" fill="currentColor"/><circle cx="30" cy="60" r="3" fill="currentColor"/><circle cx="38" cy="57" r="3" fill="currentColor"/>
+    <rect x="6" y="14" width="48" height="7" rx="3.5" fill="currentColor"/>
+  </symbol>
+</defs></svg>
+
 <div class="stripe"></div>
 <div class="lights" id="lights"></div>
 <div class="w">
-  <div class="top"><div class="logo" id="lg">🐶</div><div><h1 id="sn">Phéng</h1><p id="stg"></p></div><button class="adm" id="adm" onclick="openAdmin()" style="display:none">⚙ Quản lý</button></div>
+  <div class="top"><div class="logo" id="lg"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-hug"/></svg></div><div><h1 id="sn">O Sugar</h1><p id="stg"></p></div><button class="adm" id="adm" onclick="openAdmin()" style="display:none">⚙ Quản lý</button></div>
   <div class="tiles">
-    <div class="tile hl"><i>🧋</i><div><b id="tf">Từ 13.000đ</b><small>trà, sữa, cà phê</small></div></div>
+    <div class="tile hl"><i>🧋</i><div><b id="tf">Từ 13.000đ</b><small>trà sữa, trà trái cây</small></div></div>
     <div class="tile"><i>🕗</i><div><b id="th">08h – 21h</b><small>mở cửa mỗi ngày</small></div></div>
     <div class="tile"><i>📲</i><div><b>Quét QR</b><small>chuyển khoản</small></div></div>
     <button class="tile" id="gt" onclick="setMode(!group)"><i>👯</i><div><b>Đặt theo nhóm</b><small id="gs">ai chọn ly nấy · bấm để bật</small></div></button>
   </div>
+  <button class="sbar" id="sbar" onclick="openStamps()" style="display:none"></button>
   <div id="tree" class="tree" style="display:none"></div>
 </div>
 <div class="stripe"></div>
@@ -185,7 +340,7 @@ input[type=file]{padding:9px}
   <div class="foot" id="ft"></div>
 </main>
 
-<div id="gate"><div class="gtop"><div class="glogo" id="glg">🐶</div><h2 id="gsn">Phéng</h2><p>Trà sữa · Trà trái cây · Cà phê</p></div>
+<div id="gate"><div class="gtop"><div class="glogo" id="glg"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-peek"/></svg></div><h2 id="gsn">O Sugar</h2><p>Trà sữa · Trà trái cây</p></div>
 <div class="gcard"><div class="gseg"><button id="gt1" class="on" onclick="gTab(0)">Đăng nhập</button><button id="gt2" onclick="gTab(1)">Đăng ký</button></div>
 <div id="gnmw" style="display:none"><div class="glb">Tên của bạn</div><input class="gi" id="gnm" autocomplete="name"></div>
 <div class="glb">Số điện thoại</div><input class="gi" id="gph" inputmode="tel" autocomplete="tel">
@@ -193,7 +348,9 @@ input[type=file]{padding:9px}
 <div id="gpin2w" style="display:none"><div class="glb">Nhập lại mã PIN</div><div class="gpin" id="gpin2b"><div></div><div></div><div></div><div></div><input id="gpin2" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Nhập lại mã PIN"></div></div>
 <p id="gerr"></p><button class="btn" id="gbtn" style="justify-content:center" onclick="gGo()">Đăng nhập</button>
 <button class="gfg" id="gfg" onclick="gForgot()">Quên mã PIN?</button></div></div>
-<div class="bar"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
+<div class="conf" id="conf" aria-hidden="true"></div>
+<div id="stoast" role="status"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-wave"/></svg><div><b id="stt1"></b><span id="stt2"></span></div></div>
+<div class="bar"><div class="mob"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="mo" id="mst" onclick="openStamps()" style="display:none">🐾 Thẻ tích điểm</button></div><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
 <div id="mapov" role="dialog" aria-label="Bản đồ">
   <div class="mt"><h3 id="mtt">Chọn vị trí giao hàng</h3>
@@ -209,10 +366,9 @@ var TOPS=[['Trân Châu Trắng',5],['Trân Châu Đen',5],['Thạch Trái Cây'
 // món: [tên, bestseller, giá riêng]
 var M=[
 {id:'ts',n:'Trà sữa pha tươi',en:'Milk Tea',p:18,e:'🧋',bg:'#f6dcc8',i:[['Trà Sữa Nguyên Lá',1],['Trà Sữa Hokkaido'],['Trà Sữa Olong'],['Trà Sữa Lài'],['Trà Sữa Lài Hạnh Nhân',1],['Trà Sữa Sen'],['Cacao Sữa'],['Matcha Sữa'],['Trà Sữa Bơ',0,30]]},
-{id:'pm',n:'Trà sữa phô mai',en:'Milk Tea Cheese',p:25,e:'🧀',bg:'#f3e2b8',i:[['Trà Sữa Nguyên Lá Phô Mai'],['Trà Sữa Hokkaido Phô Mai',1],['Phéng Latte Tea']]},
+{id:'pm',n:'Trà sữa phô mai',en:'Milk Tea Cheese',p:25,e:'🧀',bg:'#f3e2b8',i:[['Trà Sữa Nguyên Lá Phô Mai'],['Trà Sữa Hokkaido Phô Mai',1],['O Sugar Latte Tea']]},
 {id:'bk',n:'Trà bọt kem',en:'Tea With Macchiato',p:25,e:'🍵',bg:'#dcead0',i:[['Trà Đen Bọt Kem',1],['Trà Olong Bọt Kem'],['Trà Sen Bọt Kem']]},
 {id:'st',n:'Sữa tươi',en:'Fresh Milk',e:'🥛',bg:'#e3ecf2',i:[['STTC Đường Đen',0,22],['STTC Đường Đen Kem Cheese',0,30],['Sữa Tươi Thốt Nốt',1,22]]},
-{id:'cf',n:'Cà phê',en:'Coffee',e:'☕',bg:'#e7d3c0',i:[['Cà Phê Đá / Sữa',0,13],['Cà Phê Muối',0,15],['Cà Phê Hạnh Nhân',1,22],['Cà Phê Caramel',0,22],['Cà Phê Bọt Kem',0,22]]},
 {id:'tc',n:'Trà trái cây',en:'Fruit Tea',p:22,e:'🍹',bg:'#f7d6dc',i:[['Trà Dâu'],['Trà Đào'],['Trà Vải',1],['Trà Lài Tắc'],['Olong Chanh Vàng'],['Trà Măng Cầu',1,25],['Trà Me Đác Rim',1,25],['Trà Lài Đác Thơm',0,25],['Trà Mận Bắc',0,25],['Trà Long Nhãn',1,25],['Bánh Que Kem Trứng',0,15]]}
 ];
 var cart=[],group=false,cur=null,done=null,delivery=false;
@@ -220,14 +376,17 @@ var $=function(s){return document.getElementById(s)};
 var fmt=function(k){return (k*1000).toLocaleString('vi-VN')+'đ'};
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
 
-var DEF_INFO={name:'Phéng',tag:'Chọn món, chọn đường và đá, rồi bấm hoàn tất là xong!',addr:'40 Nguyễn Văn Linh, P. Phước Hiệp, BR',phone:'0928 0789 25',zalo:'0928078925',hours:'08h – 21h',logo:'',qr:'',season:'',gifts:[{n:'Giảm 5k',t:'sub',v:5},{n:'Giảm 10k',t:'sub',v:10},{n:'Tặng 1 topping trân châu trắng',t:'free',v:0}]};
+var DEF_INFO={name:'O Sugar',tag:'Chọn món, chọn đường và đá, rồi bấm hoàn tất là xong!',addr:'40 Nguyễn Văn Linh, P. Phước Hiệp, BR',phone:'0928 0789 25',zalo:'0928078925',hours:'08h – 21h',logo:'',qr:'',season:'',gifts:[{n:'Giảm 5k',t:'sub',v:5},{n:'Giảm 10k',t:'sub',v:10},{n:'Tặng 1 topping trân châu trắng',t:'free',v:0}]};
 function defCfg(){return {info:JSON.parse(JSON.stringify(DEF_INFO)),cats:M.map(function(c){return {id:c.id,n:c.n,en:c.en,e:c.e,bg:c.bg,i:c.i.map(function(it){return {n:it[0],b:it[1]?1:0,p:it[2]||c.p,img:'',off:0}})}}),tops:TOPS.map(function(t){return {n:t[0],p:t[1]}})}}
 function norm(d){d.info=Object.assign({},DEF_INFO,d.info);if(!Array.isArray(d.info.gifts))d.info.gifts=JSON.parse(JSON.stringify(DEF_INFO.gifts));d.cats=d.cats||[];d.cats.forEach(function(c){c.i=c.i||[]});d.tops=d.tops||[];return d}
 var CFG=defCfg(),dbDoc=null,admin=false,assetsNs=null,q=Promise.resolve(),tab='info',ed=null,delArm=0;
+// Màu nước trong hình ly, đoán theo tên món
+var TEA=[[/matcha|bạc hà/i,'#9DBB6A'],[/cacao|socola|chocolate/i,'#6B4128'],[/đào|cam|xoài|chanh dây|măng cầu/i,'#F0A35E'],[/dâu|vải|mận|hồng|long nhãn/i,'#F2A7B4'],[/chanh|tắc|thơm/i,'#E9D267'],[/sữa tươi|bánh|kem/i,'#F4E6C8'],[/olong|lài|sen|đen|trà/i,'#C98A4B']];
+function teaColor(n){for(var i=0;i<TEA.length;i++)if(TEA[i][0].test(n))return TEA[i][1];return '#C98A4B'}
 function build(){
   var I=CFG.info,all=[];
-  $('sn').textContent=I.name;if($('in'))$('in').textContent=I.name;$('stg').textContent=I.tag;$('th').textContent=I.hours;document.title=I.name+' · Đặt trà online';applySeason();
-  $('lg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'🐶';if($('glg'))gBrand();
+  $('sn').textContent=I.name;$('stg').textContent=I.tag;$('th').textContent=I.hours;document.title=I.name+' · Đặt trà online';applySeason();
+  $('lg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'<svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-hug"/></svg>';if($('glg'))gBrand();
   CFG.cats.forEach(function(c){c.i.forEach(function(x){if(!x.off)all.push(x.p)})});
   $('tf').textContent=all.length?'Từ '+fmt(Math.min.apply(null,all)):'Thực đơn';
   $('ft').innerHTML=esc(I.name)+' · '+esc(I.addr)+' · Gọi / Zalo '+esc(I.phone)+'<br>Trang đặt hàng mẫu';
@@ -236,7 +395,7 @@ function build(){
     t+='<button class="pl" onclick="flt(\''+ci+'\',this)">'+esc(c.n)+'</button>';
     h+='<section class="cat" id="s_'+ci+'"><h2>'+esc(c.n)+'<small>'+esc(c.en||'')+'</small></h2><div class="grid">';
     c.i.forEach(function(x,k){
-      h+='<div class="cd"><div class="im" style="background:'+esc(c.bg)+'">'+(x.img?'<img src="/img/'+esc(x.img)+'" alt="">':esc(c.e))+(x.b?'<b class="bd">Best seller</b>':'')+'</div><h3>'+esc(x.n)+'</h3><p>'+esc(c.en||'')+'</p><span class="pp">'+x.p+'k</span><button class="bt" '+(x.off?'disabled>Hết món':'onclick="openItem('+ci+','+k+')">+ Chọn')+'</button></div>';
+      h+='<div class="cd"><div class="im">'+(x.img?'<img src="/img/'+esc(x.img)+'" alt="">':'<svg aria-hidden="true" style="--tea:'+teaColor(x.n)+'"><use href="#cup"/></svg>')+(x.b?'<b class="bd">Best seller</b>':'')+'</div><h3>'+esc(x.n)+'</h3><p>'+esc(c.en||'')+'</p><span class="pp">'+fmt(x.p)+'</span><button class="bt" '+(x.off?'disabled>Hết món':'onclick="openItem('+ci+','+k+')">+ Chọn')+'</button></div>';
     });
     h+='</div></section>';
   });
@@ -323,7 +482,37 @@ function addCur(){
 }
 function lineTotal(l){return unit(l)*l.qty}
 function desc(l){return l.sugar+'% đường, '+l.ice.toLowerCase()+(l.tops.length?', +'+l.tops.map(function(i){return TOPS[i][0]}).join(', +'):'')}
-function total(){return sub()-disc()}
+function total(){return sub()-disc()-freeV()}
+// ---- Thẻ tích điểm: mua 10 ly tặng 1 ly ----
+var FREE_ON=true;
+function stampsGet(){var me=meGet();return +me.stamps||0}
+function cupsCart(){return cart.reduce(function(a,l){return a+l.qty},0)}
+// Ly miễn phí = ly đắt nhất trong giỏ (kể cả topping của ly đó)
+function freeLine(){var b=null;cart.forEach(function(l){if(!b||unit(l)>unit(b))b=l});return b}
+function canFree(){return stampsGet()>=10&&cupsCart()>0}
+function freeV(){if(!FREE_ON||!canFree())return 0;var l=freeLine();return l?Math.min(unit(l),sub()-disc()):0}
+function cardColor(){try{return localStorage.getItem('card_color')||'kem'}catch(e){return 'kem'}}
+function cardHtml(n,name,ph){var full=n>=10,k=Math.min(n,10),h='<div class="mcard mc-'+cardColor()+'"><div class="mct"><b>O Sugar</b><span>MEMBER CARD</span></div><div class="mcp">';
+  for(var i=1;i<=10;i++)h+='<i class="'+(i<=k?'on':(i===10?'gft':''))+'">'+(i<=k?'<svg><use href="#paw"/></svg>':(i===10?'<b>🎁</b>':''))+'</i>';
+  var p=String(ph||'').replace(/\D/g,'');p=p.length>6?p.slice(0,4)+' •••• '+p.slice(-3):p;
+  h+='</div><div class="mcb"><small>THÀNH VIÊN</small><div class="nm">'+esc(name||'Khách')+'</div><div class="ph">'+esc(p)+'</div></div>';
+  h+=full?'<div class="mcr"><b>10/10</b>🎁 Đổi ly free!</div>':'<div class="mcn"><b>'+k+'/10</b>còn '+(10-k)+' ly</div>';
+  return h+'<svg class="cat" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC" aria-hidden="true"><use href="#p-'+(cardColor()==='do'?'wave':'hug')+'"/></svg></div>'}
+// ---- Màn hình Thẻ tích điểm ----
+var SLOG=null;
+function openStamps(){myOrders()}
+function useFree(){FREE_ON=true;closeSheet();stToast('🎁 Đã sẵn sàng!','Chọn món rồi mở giỏ hàng, ly đắt nhất sẽ thành 0đ')}
+function confetti(){var c=$('conf'),C=['#F5B82E','#E3342F','#FFF3DC','#3B7BD8'],h='';for(var i=0;i<40;i++)h+='<i style="left:'+(Math.random()*100)+'%;background:'+C[i%4]+';animation-delay:'+(Math.random()*.8)+'s;animation-duration:'+(2+Math.random()*1.5)+'s"></i>';c.innerHTML=h;setTimeout(function(){c.innerHTML=''},4200)}
+var STT=null;
+function stToast(a,b){$('stt1').textContent=a;$('stt2').textContent=b;var t=$('stoast');t.className='show';clearTimeout(STT);STT=setTimeout(function(){t.className=''},4500)}
+function cardSet(c){try{localStorage.setItem('card_color',c)}catch(e){}var me=meGet(),w=$('mcw'),d=$('mcdots');if(w)w.innerHTML=cardBlock(me);if(d)d.innerHTML=cardDots()}
+function cardBlock(me){return cardHtml(+me.stamps||0,me.name,me.ph)}
+function cardDots(){var c=cardColor();return '<span>Màu thẻ</span><button aria-label="Kem Sữa" class="kem'+(c==='kem'?' on':'')+'" onclick="cardSet(\'kem\')"></button><button aria-label="Đỏ Kem" class="do'+(c==='do'?' on':'')+'" onclick="cardSet(\'do\')"></button>'}
+function cardHint(n){return n>=10?'🎁 Đủ 10 dấu! Đơn tiếp theo được <b>1 ly miễn phí</b>':'Còn <b>'+(10-n)+' ly</b> nữa là được 1 ly miễn phí'}
+function sbarDraw(){var b=$('sbar'),me=meGet(),k=$('mst');if(!b)return;if(k)k.style.display=me.ph&&me.pin?'block':'none';if(!me.ph||!me.pin){b.style.display='none';return}var n=+me.stamps||0;b.style.display='flex';b.className='sbar'+(n>=10?' full':'');
+  b.innerHTML='<svg aria-hidden="true"><use href="#paw"/></svg>'+(n>=10?'<span style="flex:1">🎁 Đủ 10 dấu! Đơn này được 1 ly miễn phí</span>':'<span><b>'+n+'/10 dấu</b></span><span class="pb"><i style="width:'+n*10+'%"></i></span><span>còn '+(10-n)+' ly</span>')}
+function stampsSet(n){var me=meGet();if(!me.ph)return;me.stamps=n;meSet(me);sbarDraw()}
+function freeHtml(){if(!canFree())return '';var l=freeLine();return '<label class="freeb"><input type="checkbox" '+(FREE_ON?'checked':'')+' onchange="FREE_ON=this.checked;openCart()"><span>🎁 Dùng <b>1 ly miễn phí</b> từ thẻ tích điểm<br><small style="color:var(--mut)">'+esc(l.name)+' · −'+fmt(Math.min(unit(l),sub()-disc()))+'</small></span></label>'}
 function upd(){
   var n=cart.reduce(function(a,l){return a+l.qty},0);
   $('cc').textContent=n?'Xem đơn · '+n+' ly':'Xem đơn của bạn';$('ct').textContent=fmt(total());$('cb').disabled=!n;
@@ -338,7 +527,7 @@ function openCart(){
       h+='<div class="ln"><div>'+l.qty+' × '+esc(l.name)+'<small>'+desc(l)+'</small></div><div>'+fmt(lineTotal(l))+'<br><button onclick="cart.splice('+i+',1);upd();cart.length?openCart():closeSheet()">Xóa</button></div></div>';
     });
   });
-  h+=giftHtml();
+  h+=giftHtml()+freeHtml();
   h+='<div class="tot"><span>Tổng cộng</span><span>'+fmt(total())+'</span></div>';
   h+='<div class="lb">Thông tin nhận hàng</div><div style="background:var(--cd);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:14px">Đặt bằng tài khoản: <b>'+esc(meGet().name||'')+'</b> · '+esc(meGet().ph||'')+'</div>';
   var L0=locGet();
@@ -423,13 +612,13 @@ function finish(){
     cart.forEach(function(l){if(!group||l.who===k)m+='- '+l.qty+' × '+l.name+' ('+desc(l)+') '+fmt(lineTotal(l))+'\n'});
   });
   var TT=total();m+='\nTổng: '+fmt(TT);
-  m+=' (chuyển khoản)';if(giftUse)m+='\n🎁 Quà Noel: '+giftUse.n+(giftUse.t==='sub'?' (đã trừ '+fmt(disc())+')':' (tặng kèm, 0đ)');var nt=$('nt').value.trim();if(nt)m+='\nGhi chú: '+nt;
+  m+=' (chuyển khoản)';if(freeV()){var fl=freeLine();m+='\n🎁 Ly miễn phí (thẻ tích điểm): '+fl.name+' −'+fmt(freeV())}if(giftUse)m+='\n🎁 Quà Noel: '+giftUse.n+(giftUse.t==='sub'?' (đã trừ '+fmt(disc())+')':' (tặng kèm, 0đ)');var nt=$('nt').value.trim();if(nt)m+='\nGhi chú: '+nt;
   done=m;sendOrder(m,nm,ph,TT,pin,LC);
   show('<h3>Đơn của bạn</h3><p id="sst" style="font-weight:600">Đang tạo đơn…</p>');
 }
 function sendOrder(m,nm,ph,tt,pin,lc){var e=function(t){var x=$('sst');if(x)x.innerHTML=t};
 var fail=function(t){e('❌ '+(t||'Chưa tạo được đơn, bạn thử lại giúp quán nhé.')+'<br><button class="btn" style="justify-content:center;margin-top:12px" onclick="openCart()">Quay lại giỏ hàng</button>')};
-fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr,lat:lc.lat,lng:lc.lng}:{text:m,name:nm,phone:ph,total:tt,pin:pin})}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr,lat:lc.lat,lng:lc.lng}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
 if(d&&d.login){meSet(null);fail(esc(d.err||'Cần đăng nhập lại')+'. Đăng nhập lại rồi đặt lại, giỏ hàng vẫn giữ nguyên.');setTimeout(function(){closeSheet();gShow(d.err||'')},2500);return}
 if(!r.ok||!d.id)return fail(d&&d.err?esc(d.err):'');
 if(giftUse&&giftUse.fromSaved)dropGift();
@@ -452,9 +641,9 @@ show('<h3>Quét mã để thanh toán</h3><div id="pst" style="font-weight:600;m
 '<button class="btn o" style="justify-content:center" onclick="clearInterval(PAYT);closeSheet()">Đóng (thanh toán sau ở 📋 Đơn đã đặt)</button>');
 var tick=function(){var x=$('pcd');if(!x){clearInterval(PAYT);return}var left=Math.max(0,Math.round((end-Date.now())/1000));x.textContent=left?'('+Math.floor(left/60)+':'+String(left%60).padStart(2,'0')+')':'';
 if(Date.now()>end+120000){clearInterval(PAYT);$('pst').innerHTML='⌛ Hết thời gian thanh toán. <span style="font-weight:500">Nếu bạn đã chuyển tiền, gọi quán '+esc(CFG.info.phone)+' để được xử lý.</span>';return}};
-var check=function(){if(!$('pcd'))return;fetch('/api/order?id='+encodeURIComponent(o.id),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.s&&d.s!=='pay')payDone(o)}).catch(function(){})};
+var check=function(){if(!$('pcd'))return;fetch('/api/order?id='+encodeURIComponent(o.id),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.s&&d.s!=='pay')payDone(o,d)}).catch(function(){})};
 var n=0;tick();PAYT=setInterval(function(){tick();if(++n%4===0)check()},1000)}
-function payDone(o){clearInterval(PAYT);cart=[];giftReset();upd();show('<h3>✅ Thanh toán thành công</h3><p style="font-weight:600">Quán đã nhận đơn #'+esc(o.code)+'.</p><p style="color:var(--mut)">Bạn xem trạng thái đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</p><pre>'+esc(o.t||'')+'</pre><button class="btn" style="justify-content:center" onclick="closeSheet()">Xong</button>')}
+function payDone(o,d){if(d&&d.stampAdd){var left=10-Math.min(10,+d.stamps||0);stToast('+'+d.stampAdd+' dấu mới! 🐾',left>0?'Còn '+left+' ly nữa là được ly miễn phí':'Đủ 10 dấu, đơn sau được 1 ly miễn phí!');if((+d.stamps||0)>=10)setTimeout(confetti,400)}clearInterval(PAYT);cart=[];giftReset();FREE_ON=true;upd();if(d&&d.stamps!=null)stampsSet(d.stamps);var me=meGet();show('<h3>✅ Thanh toán thành công</h3><p style="font-weight:600">Quán đã nhận đơn #'+esc(o.code)+'.</p>'+(d&&d.stamps!=null?'<button class="stlink" onclick="closeSheet();openStamps()">🐾 Thẻ tích điểm: <b>'+Math.min(10,+d.stamps)+'/10 dấu</b> · xem thẻ ›</button>':'')+'<p style="color:var(--mut)">Bạn xem trạng thái đơn bất cứ lúc nào ở nút 📋 Đơn đã đặt.</p><pre>'+esc(o.t||'')+'</pre><button class="btn" style="justify-content:center" onclick="closeSheet()">Xong</button>')}
 function payQrErr(i){var a=i.getAttribute('data-alt');if(a){i.removeAttribute('data-alt');i.src=a;return}i.outerHTML='<p style="background:var(--pk);border-radius:12px;padding:10px;font-size:14px">Không tải được mã QR. Bạn mở app ngân hàng, chuyển khoản theo đúng thông tin bên dưới nhé.</p>'}
 function payDl(id,code){var b=$('pdl'),h=$('pdlh');if(!b)return;b.disabled=true;b.textContent='Đang tải mã QR…';
 fetch('/api/qr?id='+encodeURIComponent(id)).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(bl){
@@ -480,10 +669,11 @@ function stOf(o){if(o.s==='pay')return Date.now()-new Date(o.at).getTime()<15*60
 function myItem(r,st,i){var d=new Date(r.at);return '<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div style="font-size:14px;margin-top:4px;color:'+(r.s==='done'?'var(--mr)':'var(--mut)')+'">'+st+'</div><pre>'+esc(r.t)+'</pre>'+(r.s==='pay'&&Date.now()-new Date(r.at).getTime()<15*60000?'<button class="btn" style="justify-content:center;margin-bottom:8px" onclick="payAgain('+i+')">Thanh toán ngay</button>':'')+'<button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'}
 var MYL=[];
 function myCopy(i,b){var r=MYL[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
+function slogHtml(L){var h='<div class="slogb"><div class="slt">Lịch sử tích dấu</div>';if(!L||!L.length)return h+'<div class="sle">Chưa có dấu nào. Mua ly đầu tiên để bắt đầu nhé!</div></div>';return h+'<div class="slog">'+L.slice(0,5).map(function(x){var t=new Date(x.at);return '<div><span>'+t.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'})+' · Đơn #'+esc(x.code)+'</span><span>'+(x.use?'<i class="u">🎁 đổi 1 ly</i> ':'')+(x.add?'<i>+'+x.add+' dấu</i>':'')+'</span></div>'}).join('')+'</div></div>'}
 function myOrders(){var me=meGet();if(!me.ph||!me.pin)return gShow('');myLoad(me.ph,me.pin)}
 function myLocal(ids){var l=myGet().filter(function(r){return r.ph===meGet().ph&&(!r.id||ids.indexOf(r.id)<0)});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
 function myLoad(ph,pin){MYL=[];show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut)">Đang tải…</p>');fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429){meSet(null);closeSheet();return gShow(d.err||'')}return show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">'+esc(d.err||'Không xem được đơn')+'</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')}
-var me=meGet();me.name=d.name||me.name;meSet(me);var os=d.orders||[],h='<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
+var me=meGet();me.name=d.name||me.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw();var os=d.orders||[],SLOG=d.stampLog||[];var sn=+me.stamps||0;if(sn>=10)setTimeout(confetti,300);h='<div class="mch"><h3>Thẻ tích điểm</h3><div class="mcdots" id="mcdots">'+cardDots()+'</div></div><div id="mcw">'+cardBlock(me)+'</div><p class="mchint">'+cardHint(sn)+'</p>'+(sn>=10?'<button class="btn" style="justify-content:center;margin:4px 0 10px" onclick="useFree()">🎁 Dùng ly miễn phí ở đơn tiếp theo</button>':'')+'<p class="mcrule">Mỗi ly đã thanh toán = 1 dấu · đủ 10 dấu tặng ly đắt nhất trong đơn</p>'+slogHtml(SLOG)+'<h3 class="myh">Đơn bạn đã đặt</h3><p style="color:var(--mut);margin-top:0">'+esc(me.name||'')+' · '+esc(ph)+' · <a href="#" onclick="gOut();return false">Đăng xuất</a></p>';
 if(!os.length)h+='<p style="color:var(--mut)">Chưa có đơn nào.</p>';
 os.forEach(function(o){var i=MYL.push(o)-1;h+=myItem(o,stOf(o),i)});
 h+=myLocal(os.map(function(o){return o.id}))+'<button class="btn" style="margin-top:8px;justify-content:center" onclick="closeSheet()">Đóng</button>';show(h)})}).catch(function(){show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">Không kết nối được, thử lại sau</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')})}
@@ -494,7 +684,7 @@ function gPinDraw(id){var v=$(id).value,b=$(id+'b').children;for(var k=0;k<4;k++
 function gPinClr(){['gpin','gpin2'].forEach(function(id){$(id).value='';gPinDraw(id)})}
 ['gpin','gpin2'].forEach(function(id){var e=$(id);e.addEventListener('input',function(){e.value=e.value.replace(/\D/g,'').slice(0,4);gPinDraw(id);if(e.value.length===4){if(id==='gpin'&&GREG)$('gpin2').focus();else e.blur()}});e.addEventListener('focus',function(){gPinDraw(id)});e.addEventListener('blur',function(){gPinDraw(id)})});
 function gForgot(){var t=CFG.info.phone||'';$('gerr').innerHTML='Gọi quán <a href="tel:'+esc(t.replace(/\s/g,''))+'" style="color:var(--mr);font-weight:700">'+esc(t)+'</a> để đặt lại mã PIN.'}
-function gBrand(){var I=CFG.info;$('glg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'🐶';$('gsn').textContent=I.name||''}
+function gBrand(){var I=CFG.info;$('glg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'<svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-peek"/></svg>';$('gsn').textContent=I.name||''}
 function gShow(err){if(location.hash==='#admin')return;gBrand();$('gate').style.display='block';$('gerr').textContent=err||'';var me=meGet();if(me.ph&&!$('gph').value)$('gph').value=me.ph}
 function gHide(){$('gate').style.display='none'}
 function gOut(){meSet(null);closeSheet();gTab(0);gShow('')}
@@ -505,10 +695,10 @@ if(!/^\d{4}$/.test(pin)){er.textContent='Mã PIN phải gồm đúng 4 số.';$(
 if(GREG&&$('gpin2').value.trim()!==pin){er.textContent='Hai lần nhập mã PIN không khớp.';$('gpin2').focus();return}
 er.textContent='Đang xử lý…';$('gbtn').disabled=true;
 fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(GREG?{action:'register',name:nm,phone:ph,pin:pin}:{phone:ph,pin:pin})}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){$('gbtn').disabled=false;if(!r.ok){er.textContent=d.err||'Không thành công';return}
-meSet({ph:ph,pin:pin,name:d.name||nm});gTab(0);gHide()})}).catch(function(){$('gbtn').disabled=false;er.textContent='Không kết nối được, thử lại sau.'})}
+meSet({ph:ph,pin:pin,name:d.name||nm,stamps:+d.stamps||0});sbarDraw();gTab(0);gHide()})}).catch(function(){$('gbtn').disabled=false;er.textContent='Không kết nối được, thử lại sau.'})}
 // Mở web: chưa đăng nhập thì hiện màn hình đăng nhập; đã đăng nhập thì kiểm tra lại ngầm
 function gInit(){if(location.hash==='#admin')return;var me=meGet();if(!me.ph||!me.pin)return gShow('');
-fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){if(r.status===403||r.status===429)return r.json().catch(function(){return {}}).then(function(d){meSet(null);gShow(d.err||'Hãy đăng nhập lại.')});if(r.ok)return r.json().then(function(d){if(d.name){me.name=d.name;meSet(me)}})}).catch(function(){})}
+fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:me.ph,pin:me.pin}),cache:'no-store'}).then(function(r){if(r.status===403||r.status===429)return r.json().catch(function(){return {}}).then(function(d){meSet(null);gShow(d.err||'Hãy đăng nhập lại.')});if(r.ok)return r.json().then(function(d){if(d.name)me.name=d.name;if(d.stamps!=null)me.stamps=d.stamps;meSet(me);sbarDraw()})}).catch(function(){})}
 function copyMsg(b){
   var ok=function(){b.textContent='Đã sao chép'};
   try{navigator.clipboard.writeText(done).then(ok,fb)}catch(e){fb()}
@@ -518,11 +708,6 @@ var PW='';try{PW=localStorage.getItem('pw')||''}catch(e){}
 build();upd();myBtn();gInit();
 if(location.hash==='#admin')$('adm').style.display='';
 fetch('/api/config').then(function(r){return r.ok?r.json():{}}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build()}}).catch(function(){});
-function endIntro(){var e=$('intro');if(!e||e.className==='out')return;e.className='out';setTimeout(function(){e.remove()},700);try{sessionStorage.setItem('seen','1')}catch(x){}}
-(function(){var e=$('intro'),seen=0;try{seen=sessionStorage.getItem('seen')}catch(x){}
-if(seen||location.hash==='#admin'){e.remove();return}
-for(var i=0;i<16;i++){var b=document.createElement('span');b.className='bb';var z=8+Math.random()*16;b.style.cssText='left:'+Math.random()*100+'%;width:'+z+'px;height:'+z+'px;animation-duration:'+(5+Math.random()*5)+'s;animation-delay:-'+Math.random()*8+'s';e.appendChild(b)}
-setTimeout(endIntro,5000)})();
 function cartQty(){return cart.reduce(function(a,l){return a+l.qty},0)}
 function applySeason(){
   var n=CFG.info.season==='noel';

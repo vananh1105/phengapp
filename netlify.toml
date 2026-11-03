@@ -1,3 +1,7 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
+
+  # Chỉ build trang chính pheng4. Hai trang phụ pheng2, pheng3 (cùng nối repo, không dùng) bỏ qua build để không tốn credit.
+  # Lệnh trả về 0 = bỏ qua build, khác 0 = build bình thường. Muốn bật lại thì xoá dòng dưới.
+  ignore = "case \"$SITE_NAME\" in pheng2|pheng3) exit 0;; *) exit 1;; esac"
