@@ -16,7 +16,7 @@
 - Không chép linh vật, logo hay thương hiệu của quán khác; chỉ lấy cảm hứng phong cách rồi vẽ mới cho O Sugar.
 
 ## Netlify và credit
-- Gom nhiều thay đổi rồi mới deploy bản chính một lần (mỗi lần deploy bản chính tốn credit cho từng trang Netlify đang build); ưu tiên cho xem thử bằng link xem trước (deploy preview, miễn phí). Chỉ dùng trang `pheng4` (trang chính của quán); `pheng2`, `pheng3` cũng nối repo nhưng không dùng, không cần build.
+- Gom nhiều thay đổi rồi mới deploy bản chính một lần (mỗi lần deploy bản chính tốn credit cho từng trang Netlify đang build); ưu tiên cho xem thử bằng link xem trước (deploy preview, miễn phí). Chỉ dùng trang `pheng4` (trang chính của quán); `pheng2`, `pheng3` cũng nối repo nhưng không dùng, không cần build (`netlify.toml` có `ignore` bỏ qua build khi `SITE_NAME` là pheng2/pheng3).
 - Khi gửi link xem trước, nhắc rằng link xem trước dùng chung dữ liệu thật (tài khoản khách, đơn, menu); không chuyển khoản thật để thử.
 
 ## Dự án
