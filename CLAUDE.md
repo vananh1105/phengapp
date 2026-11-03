@@ -8,6 +8,17 @@
 ## Giao tiếp
 - Trả lời bằng tiếng Việt.
 
+## Cách làm việc
+- Chỉ sửa đúng phần được yêu cầu. Ví dụ chỉ được nhờ làm thẻ tích điểm thì không tự đổi giao diện cả trang; muốn đổi thêm phần khác thì hỏi trước.
+- Không xoá hay bỏ chức năng đang có của trang đặt hàng (`index.html`), trang quản lý đơn (`don.html`) và phần mềm bán hàng (`ban.html`) khi chưa hỏi chủ repo.
+- Chưa rõ ý thì hỏi lại trước khi làm (ví dụ "ứng dụng bán hàng" là trang đặt hàng hay phần mềm bán tại quầy, "mẫu B" là mẫu nào).
+- Thay đổi giao diện lớn: làm vài mẫu xem trước cho chủ repo chọn rồi mới áp vào code thật.
+- Không chép linh vật, logo hay thương hiệu của quán khác; chỉ lấy cảm hứng phong cách rồi vẽ mới cho O Sugar.
+
+## Netlify và credit
+- Gom nhiều thay đổi rồi mới deploy bản chính một lần (mỗi lần deploy bản chính tốn credit cho từng trang Netlify đang build); ưu tiên cho xem thử bằng link xem trước (deploy preview, miễn phí). Chỉ dùng trang `pheng4` (trang chính của quán); `pheng2`, `pheng3` cũng nối repo nhưng không dùng, không cần build.
+- Khi gửi link xem trước, nhắc rằng link xem trước dùng chung dữ liệu thật (tài khoản khách, đơn, menu); không chuyển khoản thật để thử.
+
 ## Dự án
 - Web app quán trà **O Sugar** (tên cũ Phéng; chỉ bán trà sữa, trà trái cây, không bán cà phê), chạy trên Netlify. Tên quán và menu thật lưu ở cấu hình trên máy chủ (`/#admin`); trong code chỉ là mặc định. Nội dung chuyển khoản vẫn dùng tiền tố `PHENG` (SePay dựa vào đó để khớp đơn).
 - `public/index.html`: trang khách đặt đơn. Giao diện "Mẫu A · Mèo Xanh" (khối CSS cuối `<style>`, ghi đè biến màu cũ; luôn sáng): nền xanh #1F63C9, thanh đầu kem có logo Mèo Đen (khi chưa có logo riêng), thẻ món kem có hình ly (`teaColor`), nút đỏ. Thẻ tích điểm "mua 10 ly tặng 1 ly": `members` lưu `stamps`, `stampLog`; `sepay.mjs` cộng dấu khi đơn thanh toán (`addStamps`, mỗi ly 1 dấu); giỏ hàng có ô "Dùng 1 ly miễn phí" khi đủ 10 dấu (miễn phí ly đắt nhất, gửi `free:1`, `order.mjs` kiểm tra đủ dấu, khi thanh toán trừ 10 dấu); thẻ hiện trong khung trượt "Đơn đã đặt" (phần đầu: thẻ, dòng nhắc, lịch sử; mở từ thanh `#sbar` hoặc nút "🐾 Thẻ tích điểm"; `openStamps` = `myOrders`), màu Kem Sữa / Đỏ Kem (`card_color`), đủ 10 dấu có pháo giấy + nút "Dùng ly miễn phí"; thanh toán xong hiện thông báo `#stoast` "+n dấu mới!".
