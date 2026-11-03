@@ -36,7 +36,7 @@ export default async (req) => {
       if (v.exp && Date.now() > v.exp) v.late = 1;
       await orders.setJSON(link.id, v);
       await pays.setJSON(txKey, { ok: 1, id: link.id });
-      await notifyNewOrder(new URL(req.url).origin, codeOf(link.id), v.t);
+      await notifyNewOrder(new URL(req.url).origin, codeOf(link.id), v.t, v);
       return Response.json({ success: true });
     }
   }
