@@ -171,11 +171,11 @@ input[type=file]{padding:9px}
 .mcard .mct b{font:400 clamp(18px,5.6vw,23px)/1 "Coiny","Baloo 2",sans-serif;color:var(--clogo);text-shadow:var(--clsh)}
 .mcard .mct span{margin-left:auto;font-weight:700;font-size:9px;letter-spacing:2px;opacity:.72}
 .mcard .mcp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7% 6%;width:58%;align-self:center}
-.mcard .mcp i{min-width:0;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-style:normal;background:var(--cslot);box-shadow:inset 0 0 0 1.6px var(--cline)}
+.mcard .mcp i{min-width:0;min-height:0;overflow:hidden;line-height:0;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-style:normal;background:var(--cslot);box-shadow:inset 0 0 0 1.6px var(--cline)}
 .mcard .mcp i svg{width:70%;height:70%;color:var(--cpaw)}
 .mcard .mcp i.on{background:var(--con);box-shadow:none}
 .mcard .mcp i:nth-child(odd) svg{transform:rotate(-14deg)}.mcard .mcp i:nth-child(even) svg{transform:rotate(12deg)}
-.mcard .mcp i.gift{box-shadow:inset 0 0 0 1.6px var(--cacc)}.mcard .mcp i.gift b{font-size:12px;line-height:1}
+.mcard .mcp i.gft{box-shadow:inset 0 0 0 1.6px var(--cacc)}.mcard .mcp i.gft b{font-size:11px;line-height:1;display:block}
 .mcard .mcb small{display:block;font-weight:700;font-size:8px;letter-spacing:1.6px;opacity:.68;margin-bottom:3px}
 .mcard .mcb .nm{font-weight:700;font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.15}
 .mcard .mcb .ph{font-weight:600;font-size:11px;letter-spacing:1.8px;opacity:.85;margin-top:2px}
@@ -194,6 +194,69 @@ input[type=file]{padding:9px}
 .freeb{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px 12px;border-radius:14px;background:#FFF3DC;color:#14213D;font-size:14px;cursor:pointer}
 .freeb input{width:20px;height:20px;accent-color:#E3342F;margin:0}
 .freeb b{color:#E3342F}
+
+/* ===== Giao diện Mẫu A · Mèo Xanh (cùng bộ màu phần mềm bán hàng và trang quản lý) ===== */
+:root,:root[data-theme="dark"]{--bg:#FFFDF7;--sky:#1F63C9;--sage:#1F63C9;--cd:#FFF3DC;--ink:#14213D;--mut:#6E6A63;--ln:#E6D3AE;--mr:#E3342F;--pk:#DCE8F8;--on:#fff;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#FFFDF7;--sky:#1F63C9;--sage:#1F63C9;--cd:#FFF3DC;--ink:#14213D;--mut:#6E6A63;--ln:#E6D3AE;--mr:#E3342F;--pk:#DCE8F8;color-scheme:light}}
+html{background:#1F63C9}
+body{background:#1F63C9}
+h1,h2,h3{font-family:"Coiny","Baloo 2",sans-serif;font-weight:400}
+.top{margin-top:12px;padding:10px 12px;background:#FFF3DC;border-radius:20px;gap:10px}
+.logo{width:54px;height:54px;border-radius:50%;background:#1F63C9;border:0;box-shadow:none;padding:2px;font-size:28px}
+.logo svg{width:100%;height:100%}
+.top h1{font-size:28px;color:#1F63C9;text-shadow:2px 2px 0 #14110F}
+.top p{font-size:12.5px;line-height:1.35}
+.tiles{margin-top:10px;gap:8px}
+.tile,.tile.hl{background:rgba(255,243,220,.16);color:#FFF3DC;box-shadow:none;padding:10px}
+.tile i{background:rgba(255,243,220,.2)}
+button.tile.on{outline:2px solid #FFF3DC;background:rgba(255,243,220,.28)}
+.wave{display:none}
+main.w{padding-top:12px}
+.pills{padding-top:4px}
+.pl{background:#3B7BD8;color:#FFF3DC;box-shadow:none}
+.pl.on{background:#FFF3DC;color:#1F63C9}
+.cat h2{color:#FFF3DC;font-size:22px}
+.cat h2 small{color:#FFF3DC;opacity:.8}
+.grid{gap:10px}
+.cd{border-radius:20px;padding:8px 8px 10px;box-shadow:none;text-align:left}
+.im{aspect-ratio:16/11;border-radius:14px;background:#DCE8F8!important;margin-bottom:8px}
+.im svg{height:70%;width:auto;color:#14213D}
+.bd{background:#E3342F;color:#FFF3DC;font:800 10px/1.9 "Be Vietnam Pro",sans-serif;letter-spacing:.3px}
+.cd h3{font:700 15px/1.25 "Be Vietnam Pro",sans-serif;min-height:0;display:block;color:#14213D}
+.cd p{margin:2px 0 8px}
+.pp{align-self:flex-start;background:none;color:#E3342F;padding:0;font:400 18px/1 "Coiny",sans-serif;margin-bottom:8px}
+.bt{background:#E3342F;color:#FFF3DC;font-weight:700}
+.tp{background:#FFF3DC}
+.foot{color:#FFF3DC;opacity:.85}
+.bar{background:linear-gradient(rgba(31,99,201,0),#1F63C9 35%)}
+.btn{background:#E3342F;color:#FFF3DC;box-shadow:0 0 0 2px #14110F}
+.btn[disabled]{background:#3B7BD8;color:#FFF3DC;opacity:1;box-shadow:none}
+.mo{background:#FFF3DC;border-color:#14110F;color:#14213D}
+.sheet{background:#FFFDF7}
+.sheet h3{font-size:24px}
+.ch button.on{border-color:#1F63C9;background:#1F63C9;color:#FFF3DC}
+.q button{background:#DCE8F8;color:#1F63C9}
+.who{color:#1F63C9}
+.tot{font-family:"Coiny",sans-serif;font-weight:400}
+.sec2 .btn,.btn.o{box-shadow:none}
+.btn.o{color:#14213D;border-color:#14213D}
+.adm{background:#14110F;color:#FFF3DC}
+.tree{background:#FFF3DC}
+.gift{background:#FFF3DC;border-color:#E3342F}
+#gate{background:#1F63C9}
+#gate .gtop{background:#1F63C9;height:280px}
+#gate .glogo{width:120px;height:120px;border:0;background:none;box-shadow:none;border-radius:0;font-size:60px}
+#gate .glogo svg{width:100%;height:100%}
+#gate h2{font-family:"Coiny",sans-serif;font-weight:400;font-size:34px;text-shadow:2px 2px 0 #14110F}
+#gate .gcard{background:#FFF3DC}
+#gate .gseg{background:#F4E6C8}
+#gate .gseg button.on{background:#1F63C9;color:#FFF3DC}
+#gate input.gi,#gate .gpin div{background:#FFFFFF}
+#gate .gpin div{color:#1F63C9}
+#intro{background:#1F63C9}
+.in-top h1{color:#FFF3DC;font-family:"Coiny",sans-serif;font-weight:400;text-shadow:3px 3px 0 #14110F}
+.in-top p{color:#FFF3DC}
+.in-skip{background:#FFF3DC;color:#14213D}
 </style>
 </head>
 <body>
@@ -231,6 +294,27 @@ input[type=file]{padding:9px}
     <ellipse cx="38" cy="104" rx="9" ry="7" fill="var(--cat,#14110F)"/>
       <path d="M35 106v-3M41 106v-3" stroke="var(--face,#FFF3DC)" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
   </symbol>
+<symbol id="p-peek" viewBox="0 0 120 120">
+    <path d="M24 70Q18 40 44 52Z M96 70Q102 40 76 52Z" fill="var(--cat,#14110F)" stroke="var(--cat,#14110F)" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M14 120q0-62 46-62t46 62Z" fill="var(--cat,#14110F)"/>
+    <circle cx="44" cy="84" r="9" fill="var(--face,#FFF3DC)"/><circle cx="76" cy="84" r="9" fill="var(--face,#FFF3DC)"/>
+    <circle cx="45" cy="82" r="5.4" fill="var(--cat,#14110F)"/><circle cx="77" cy="82" r="5.4" fill="var(--cat,#14110F)"/>
+    <circle cx="47" cy="79.6" r="1.8" fill="var(--face,#FFF3DC)"/><circle cx="79" cy="79.6" r="1.8" fill="var(--face,#FFF3DC)"/>
+    <ellipse cx="30" cy="96" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/><ellipse cx="90" cy="96" rx="5" ry="3" fill="var(--blush,#E3342F)" opacity=".6"/>
+    <path d="M55 96q2.5 3 5 0q2.5 3 5 0" fill="none" stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"/>
+    <g stroke="var(--face,#FFF3DC)" stroke-width="2.6" stroke-linecap="round"><path d="M20 90l-12-2M20 96l-12 2M100 90l12-2M100 96l12 2"/></g>
+    <ellipse cx="36" cy="112" rx="11" ry="7" fill="var(--cat,#14110F)"/>
+    <ellipse cx="84" cy="112" rx="11" ry="7" fill="var(--cat,#14110F)"/>
+    <g fill="var(--cup,#E3342F)"><path d="M60 26l2.4-7 2.4 7 7 2.4-7 2.4-2.4 7-2.4-7-7-2.4Z"/><circle cx="96" cy="26" r="3"/><circle cx="22" cy="30" r="2.4"/></g>
+      <path d="M32 115v-3M40 115v-3M80 115v-3M88 115v-3" stroke="var(--face,#FFF3DC)" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+<symbol id="cup" viewBox="0 0 60 70">
+    <path d="M40 4 34 20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <path d="M10 18h40l-5 48H15Z" fill="#FFFDF8" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M12.4 32h35.2l-3.4 32H15.8Z" fill="var(--tea,#C98A4B)"/>
+    <circle cx="22" cy="58" r="3" fill="currentColor"/><circle cx="30" cy="60" r="3" fill="currentColor"/><circle cx="38" cy="57" r="3" fill="currentColor"/>
+    <rect x="6" y="14" width="48" height="7" rx="3.5" fill="currentColor"/>
+  </symbol>
 </defs></svg>
 
 <div id="intro" onclick="endIntro()"><button class="in-skip" onclick="event.stopPropagation();endIntro()">Bỏ qua ›</button>
@@ -240,7 +324,7 @@ input[type=file]{padding:9px}
 <div class="stripe"></div>
 <div class="lights" id="lights"></div>
 <div class="w">
-  <div class="top"><div class="logo" id="lg">🐶</div><div><h1 id="sn">O Sugar</h1><p id="stg"></p></div><button class="adm" id="adm" onclick="openAdmin()" style="display:none">⚙ Quản lý</button></div>
+  <div class="top"><div class="logo" id="lg"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-hug"/></svg></div><div><h1 id="sn">O Sugar</h1><p id="stg"></p></div><button class="adm" id="adm" onclick="openAdmin()" style="display:none">⚙ Quản lý</button></div>
   <div class="tiles">
     <div class="tile hl"><i>🧋</i><div><b id="tf">Từ 13.000đ</b><small>trà sữa, trà trái cây</small></div></div>
     <div class="tile"><i>🕗</i><div><b id="th">08h – 21h</b><small>mở cửa mỗi ngày</small></div></div>
@@ -258,7 +342,7 @@ input[type=file]{padding:9px}
   <div class="foot" id="ft"></div>
 </main>
 
-<div id="gate"><div class="gtop"><div class="glogo" id="glg">🐶</div><h2 id="gsn">O Sugar</h2><p>Trà sữa · Trà trái cây</p></div>
+<div id="gate"><div class="gtop"><div class="glogo" id="glg"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-peek"/></svg></div><h2 id="gsn">O Sugar</h2><p>Trà sữa · Trà trái cây</p></div>
 <div class="gcard"><div class="gseg"><button id="gt1" class="on" onclick="gTab(0)">Đăng nhập</button><button id="gt2" onclick="gTab(1)">Đăng ký</button></div>
 <div id="gnmw" style="display:none"><div class="glb">Tên của bạn</div><input class="gi" id="gnm" autocomplete="name"></div>
 <div class="glb">Số điện thoại</div><input class="gi" id="gph" inputmode="tel" autocomplete="tel">
@@ -296,10 +380,13 @@ var DEF_INFO={name:'O Sugar',tag:'Chọn món, chọn đường và đá, rồi 
 function defCfg(){return {info:JSON.parse(JSON.stringify(DEF_INFO)),cats:M.map(function(c){return {id:c.id,n:c.n,en:c.en,e:c.e,bg:c.bg,i:c.i.map(function(it){return {n:it[0],b:it[1]?1:0,p:it[2]||c.p,img:'',off:0}})}}),tops:TOPS.map(function(t){return {n:t[0],p:t[1]}})}}
 function norm(d){d.info=Object.assign({},DEF_INFO,d.info);if(!Array.isArray(d.info.gifts))d.info.gifts=JSON.parse(JSON.stringify(DEF_INFO.gifts));d.cats=d.cats||[];d.cats.forEach(function(c){c.i=c.i||[]});d.tops=d.tops||[];return d}
 var CFG=defCfg(),dbDoc=null,admin=false,assetsNs=null,q=Promise.resolve(),tab='info',ed=null,delArm=0;
+// Màu nước trong hình ly, đoán theo tên món
+var TEA=[[/matcha|bạc hà/i,'#9DBB6A'],[/cacao|socola|chocolate/i,'#6B4128'],[/đào|cam|xoài|chanh dây|măng cầu/i,'#F0A35E'],[/dâu|vải|mận|hồng|long nhãn/i,'#F2A7B4'],[/chanh|tắc|thơm/i,'#E9D267'],[/sữa tươi|bánh|kem/i,'#F4E6C8'],[/olong|lài|sen|đen|trà/i,'#C98A4B']];
+function teaColor(n){for(var i=0;i<TEA.length;i++)if(TEA[i][0].test(n))return TEA[i][1];return '#C98A4B'}
 function build(){
   var I=CFG.info,all=[];
   $('sn').textContent=I.name;if($('in'))$('in').textContent=I.name;$('stg').textContent=I.tag;$('th').textContent=I.hours;document.title=I.name+' · Đặt trà online';applySeason();
-  $('lg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'🐶';if($('glg'))gBrand();
+  $('lg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'<svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-hug"/></svg>';if($('glg'))gBrand();
   CFG.cats.forEach(function(c){c.i.forEach(function(x){if(!x.off)all.push(x.p)})});
   $('tf').textContent=all.length?'Từ '+fmt(Math.min.apply(null,all)):'Thực đơn';
   $('ft').innerHTML=esc(I.name)+' · '+esc(I.addr)+' · Gọi / Zalo '+esc(I.phone)+'<br>Trang đặt hàng mẫu';
@@ -308,7 +395,7 @@ function build(){
     t+='<button class="pl" onclick="flt(\''+ci+'\',this)">'+esc(c.n)+'</button>';
     h+='<section class="cat" id="s_'+ci+'"><h2>'+esc(c.n)+'<small>'+esc(c.en||'')+'</small></h2><div class="grid">';
     c.i.forEach(function(x,k){
-      h+='<div class="cd"><div class="im" style="background:'+esc(c.bg)+'">'+(x.img?'<img src="/img/'+esc(x.img)+'" alt="">':esc(c.e))+(x.b?'<b class="bd">Best seller</b>':'')+'</div><h3>'+esc(x.n)+'</h3><p>'+esc(c.en||'')+'</p><span class="pp">'+x.p+'k</span><button class="bt" '+(x.off?'disabled>Hết món':'onclick="openItem('+ci+','+k+')">+ Chọn')+'</button></div>';
+      h+='<div class="cd"><div class="im">'+(x.img?'<img src="/img/'+esc(x.img)+'" alt="">':'<svg aria-hidden="true" style="--tea:'+teaColor(x.n)+'"><use href="#cup"/></svg>')+(x.b?'<b class="bd">Best seller</b>':'')+'</div><h3>'+esc(x.n)+'</h3><p>'+esc(c.en||'')+'</p><span class="pp">'+fmt(x.p)+'</span><button class="bt" '+(x.off?'disabled>Hết món':'onclick="openItem('+ci+','+k+')">+ Chọn')+'</button></div>';
     });
     h+='</div></section>';
   });
@@ -406,7 +493,7 @@ function canFree(){return stampsGet()>=10&&cupsCart()>0}
 function freeV(){if(!FREE_ON||!canFree())return 0;var l=freeLine();return l?Math.min(unit(l),sub()-disc()):0}
 function cardColor(){try{return localStorage.getItem('card_color')||'kem'}catch(e){return 'kem'}}
 function cardHtml(n,name,ph){var full=n>=10,k=Math.min(n,10),h='<div class="mcard mc-'+cardColor()+'"><div class="mct"><b>O Sugar</b><span>MEMBER CARD</span></div><div class="mcp">';
-  for(var i=1;i<=10;i++)h+='<i class="'+(i<=k?'on':(i===10?'gift':''))+'">'+(i<=k?'<svg><use href="#paw"/></svg>':(i===10?'<b>🎁</b>':''))+'</i>';
+  for(var i=1;i<=10;i++)h+='<i class="'+(i<=k?'on':(i===10?'gft':''))+'">'+(i<=k?'<svg><use href="#paw"/></svg>':(i===10?'<b>🎁</b>':''))+'</i>';
   var p=String(ph||'').replace(/\D/g,'');p=p.length>6?p.slice(0,4)+' •••• '+p.slice(-3):p;
   h+='</div><div class="mcb"><small>THÀNH VIÊN</small><div class="nm">'+esc(name||'Khách')+'</div><div class="ph">'+esc(p)+'</div></div>';
   h+=full?'<div class="mcr"><b>10/10</b>🎁 Đổi ly free!</div>':'<div class="mcn"><b>'+k+'/10</b>còn '+(10-k)+' ly</div>';
@@ -588,7 +675,7 @@ function gPinDraw(id){var v=$(id).value,b=$(id+'b').children;for(var k=0;k<4;k++
 function gPinClr(){['gpin','gpin2'].forEach(function(id){$(id).value='';gPinDraw(id)})}
 ['gpin','gpin2'].forEach(function(id){var e=$(id);e.addEventListener('input',function(){e.value=e.value.replace(/\D/g,'').slice(0,4);gPinDraw(id);if(e.value.length===4){if(id==='gpin'&&GREG)$('gpin2').focus();else e.blur()}});e.addEventListener('focus',function(){gPinDraw(id)});e.addEventListener('blur',function(){gPinDraw(id)})});
 function gForgot(){var t=CFG.info.phone||'';$('gerr').innerHTML='Gọi quán <a href="tel:'+esc(t.replace(/\s/g,''))+'" style="color:var(--mr);font-weight:700">'+esc(t)+'</a> để đặt lại mã PIN.'}
-function gBrand(){var I=CFG.info;$('glg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'🐶';$('gsn').textContent=I.name||''}
+function gBrand(){var I=CFG.info;$('glg').innerHTML=I.logo?'<img src="/img/'+esc(I.logo)+'" alt="">':'<svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-peek"/></svg>';$('gsn').textContent=I.name||''}
 function gShow(err){if(location.hash==='#admin')return;gBrand();$('gate').style.display='block';$('gerr').textContent=err||'';var me=meGet();if(me.ph&&!$('gph').value)$('gph').value=me.ph}
 function gHide(){$('gate').style.display='none'}
 function gOut(){meSet(null);closeSheet();gTab(0);gShow('')}
