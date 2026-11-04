@@ -75,21 +75,6 @@ button.tile.on{outline:2px solid var(--mr)}
 .mi{background:var(--cd);border-radius:14px;padding:12px;margin:10px 0}.mi .mh{display:flex;justify-content:space-between;gap:8px;font-weight:600}.mi small{color:var(--mut);font-weight:500}.mi pre{background:var(--bg)}
 .ov{position:fixed;inset:0;background:rgba(30,10,14,.5);z-index:20;display:none;align-items:flex-end}
 .ov.show{display:flex}
-/* Bản đồ chọn vị trí giao hàng */
-#mapov{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
-#mapov.show{display:flex}
-#mapov .mt{padding:10px max(14px,env(safe-area-inset-left,0px)) 8px;display:grid;gap:8px}
-#mapov .mt h3{margin:0;font-size:20px}
-#mapov .row{display:flex;gap:6px}#mapov .row input{margin:0;flex:1;min-width:0}
-#mapov .row button{flex:none;border:0;border-radius:12px;background:var(--mr);color:var(--on);font:600 14px inherit;padding:0 14px;cursor:pointer}
-#mres{display:grid;gap:4px;max-height:30vh;overflow:auto}#mres:empty{display:none}
-#mres button{border:1.5px solid var(--ln);background:var(--cd);color:var(--ink);border-radius:10px;padding:8px 10px;text-align:left;font:inherit;font-size:13px;cursor:pointer}
-#map{flex:1;min-height:0;background:var(--sky)}
-#mapov .mb{padding:10px max(14px,env(safe-area-inset-left,0px)) calc(12px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;background:var(--cd);border-top:1px solid var(--ln)}
-#mst{font-weight:600;font-size:14px;min-height:20px}#mst.ok{color:#2E7D5B}#mst.bad{color:#C62A3A}
-#mapov .acts{display:grid;grid-template-columns:1fr 2fr;gap:8px}
-.locst{font-size:13px;margin:-2px 0 10px;font-weight:600}.locst.ok{color:#2E7D5B}.locst.bad{color:#C62A3A}.locst.mut{color:var(--mut);font-weight:400}
-.mapbtn{width:100%;justify-content:center;margin-bottom:6px}
 .sheet{background:var(--bg);width:100%;max-width:640px;margin:0 auto;max-height:90%;overflow-y:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
 @keyframes up{from{transform:translateY(40px);opacity:0}}
 @media (prefers-reduced-motion:reduce){.sheet{animation:none}html{scroll-behavior:auto}}
@@ -231,9 +216,19 @@ main.w{padding-top:12px}
 .cat h2 small{color:#FFF3DC;opacity:.8}
 .grid{gap:10px}
 .cd{border-radius:20px;padding:8px 8px 10px;box-shadow:none;text-align:left}
-.im{aspect-ratio:16/11;border-radius:14px;background:#DCE8F8!important;margin-bottom:8px}
+.im{aspect-ratio:1/1;border-radius:14px;background:#DCE8F8!important;margin-bottom:8px}
 .im svg{height:70%;width:auto;color:#14213D}
 .bd{background:#E3342F;color:#FFF3DC;font:800 10px/1.9 "Be Vietnam Pro",sans-serif;letter-spacing:.3px}
+.bds{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:1}.bds .bd{position:static}
+#rch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+#rch button{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;border:1.5px solid #1F63C9;background:#fff;color:#1F63C9;border-radius:14px;padding:7px 6px;font:inherit;cursor:pointer}
+#rch i{font-style:normal;font-size:18px;line-height:1.15}#rch b{font-size:14.5px;font-weight:800}#rch small{font-size:11.5px;color:#6E6A63}
+#rch button.on{background:#1F63C9;color:#FFF3DC}#rch button.on small{color:#FFF3DC;opacity:.9}
+#rch button.on::after{content:'✓';position:absolute;top:5px;right:6px;width:18px;height:18px;border-radius:50%;background:#FFF3DC;color:#1F63C9;font:800 12px/18px system-ui,sans-serif}
+.chg{background:#FDE2E1;border:1.5px solid #E3342F;color:#14213D;border-radius:12px;padding:8px 12px;margin:0 0 12px;font-size:13.5px;line-height:1.45}.chg b{color:#C62A3A}
+.urg{font-size:13px;line-height:1.45;background:#FFF3DC;border:1.5px dashed #E3342F;color:#14213D;border-radius:12px;padding:8px 12px;margin:0 0 12px}.urg a{color:#E3342F;font-weight:700}
+.shipnote{font-size:13px;color:var(--mut);margin:-2px 0 10px;line-height:1.45}.shipnote b{color:var(--ink)}
+.bd.nw{background:#1F63C9;color:#FFF3DC}.bd.tr{background:#FFD45C;color:#14213D}
 .cd h3{font:700 15px/1.25 "Be Vietnam Pro",sans-serif;min-height:0;display:block;color:#14213D}
 .cd p{margin:2px 0 8px}
 .pp{align-self:flex-start;background:none;color:#E3342F;padding:0;font:400 18px/1 "Coiny",sans-serif;margin-bottom:8px}
@@ -358,13 +353,6 @@ main.w{padding-top:12px}
 <div id="stoast" role="status"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-wave"/></svg><div><b id="stt1"></b><span id="stt2"></span></div></div>
 <div class="bar"><div class="mob"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="mo" id="mst" onclick="openStamps()" style="display:none">🐾 Thẻ tích điểm</button></div><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
-<div id="mapov" role="dialog" aria-label="Bản đồ">
-  <div class="mt"><h3 id="mtt">Chọn vị trí giao hàng</h3>
-    <div class="row"><input id="mq" placeholder="Gõ địa chỉ rồi bấm Tìm" onkeydown="if(event.key==='Enter')mapSearch()"><button onclick="mapSearch()">Tìm</button><button onclick="mapMe()" title="Vị trí của tôi">📍</button></div>
-    <div id="mres"></div></div>
-  <div id="map"></div>
-  <div class="mb"><div id="mst"></div><div class="acts"><button class="btn o" style="justify-content:center" onclick="closeMap()">Quay lại</button><button class="btn" id="mok" style="justify-content:center" onclick="mapOk()" disabled>Giao đến đây</button></div></div>
-</div>
 
 <script>
 var SUGAR=[0,30,50,70,100], ICE=['Không đá','Ít đá','Vừa','Nhiều đá'];
@@ -377,7 +365,7 @@ var M=[
 {id:'st',n:'Sữa tươi',en:'Fresh Milk',e:'🥛',bg:'#e3ecf2',i:[['STTC Đường Đen',0,22],['STTC Đường Đen Kem Cheese',0,30],['Sữa Tươi Thốt Nốt',1,22]]},
 {id:'tc',n:'Trà trái cây',en:'Fruit Tea',p:22,e:'🍹',bg:'#f7d6dc',i:[['Trà Dâu'],['Trà Đào'],['Trà Vải',1],['Trà Lài Tắc'],['Olong Chanh Vàng'],['Trà Măng Cầu',1,25],['Trà Me Đác Rim',1,25],['Trà Lài Đác Thơm',0,25],['Trà Mận Bắc',0,25],['Trà Long Nhãn',1,25],['Bánh Que Kem Trứng',0,15]]}
 ];
-var cart=[],group=false,cur=null,done=null,delivery=false;
+var cart=[],group=false,cur=null,done=null,delivery=false,selfShip=false,FCHK=0;
 var $=function(s){return document.getElementById(s)};
 var fmt=function(k){return (k*1000).toLocaleString('vi-VN')+'đ'};
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
@@ -401,7 +389,7 @@ function build(){
     t+='<button class="pl" onclick="flt(\''+ci+'\',this)">'+esc(c.n)+'</button>';
     h+='<section class="cat" id="s_'+ci+'"><h2>'+esc(c.n)+'<small>'+esc(c.en||'')+'</small></h2><div class="grid">';
     c.i.forEach(function(x,k){
-      h+='<div class="cd"><div class="im">'+(x.img?'<img src="/img/'+esc(x.img)+'" alt="">':'<svg aria-hidden="true" style="--tea:'+teaColor(x.n)+'"><use href="#cup"/></svg>')+(x.b?'<b class="bd">Best seller</b>':'')+'</div><h3>'+esc(x.n)+'</h3><p>'+esc(c.en||'')+'</p><span class="pp">'+fmt(x.p)+'</span><button class="bt" '+(x.off?'disabled>Hết món':'onclick="openItem('+ci+','+k+')">+ Chọn')+'</button></div>';
+      h+='<div class="cd"><div class="im">'+(x.img?'<img src="/img/'+esc(x.img)+'" alt="">':'<svg aria-hidden="true" style="--tea:'+teaColor(x.n)+'"><use href="#cup"/></svg>')+((x.b||x.nw||x.tr)?'<span class="bds">'+(x.nw?'<b class="bd nw">Món mới</b>':'')+(x.tr?'<b class="bd tr">Nên thử</b>':'')+(x.b?'<b class="bd">Best seller</b>':'')+'</span>':'')+'</div><h3>'+esc(x.n)+'</h3><p>'+esc(c.en||'')+'</p><span class="pp">'+fmt(x.p)+'</span><button class="bt" '+(x.off?'disabled>Hết món':'onclick="openItem('+ci+','+k+')">+ Chọn')+'</button></div>';
     });
     h+='</div></section>';
   });
@@ -412,8 +400,12 @@ function build(){
 }
 function syncTops(){TOPS=CFG.tops.map(function(t){return [t.n,t.p]})}
 function save(){syncTops();build();if(!PW)return;q=q.then(function(){return fetch('/api/config',{method:'POST',headers:{'x-admin':PW,'content-type':'application/json'},body:JSON.stringify(CFG)}).then(function(r){if(r.status===401){PW='';loginSheet('Hết phiên, đăng nhập lại')}})}).catch(function(){})}
-function rs(f){return createImageBitmap(f).then(function(bm){var s=Math.min(1,900/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);return new Promise(function(ok){c.toBlob(ok,'image/jpeg',.85)})})}
-function upImg(inp,cb){var f=inp.files[0];if(!f)return;inp.disabled=true;rs(f).then(function(b){return fetch('/api/upload',{method:'POST',headers:{'x-admin':PW},body:b})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){cb(r.id)}).catch(function(){inp.disabled=false;inp.insertAdjacentText('afterend','Không tải được ảnh, thử lại nhé.')})}
+// sq: ảnh món — cắt vuông ở giữa, 720×720, JPEG 80% (~50–70KB); logo, mã QR giữ nguyên tỉ lệ, cạnh dài tối đa 900px
+function rs(f,sq){return createImageBitmap(f).then(function(bm){var c=document.createElement('canvas'),g=c.getContext('2d');
+  if(sq){var m=Math.min(bm.width,bm.height),z=Math.min(720,m);c.width=c.height=z;g.drawImage(bm,(bm.width-m)/2,(bm.height-m)/2,m,m,0,0,z,z)}
+  else{var s=Math.min(1,900/Math.max(bm.width,bm.height));c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);g.drawImage(bm,0,0,c.width,c.height)}
+  return new Promise(function(ok){c.toBlob(ok,'image/jpeg',sq?.8:.85)})})}
+function upImg(inp,cb,sq){var f=inp.files[0];if(!f)return;inp.disabled=true;rs(f,sq).then(function(b){return fetch('/api/upload',{method:'POST',headers:{'x-admin':PW},body:b})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){cb(r.id)}).catch(function(){inp.disabled=false;inp.insertAdjacentText('afterend','Không tải được ảnh, thử lại nhé.')})}
 function openAdmin(){if(!PW)return loginSheet();tab='info';ed=null;drawAdmin()}
 function loginSheet(msg){show('<h3>Đăng nhập quản lý</h3>'+(msg?'<p style="color:var(--mr)">'+msg+'</p>':'')+'<input id="pw" type="password" placeholder="Mật khẩu" autocomplete="current-password"><button class="btn" onclick="login()"><span>Đăng nhập</span></button>')}
 function login(){var p=$('pw').value.trim();fetch('/api/config',{headers:{'x-admin':p}}).then(function(r){if(r.ok){PW=p;try{localStorage.setItem('pw',p)}catch(e){}openAdmin()}else r.text().then(function(t){loginSheet('Sai mật khẩu ['+r.status+'] '+t.slice(0,60))})}).catch(function(){loginSheet('Không kết nối được')})}
@@ -424,16 +416,14 @@ function drawAdmin(){
 }
 function adInfo(){
   var I=CFG.info,h='<div class="lb">Giao diện theo mùa</div><div class="ch"><button class="'+(I.season?'':'on')+'" onclick="setSeason(\'\')">Bình thường</button><button class="'+(I.season==='noel'?'on':'')+'" onclick="setSeason(\'noel\')">🎄 Noel</button></div>'+adGifts();
-  [['name','Tên quán'],['tag','Câu giới thiệu'],['addr','Địa chỉ'],['phone','Số điện thoại hiển thị'],['zalo','Số Zalo (viết liền, không dấu cách)'],['hours','Giờ mở cửa']].forEach(function(f){h+='<div class="lb">'+f[1]+'</div><input value="'+esc(I[f[0]])+'" onchange="CFG.info.'+f[0]+'=this.value;save()">'});
-  var SL=shopLL();h+='<div class="lb">Vị trí quán (để tính quãng đường giao hàng)</div><div style="font-size:14px;margin-bottom:6px">'+(SL.set?'📍 '+SL.lat.toFixed(5)+', '+SL.lng.toFixed(5):'⚠️ Chưa đặt, đang dùng vị trí gần đúng ở trung tâm Bà Rịa')+'</div><button class="btn o mapbtn" onclick="openMap(\'shop\')">📍 Đặt vị trí quán trên bản đồ</button>';
-  h+='<div class="lb">Giao tối đa bao nhiêu km (theo đường đi)</div><input type="number" inputmode="decimal" min="1" max="100" value="'+SL.max+'" onchange="CFG.info.maxKm=Math.max(1,Math.min(100,+this.value||10));save()">';
+  [['name','Tên quán'],['tag','Câu giới thiệu'],['addr','Địa chỉ'],['phone','Số điện thoại hiển thị'],['zalo','Số Zalo (viết liền, không dấu cách)'],['hours','Giờ mở cửa'],['fb','Link fanpage (để khách nhắn đơn gấp)']].forEach(function(f){h+='<div class="lb">'+f[1]+'</div><input value="'+esc(I[f[0]])+'" onchange="CFG.info.'+f[0]+'=this.value;save()">'});
   return h+'<div class="lb">Logo</div><input type="file" accept="image/*" onchange="upImg(this,function(id){CFG.info.logo=id;save();drawAdmin()})"><div class="lb">Mã QR nhận chuyển khoản</div>'+(I.qr?'<img src="/img/'+esc(I.qr)+'" style="width:140px;border-radius:12px;display:block;margin-bottom:8px" alt="">':'')+'<input type="file" accept="image/*" onchange="upImg(this,function(id){CFG.info.qr=id;save();drawAdmin()})">';
 }
 function adMenu(){
   var h='';
   CFG.cats.forEach(function(c,ci){
     h+='<div class="who"><input style="margin:0 8px 0 0;font-weight:600" value="'+esc(c.n)+'" onchange="CFG.cats['+ci+'].n=this.value;save()">'+(c.i.length?'':'<button class="ln" style="border:0;background:none;color:var(--mr);cursor:pointer;font:inherit" onclick="CFG.cats.splice('+ci+',1);save();drawAdmin()">Xóa</button>')+'<button class="bt" style="padding:6px 14px;flex:none" onclick="addItem('+ci+')">+ Món</button></div>';
-    c.i.forEach(function(x,k){h+='<div class="ln"><div>'+esc(x.n)+(x.off?' (hết món)':'')+'<small>'+fmt(x.p)+(x.b?' · best seller':'')+(x.img?' · có ảnh':'')+'</small></div><button onclick="ed={ci:'+ci+',k:'+k+'};delArm=0;drawAdmin()">Sửa</button></div>'});
+    c.i.forEach(function(x,k){h+='<div class="ln"><div>'+esc(x.n)+(x.off?' (hết món)':'')+'<small>'+fmt(x.p)+(x.b?' · best seller':'')+(x.nw?' · món mới':'')+(x.tr?' · nên thử':'')+(x.img?' · có ảnh':'')+'</small></div><button onclick="ed={ci:'+ci+',k:'+k+'};delArm=0;drawAdmin()">Sửa</button></div>'});
   });
   return h+'<button class="btn o" style="margin-top:14px;justify-content:center" onclick="addCat()">+ Thêm nhóm món</button>';
 }
@@ -443,9 +433,9 @@ function adItem(){
   var x=CFG.cats[ed.ci].i[ed.k],p='CFG.cats['+ed.ci+'].i['+ed.k+']';
   return '<div class="lb">Tên món</div><input value="'+esc(x.n)+'" onchange="'+p+'.n=this.value;save()">'
   +'<div class="lb">Giá (nghìn đồng, ví dụ 25)</div><input type="number" inputmode="numeric" value="'+x.p+'" onchange="'+p+'.p=+this.value||0;save()">'
-  +'<div class="lb">Hình ảnh</div>'+(x.img?'<img src="/img/'+esc(x.img)+'" style="width:96px;height:120px;object-fit:cover;border-radius:12px;display:block;margin-bottom:8px" alt="">':'')
-  +'<input type="file" accept="image/*" onchange="upImg(this,function(id){'+p+'.img=id;save();drawAdmin()})">'
-  +'<div class="ch" style="margin:10px 0"><button class="'+(x.b?'on':'')+'" onclick="'+p+'.b=+!'+p+'.b;save();drawAdmin()">Best seller</button><button class="'+(x.off?'on':'')+'" onclick="'+p+'.off=+!'+p+'.off;save();drawAdmin()">Tạm hết món</button></div>'
+  +'<div class="lb">Hình ảnh</div>'+(x.img?'<img src="/img/'+esc(x.img)+'" style="width:110px;height:110px;object-fit:cover;border-radius:12px;display:block;margin-bottom:8px" alt="">':'')
+  +'<input type="file" accept="image/*" onchange="upImg(this,function(id){'+p+'.img=id;save();drawAdmin()},1)">'
+  +'<div class="ch" style="margin:10px 0"><button class="'+(x.b?'on':'')+'" onclick="'+p+'.b=+!'+p+'.b;save();drawAdmin()">Best seller</button><button class="'+(x.nw?'on':'')+'" onclick="'+p+'.nw=+!'+p+'.nw;save();drawAdmin()">Món mới</button><button class="'+(x.tr?'on':'')+'" onclick="'+p+'.tr=+!'+p+'.tr;save();drawAdmin()">Nên thử</button><button class="'+(x.off?'on':'')+'" onclick="'+p+'.off=+!'+p+'.off;save();drawAdmin()">Tạm hết món</button></div>'
   +'<div class="sec2"><button class="btn o" onclick="ed=null;drawAdmin()">‹ Quay lại</button><button class="btn o" onclick="if(!delArm){delArm=1;drawAdmin();return}CFG.cats['+ed.ci+'].i.splice('+ed.k+',1);ed=null;save();drawAdmin()">'+(delArm?'Bấm lại để xóa':'Xóa món')+'</button></div>';
 }
 function adTops(){
@@ -483,7 +473,7 @@ function unit(c){return c.price+c.tops.reduce(function(a,i){return a+TOPS[i][1]}
 function togTop(i){var a=cur.tops,p=a.indexOf(i);if(p>-1)a.splice(p,1);else a.push(i);drawItem()}
 function addCur(){
   if(group&&!cur.who.trim()){var e=$('who');if(e){e.focus();e.placeholder='Nhập tên người uống trước nhé'}return}
-  cart.push({name:cur.name,price:cur.price,sugar:cur.sugar,ice:cur.ice,tops:cur.tops.slice(),qty:cur.qty,who:cur.who.trim()});
+  cart.push({name:cur.name,price:cur.price,sugar:cur.sugar,ice:cur.ice,tops:cur.tops.slice(),topN:cur.tops.map(function(i){return TOPS[i][0]}),qty:cur.qty,who:cur.who.trim()});
   closeSheet();upd();
 }
 function lineTotal(l){return unit(l)*l.qty}
@@ -524,7 +514,7 @@ function upd(){
   $('cc').textContent=n?'Xem đơn · '+n+' ly':'Xem đơn của bạn';$('ct').textContent=fmt(total());$('cb').disabled=!n;
 }
 function openCart(){
-  var h='<h3>Đơn của bạn</h3>';
+  var h='<h3>Đơn của bạn</h3>'+(CHG.length?'<div class="chg"><b>⚠️ Menu vừa thay đổi</b>'+CHG.map(function(t){return '<div>'+esc(t)+'</div>'}).join('')+'</div>':'');CHG=[];
   var keys=group?cart.map(function(l){return l.who}).filter(function(v,i,a){return a.indexOf(v)===i}):[''];
   keys.forEach(function(k){
     if(group){var s=cart.filter(function(l){return l.who===k}).reduce(function(a,l){return a+lineTotal(l)},0);h+='<div class="who"><span>'+esc(k)+'</span><span>'+fmt(s)+'</span></div>'}
@@ -537,81 +527,31 @@ function openCart(){
   h+='<div class="tot"><span>Tổng cộng</span><span>'+fmt(total())+'</span></div>';
   h+='<div class="lb">Thông tin nhận hàng</div><div style="background:var(--cd);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:14px">Đặt bằng tài khoản: <b>'+esc(meGet().name||'')+'</b> · '+esc(meGet().ph||'')+'</div>';
   var L0=locGet();
-  h+='<div class="ch" style="margin-bottom:10px"><button id="r1" class="on" onclick="ship(0)">Nhận tại quán</button><button id="r2" onclick="ship(1)">Giao tận nơi</button></div>';
+  h+='<div class="lb">Chọn cách nhận hàng <span style="color:#E3342F">*</span></div><div id="rch"><button id="r2" onclick="ship(1)"><i>🛵</i><b>Giao tận nơi</b><small>Quán đặt tài xế</small></button><button id="r3" onclick="ship(2)"><i>🙋</i><b>Khách tự đặt ship</b><small>Tài xế bạn đặt đến lấy</small></button></div>';
   h+='<div id="shipbox" style="display:none"><input id="ad" placeholder="Địa chỉ giao hàng: số nhà, đường, phường" value="'+esc(L0?L0.addr:'')+'" autocomplete="street-address">';
-  h+='<button class="btn o mapbtn" onclick="openMap(\'ship\')">📍 '+(L0?'Đổi vị trí trên bản đồ':'Chọn vị trí trên bản đồ')+'</button><div id="locst" class="locst"></div></div>';
+  h+='<p class="shipnote">🛵 Quán sẽ đặt tài xế <b>Grab</b>, <b>Xanh SM</b>, <b>Ahamove</b> hoặc <b>Shopee</b> để giao đến bạn.</p></div>';
+  h+='<div id="selfbox" style="display:none"><p class="shipnote">🛵 Bạn tự đặt tài xế (Grab, Xanh SM, Ahamove, Shopee…) đến lấy tại quán'+(CFG.info.addr?': <b>'+esc(CFG.info.addr)+'</b>':'')+'. Nhắn tài xế báo <b>mã đơn</b> khi đến lấy nhé.</p></div>';
   h+='<textarea id="nt" rows="2" placeholder="Ghi chú (không bắt buộc)"></textarea>';
+  var FB=/^https?:\/\//i.test(CFG.info.fb||'')?CFG.info.fb:'';h+='<p class="urg">⏰ Quán <b>không nhận đơn gấp</b> qua web. Nếu cần gấp, bạn vui lòng nhắn trực tiếp cho quán qua '+(FB?'<a href="'+esc(FB)+'" target="_blank" rel="noopener">trang fanpage</a>':'trang fanpage')+' nhé.</p>';
   h+='<div class="lb">Thanh toán</div><p style="font-size:14px;color:var(--mut);margin:0 0 14px">Bấm <b>Hoàn tất đơn</b> rồi quét mã QR để chuyển khoản. Đơn chỉ được gửi đến quán khi thanh toán thành công.</p>';
   h+='<button class="btn" onclick="finish()"><span>Hoàn tất đơn</span><span>'+fmt(total())+'</span></button>';
-  delivery=false;show(h);locShow();
+  delivery=false;selfShip=false;show(h);
 }
-function ship(d){delivery=!!d;$('r1').className=d?'':'on';$('r2').className=d?'on':'';$('shipbox').style.display=d?'block':'none'}
-// ---- Giao hàng: vị trí trên bản đồ + quãng đường từ quán ----
-function shopLL(){var I=CFG.info||{},la=+I.lat,ln=+I.lng;return {lat:la&&ln?la:10.4963,lng:la&&ln?ln:107.1684,max:+I.maxKm>0?+I.maxKm:10,set:!!(la&&ln)}}
-function locGet(){try{var v=JSON.parse(localStorage.getItem('ship_loc')||'null');return v&&v.lat&&v.lng?v:null}catch(e){return null}}
+function ship(d){delivery=d===1;selfShip=d===2;var w=$('rwarn');if(w)w.remove();$('r2').className=d===1?'on':'';$('r3').className=d===2?'on':'';$('shipbox').style.display=d===1?'block':'none';$('selfbox').style.display=d===2?'block':'none'}
+// ---- Giao hàng: nhớ địa chỉ cũ của khách ----
+function locGet(){try{var v=JSON.parse(localStorage.getItem('ship_loc')||'null');return v&&v.addr?v:null}catch(e){return null}}
 function locSet(v){try{localStorage.setItem('ship_loc',JSON.stringify(v))}catch(e){}}
-function kmTxt(k){return (Math.round(k*10)/10).toLocaleString('vi-VN')+' km'}
-function locShow(){var e=$('locst');if(!e)return;var L=locGet(),S=shopLL();
-  if(!L){e.className='locst mut';e.textContent='Chọn vị trí để quán biết đường giao và tính quãng đường (giao trong '+S.max+' km).';return}
-  var ok=L.km<=S.max;e.className='locst '+(ok?'ok':'bad');e.textContent=(ok?'✅ ':'❌ ')+'Cách quán khoảng '+kmTxt(L.km)+(L.road?' theo đường đi':' (ước chừng)')+(ok?' · trong vùng giao hàng':' · ngoài vùng giao hàng (tối đa '+S.max+' km)')}
-var MAP=null,MK=null,RT=null,SHOPMK=null,RING=null,PICK=null,PKM=null,MMODE='ship',MSEQ=0;
-function loadLeaflet(cb){if(window.L)return cb();
-  var c=document.createElement('link');c.rel='stylesheet';c.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(c);
-  var j=document.createElement('script');j.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';j.onload=cb;j.onerror=function(){$('mst').className='bad';$('mst').textContent='Không tải được bản đồ, kiểm tra mạng rồi thử lại.'};document.head.appendChild(j)}
-function openMap(mode){MMODE=mode;var S=shopLL(),LC0=mode==='ship'?locGet():null;
-  $('mapov').className='show';$('mres').innerHTML='';$('mq').value=mode==='ship'?(($('ad')&&$('ad').value)||''):'';
-  $('mtt').textContent=mode==='ship'?'Chọn vị trí giao hàng':'Vị trí của quán';
-  $('mok').textContent=mode==='ship'?'Giao đến đây':'Đặt vị trí quán ở đây';
-  $('mst').className='';$('mst').textContent=mode==='ship'?'Chạm vào bản đồ hoặc tìm địa chỉ để đặt ghim.':'Kéo ghim tới đúng cửa quán.';$('mok').disabled=true;
-  loadLeaflet(function(){
-    if(!MAP){MAP=L.map('map',{zoomControl:true});L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(MAP);MAP.on('click',function(e){setPick(e.latlng.lat,e.latlng.lng)})}
-    if(SHOPMK)SHOPMK.remove();if(RING)RING.remove();
-    if(mode==='ship'){SHOPMK=L.marker([S.lat,S.lng],{icon:L.divIcon({className:'',html:'<div style="background:#6e0f22;color:#fff;border-radius:99px;padding:3px 8px;font:700 12px system-ui;white-space:nowrap;transform:translate(-50%,-50%);display:inline-block">🧋 Quán</div>'})}).addTo(MAP);
-      RING=L.circle([S.lat,S.lng],{radius:S.max*1000,color:'#6e0f22',weight:1.5,fillOpacity:.04,dashArray:'6 6'}).addTo(MAP)}
-    setTimeout(function(){MAP.invalidateSize();
-      if(LC0&&mode==='ship'){MAP.setView([LC0.lat,LC0.lng],16);setPick(LC0.lat,LC0.lng)}
-      else if(mode==='shop'){MAP.setView([S.lat,S.lng],17);setPick(S.lat,S.lng)}
-      else{MAP.setView([S.lat,S.lng],13);if(MK){MK.remove();MK=null}if(RT){RT.remove();RT=null}}},50);
-  });
-}
-function closeMap(){$('mapov').className=''}
-function setPick(lat,lng){PICK={lat:lat,lng:lng};
-  if(!MK){MK=L.marker([lat,lng],{draggable:true}).addTo(MAP);MK.on('dragend',function(){var p=MK.getLatLng();setPick(p.lat,p.lng)})}else MK.setLatLng([lat,lng]);
-  if(MMODE==='shop'){$('mst').className='ok';$('mst').textContent='Vị trí quán: '+lat.toFixed(5)+', '+lng.toFixed(5);$('mok').disabled=false;return}
-  var S=shopLL(),seq=++MSEQ;$('mok').disabled=true;$('mst').className='';$('mst').textContent='Đang tính quãng đường…';
-  var air=function(){var R=6371,r=function(x){return x*Math.PI/180},a=Math.sin(r(lat-S.lat)/2),b=Math.sin(r(lng-S.lng)/2);return 2*R*Math.asin(Math.sqrt(a*a+Math.cos(r(S.lat))*Math.cos(r(lat))*b*b))};
-  var done=function(km,road,geo){if(seq!==MSEQ)return;PKM={km:km,road:road};
-    if(RT){RT.remove();RT=null}if(geo)RT=L.geoJSON(geo,{style:{color:'#1F63C9',weight:4,opacity:.8}}).addTo(MAP);
-    var ok=km<=S.max;$('mst').className=ok?'ok':'bad';$('mst').textContent=(ok?'✅ Cách quán khoảng ':'❌ Cách quán khoảng ')+kmTxt(km)+(road?' theo đường đi':' (ước chừng)')+(ok?' · trong vùng giao hàng':' · ngoài vùng giao hàng (quán giao tối đa '+S.max+' km)');$('mok').disabled=!ok};
-  fetch('https://router.project-osrm.org/route/v1/driving/'+S.lng+','+S.lat+';'+lng+','+lat+'?overview=simplified&geometries=geojson').then(function(r){return r.json()}).then(function(j){
-    if(j&&j.code==='Ok'&&j.routes&&j.routes[0])done(j.routes[0].distance/1000,true,j.routes[0].geometry);else done(air()*1.3,false)}).catch(function(){done(air()*1.3,false)});
-  if(!$('mq').value.trim())fetch('https://nominatim.openstreetmap.org/reverse?format=json&accept-language=vi&zoom=18&lat='+lat+'&lon='+lng).then(function(r){return r.json()}).then(function(j){if(seq===MSEQ&&j&&j.display_name&&!$('mq').value.trim())$('mq').value=j.display_name.split(', ').slice(0,4).join(', ')}).catch(function(){});
-}
-function mapSearch(){var q=$('mq').value.trim();if(!q)return;var S=shopLL(),b=[S.lng-.3,S.lat+.3,S.lng+.3,S.lat-.3].join(',');
-  $('mres').innerHTML='<div style="font-size:13px;color:var(--mut)">Đang tìm…</div>';
-  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=vn&accept-language=vi&viewbox='+b+'&q='+encodeURIComponent(q)).then(function(r){return r.json()}).then(function(a){
-    if(!a||!a.length){$('mres').innerHTML='<div style="font-size:13px;color:var(--mut)">Không tìm thấy. Bạn chạm thẳng vào bản đồ để đặt ghim nhé.</div>';return}
-    window.MRES=a;$('mres').innerHTML=a.map(function(x,i){return '<button onclick="mapGo('+i+')">'+esc(x.display_name)+'</button>'}).join('')}).catch(function(){$('mres').innerHTML='<div style="font-size:13px;color:var(--mut)">Không tìm được lúc này. Bạn chạm vào bản đồ để đặt ghim nhé.</div>'})}
-function mapGo(i){var x=window.MRES[i];$('mres').innerHTML='';MAP.setView([+x.lat,+x.lon],17);setPick(+x.lat,+x.lon)}
-function mapMe(){if(!navigator.geolocation){$('mst').textContent='Máy không hỗ trợ lấy vị trí.';return}$('mst').className='';$('mst').textContent='Đang lấy vị trí của bạn…';
-  navigator.geolocation.getCurrentPosition(function(p){MAP.setView([p.coords.latitude,p.coords.longitude],17);setPick(p.coords.latitude,p.coords.longitude)},function(){$('mst').className='bad';$('mst').textContent='Không lấy được vị trí. Bạn cho phép truy cập vị trí hoặc chạm vào bản đồ nhé.'},{enableHighAccuracy:true,timeout:10000})}
-function mapOk(){if(!PICK)return;
-  if(MMODE==='shop'){CFG.info.lat=Math.round(PICK.lat*1e6)/1e6;CFG.info.lng=Math.round(PICK.lng*1e6)/1e6;save();closeMap();drawAdmin();return}
-  var a=($('ad')&&$('ad').value.trim())||$('mq').value.trim();
-  locSet({addr:a,lat:PICK.lat,lng:PICK.lng,km:Math.round(PKM.km*10)/10,road:PKM.road});
-  if($('ad')&&!$('ad').value.trim())$('ad').value=a;closeMap();locShow();
-  var b=document.querySelector('.mapbtn');if(b)b.textContent='📍 Đổi vị trí trên bản đồ'}
 function finish(){
+  if(!FCHK){FCHK=1;refreshCfg(function(n){if(n){FCHK=0;if(cart.length)reCart();else{closeSheet();stToast('⚠️ Menu vừa thay đổi',CHG.join(' '));CHG=[]}}else finish()});return}FCHK=0;
   var me=meGet();if(!me.ph||!me.pin){closeSheet();gShow('Hãy đăng nhập để đặt đơn.');return}
   var nm=me.name||'Khách',ph=me.ph,pin=me.pin,ad=$('ad').value.trim();
+  if(!delivery&&!selfShip){if(!$('rwarn'))$('rch').insertAdjacentHTML('afterend','<p id="rwarn" class="urg" style="margin-top:-2px">Bạn chọn <b>Giao tận nơi</b> hoặc <b>Khách tự đặt ship</b> giúp quán nhé.</p>');if($('rch').scrollIntoView)$('rch').scrollIntoView({block:'center'});return}
   var LC=null;
   if(delivery){
     if(ad.length<5){$('ad').focus();$('ad').placeholder='Bạn điền địa chỉ giao hàng giúp quán nhé';return}
-    var SS=shopLL();LC=locGet();if(!LC){openMap('ship');return}
-    if(LC.km>SS.max){locShow();var le=$('locst');if(le&&le.scrollIntoView)le.scrollIntoView({block:'center'});return}
-    LC.addr=ad;locSet(LC);
+    LC={addr:ad};locSet(LC);
   }
-  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad+' ('+kmTxt(LC.km)+')':'Nhận tại quán')+'\n';
+  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:'Khách tự đặt ship (tài xế đến lấy tại quán)')+'\n';
   var keys=group?cart.map(function(l){return l.who}).filter(function(v,i,a){return a.indexOf(v)===i}):[''];
   keys.forEach(function(k){
     if(group)m+='\n'+k+':\n';
@@ -624,8 +564,9 @@ function finish(){
 }
 function sendOrder(m,nm,ph,tt,pin,lc){var e=function(t){var x=$('sst');if(x)x.innerHTML=t};
 var fail=function(t){e('❌ '+(t||'Chưa tạo được đơn, bạn thử lại giúp quán nhé.')+'<br><button class="btn" style="justify-content:center;margin-top:12px" onclick="openCart()">Quay lại giỏ hàng</button>')};
-fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr,lat:lc.lat,lng:lc.lng}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{},{items:cart.map(function(l){return {n:l.name,p:l.price,t:l.tops.map(function(k){return TOPS[k][0]}),q:l.qty}})}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
 if(d&&d.login){meSet(null);fail(esc(d.err||'Cần đăng nhập lại')+'. Đăng nhập lại rồi đặt lại, giỏ hàng vẫn giữ nguyên.');setTimeout(function(){closeSheet();gShow(d.err||'')},2500);return}
+if(d&&d.menu){refreshCfg(function(){if(!CHG.length)CHG.push(d.err);if(cart.length)reCart();else{closeSheet();stToast('⚠️ Menu vừa thay đổi',CHG.join(' '));CHG=[]}});return}
 if(!r.ok||!d.id)return fail(d&&d.err?esc(d.err):'');
 if(giftUse&&giftUse.fromSaved)dropGift();
 var o={id:d.id,code:d.code,amount:d.amount,content:d.content,bank:d.bank,min:d.min,at:Date.now(),t:m,ph:ph,total:tt};
@@ -675,7 +616,7 @@ function stOf(o){if(o.s==='pay')return Date.now()-new Date(o.at).getTime()<15*60
 function myItem(r,st,i){var d=new Date(r.at);return '<div class="mi"><div class="mh"><span>'+(r.code?'#'+esc(r.code):'Đơn')+' · '+fmt(r.total||0)+'</span><small>'+d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' '+d.toLocaleDateString('vi-VN')+'</small></div><div style="font-size:14px;margin-top:4px;color:'+(r.s==='done'?'var(--mr)':'var(--mut)')+'">'+st+'</div><pre>'+esc(r.t)+'</pre>'+(r.s==='pay'&&Date.now()-new Date(r.at).getTime()<15*60000?'<button class="btn" style="justify-content:center;margin-bottom:8px" onclick="payAgain('+i+')">Thanh toán ngay</button>':'')+'<button class="btn o" onclick="myCopy('+i+',this)">Sao chép đơn</button></div>'}
 var MYL=[];
 function myCopy(i,b){var r=MYL[i];if(!r)return;var t=(r.code?'Mã đơn #'+r.code+'\n':'')+r.t;try{navigator.clipboard.writeText(t).then(function(){b.textContent='Đã sao chép'})}catch(e){}}
-function slogHtml(L){var h='<div class="slogb"><div class="slt">Lịch sử tích dấu</div>';if(!L||!L.length)return h+'<div class="sle">Chưa có dấu nào. Mua ly đầu tiên để bắt đầu nhé!</div></div>';return h+'<div class="slog">'+L.slice(0,5).map(function(x){var t=new Date(x.at);return '<div><span>'+t.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'})+' · Đơn #'+esc(x.code)+'</span><span>'+(x.use?'<i class="u">🎁 đổi 1 ly</i> ':'')+(x.add?'<i>+'+x.add+' dấu</i>':'')+'</span></div>'}).join('')+'</div></div>'}
+function slogHtml(L){var h='<div class="slogb"><div class="slt">Lịch sử tích dấu</div>';if(!L||!L.length)return h+'<div class="sle">Chưa có dấu nào. Mua ly đầu tiên để bắt đầu nhé!</div></div>';return h+'<div class="slog">'+L.slice(0,5).map(function(x){var t=new Date(x.at);return '<div><span>'+t.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'})+' · '+(x.code==='QUAY'?'Mua tại quán':'Đơn #'+esc(x.code))+'</span><span>'+(x.use?'<i class="u">🎁 đổi 1 ly</i> ':'')+(x.add?'<i>+'+x.add+' dấu</i>':'')+'</span></div>'}).join('')+'</div></div>'}
 function myOrders(){var me=meGet();if(!me.ph||!me.pin)return gShow('');myLoad(me.ph,me.pin)}
 function myLocal(ids){var l=myGet().filter(function(r){return r.ph===meGet().ph&&(!r.id||ids.indexOf(r.id)<0)});if(!l.length)return '';var h='<div class="lb">Đơn chỉ lưu trên máy này</div>';l.forEach(function(r){var i=MYL.push(r)-1;h+=myItem(r,r.ok?'Đã gửi đến quán':'❌ Chưa gửi được, hãy gửi qua Zalo',i)});return h}
 function myLoad(ph,pin){MYL=[];show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mut)">Đang tải…</p>');fetch('/api/my',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({phone:ph,pin:pin}),cache:'no-store'}).then(function(r){return r.json().catch(function(){return {err:'Lỗi máy chủ'}}).then(function(d){if(!r.ok){if(r.status===403||r.status===429){meSet(null);closeSheet();return gShow(d.err||'')}return show('<h3>Đơn bạn đã đặt</h3><p style="color:var(--mr)">'+esc(d.err||'Không xem được đơn')+'</p>'+myLocal([])+'<button class="btn" style="justify-content:center" onclick="closeSheet()">Đóng</button>')}
@@ -713,7 +654,23 @@ function copyMsg(b){
 var PW='';try{PW=localStorage.getItem('pw')||''}catch(e){}
 build();upd();myBtn();gInit();
 if(location.hash==='#admin')$('adm').style.display='';
-fetch('/api/config').then(function(r){return r.ok?r.json():{}}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build()}}).catch(function(){});
+refreshCfg();
+// ---- Menu luôn mới: tải lại menu khi khách quay lại trang và mỗi 20 giây khi đang mở; món hết / đổi giá thì sửa giỏ và báo khách ----
+var CHG=[],CFGT=0;
+function refreshCfg(cb){if(location.hash==='#admin'&&PW){cb&&cb(false);return}
+  fetch('/api/config',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build();CFGT=Date.now();var n=cartCheck();upd();cb&&cb(n)}else cb&&cb(false)}).catch(function(){cb&&cb(false)})}
+function reCart(){var v={};['ad','nt'].forEach(function(k){if($(k))v[k]=$(k).value});var d=delivery,sf=selfShip;openCart();['ad','nt'].forEach(function(k){if(v[k]!=null&&$(k))$(k).value=v[k]});if(d)ship(1);else if(sf)ship(2);if($('sh').scrollTo)$('sh').scrollTo(0,0)}
+function cartCheck(){var n=0,items={};CFG.cats.forEach(function(c){c.i.forEach(function(x){if(!(x.n in items))items[x.n]=x})});
+  for(var i=cart.length-1;i>=0;i--){var l=cart[i],x=items[l.name];
+    if(!x||x.off){CHG.push(l.name+' vừa hết món, đã bỏ khỏi giỏ.');cart.splice(i,1);n++;continue}
+    if(x.p!==l.price){CHG.push('Giá '+l.name+' đổi từ '+fmt(l.price)+' thành '+fmt(x.p)+'.');l.price=x.p;n++}
+    var tn=l.topN||l.tops.map(function(k){return TOPS[k]?TOPS[k][0]:''}),nt=[];
+    tn.forEach(function(t){var k=-1;TOPS.forEach(function(T,j){if(T[0]===t)k=j});if(k<0){CHG.push('Topping '+t+' ('+l.name+') vừa hết, đã bỏ ra.');n++}else nt.push(k)});
+    l.tops=nt;l.topN=nt.map(function(k){return TOPS[k][0]})}
+  CHG=CHG.filter(function(t,i,a){return a.indexOf(t)===i});return n}
+function cfgLive(){if(document.hidden)return;var open=$('ov')&&$('ov').classList.contains('show');refreshCfg(function(n){if(n&&open&&$('sh')&&/Đơn của bạn/.test($('sh').innerHTML)){cart.length?reCart():(closeSheet(),stToast('⚠️ Menu vừa thay đổi',CHG.join(' ')||'Giỏ hàng đã được cập nhật'))}})}
+setInterval(cfgLive,20000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&Date.now()-CFGT>5000)cfgLive()});
 function cartQty(){return cart.reduce(function(a,l){return a+l.qty},0)}
 function applySeason(){
   var n=CFG.info.season==='noel';
@@ -755,10 +712,10 @@ function giftUseSaved(){var g=savedGift();if(g){g.fromSaved=1;giftUse=g;refreshG
 function giftBack(){giftUse=null;refreshGift()}
 function refreshGift(){
   var K=['nm','ph','ad','nt'],v={};K.forEach(function(k){if($(k))v[k]=$(k).value});
-  var d=delivery,c=$('pd')&&$('pd').checked;
+  var d=delivery,sf=selfShip,c=$('pd')&&$('pd').checked;
   openCart();
   K.forEach(function(k){if(v[k]!=null&&$(k))$(k).value=v[k]});
-  if(d)ship(1);if(c&&$('pd'))$('pd').checked=true;
+  if(d)ship(1);else if(sf)ship(2);if(c&&$('pd'))$('pd').checked=true;
   var g=document.querySelector('.gift');if(g&&g.scrollIntoView)g.scrollIntoView({block:'center'});
 }
 function adGifts(){
