@@ -32,3 +32,6 @@
 - `netlify/lib/push.mjs`: gửi Web Push (VAPID).
 - Thanh toán trước qua SePay: `order.mjs` tạo đơn trạng thái `pay` (quán chưa thấy), khách quét VietQR (TPBank, nội dung `PHENG <mã đơn>`, giữ 15 phút); `sepay.mjs` (`/api/sepay`, header `Authorization: Apikey <SEPAY_API_KEY>`) nhận tiền vào, đủ tiền thì đơn sang `new` + báo quán (`lib/notify.mjs`); tiền không khớp lưu `pay` store `u:` để quán xử lý tay ở `don.html`. Tài khoản nhận tiền ở `netlify/lib/pay.mjs`.
 - Biến môi trường Netlify: `ADMIN_PASSWORD`, `SEPAY_API_KEY`, (tuỳ chọn) `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`.
+
+## Skill
+- `.claude/skills/web-quan-tra/`: skill làm/sửa web đặt đơn + trang quản lý cho quán (gọi `/web-quan-tra`). Thêm hay đổi chức năng web thì cập nhật luôn skill (`references/tinh-nang.md`, `giao-dien.md`). File zip để tải lên tài khoản Claude tạo bằng `bash .claude/skills/web-quan-tra/scripts/dong-goi.sh . <file.zip>` (tự xoá tài khoản ngân hàng, địa chỉ, SĐT khỏi bản mẫu).
