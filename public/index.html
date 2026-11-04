@@ -225,6 +225,7 @@ main.w{padding-top:12px}
 #rch i{font-style:normal;font-size:18px;line-height:1.15}#rch b{font-size:14.5px;font-weight:800}#rch small{font-size:11.5px;color:#6E6A63}
 #rch button.on{background:#1F63C9;color:#FFF3DC}#rch button.on small{color:#FFF3DC;opacity:.9}
 #rch button.on::after{content:'✓';position:absolute;top:5px;right:6px;width:18px;height:18px;border-radius:50%;background:#FFF3DC;color:#1F63C9;font:800 12px/18px system-ui,sans-serif}
+.chg{background:#FDE2E1;border:1.5px solid #E3342F;color:#14213D;border-radius:12px;padding:8px 12px;margin:0 0 12px;font-size:13.5px;line-height:1.45}.chg b{color:#C62A3A}
 .urg{font-size:13px;line-height:1.45;background:#FFF3DC;border:1.5px dashed #E3342F;color:#14213D;border-radius:12px;padding:8px 12px;margin:0 0 12px}.urg a{color:#E3342F;font-weight:700}
 .shipnote{font-size:13px;color:var(--mut);margin:-2px 0 10px;line-height:1.45}.shipnote b{color:var(--ink)}
 .bd.nw{background:#1F63C9;color:#FFF3DC}.bd.tr{background:#FFD45C;color:#14213D}
@@ -364,7 +365,7 @@ var M=[
 {id:'st',n:'Sữa tươi',en:'Fresh Milk',e:'🥛',bg:'#e3ecf2',i:[['STTC Đường Đen',0,22],['STTC Đường Đen Kem Cheese',0,30],['Sữa Tươi Thốt Nốt',1,22]]},
 {id:'tc',n:'Trà trái cây',en:'Fruit Tea',p:22,e:'🍹',bg:'#f7d6dc',i:[['Trà Dâu'],['Trà Đào'],['Trà Vải',1],['Trà Lài Tắc'],['Olong Chanh Vàng'],['Trà Măng Cầu',1,25],['Trà Me Đác Rim',1,25],['Trà Lài Đác Thơm',0,25],['Trà Mận Bắc',0,25],['Trà Long Nhãn',1,25],['Bánh Que Kem Trứng',0,15]]}
 ];
-var cart=[],group=false,cur=null,done=null,delivery=false,selfShip=false;
+var cart=[],group=false,cur=null,done=null,delivery=false,selfShip=false,FCHK=0;
 var $=function(s){return document.getElementById(s)};
 var fmt=function(k){return (k*1000).toLocaleString('vi-VN')+'đ'};
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
@@ -468,7 +469,7 @@ function unit(c){return c.price+c.tops.reduce(function(a,i){return a+TOPS[i][1]}
 function togTop(i){var a=cur.tops,p=a.indexOf(i);if(p>-1)a.splice(p,1);else a.push(i);drawItem()}
 function addCur(){
   if(group&&!cur.who.trim()){var e=$('who');if(e){e.focus();e.placeholder='Nhập tên người uống trước nhé'}return}
-  cart.push({name:cur.name,price:cur.price,sugar:cur.sugar,ice:cur.ice,tops:cur.tops.slice(),qty:cur.qty,who:cur.who.trim()});
+  cart.push({name:cur.name,price:cur.price,sugar:cur.sugar,ice:cur.ice,tops:cur.tops.slice(),topN:cur.tops.map(function(i){return TOPS[i][0]}),qty:cur.qty,who:cur.who.trim()});
   closeSheet();upd();
 }
 function lineTotal(l){return unit(l)*l.qty}
@@ -509,7 +510,7 @@ function upd(){
   $('cc').textContent=n?'Xem đơn · '+n+' ly':'Xem đơn của bạn';$('ct').textContent=fmt(total());$('cb').disabled=!n;
 }
 function openCart(){
-  var h='<h3>Đơn của bạn</h3>';
+  var h='<h3>Đơn của bạn</h3>'+(CHG.length?'<div class="chg"><b>⚠️ Menu vừa thay đổi</b>'+CHG.map(function(t){return '<div>'+esc(t)+'</div>'}).join('')+'</div>':'');CHG=[];
   var keys=group?cart.map(function(l){return l.who}).filter(function(v,i,a){return a.indexOf(v)===i}):[''];
   keys.forEach(function(k){
     if(group){var s=cart.filter(function(l){return l.who===k}).reduce(function(a,l){return a+lineTotal(l)},0);h+='<div class="who"><span>'+esc(k)+'</span><span>'+fmt(s)+'</span></div>'}
@@ -537,6 +538,7 @@ function ship(d){delivery=d===1;selfShip=d===2;var w=$('rwarn');if(w)w.remove();
 function locGet(){try{var v=JSON.parse(localStorage.getItem('ship_loc')||'null');return v&&v.addr?v:null}catch(e){return null}}
 function locSet(v){try{localStorage.setItem('ship_loc',JSON.stringify(v))}catch(e){}}
 function finish(){
+  if(!FCHK){FCHK=1;refreshCfg(function(n){if(n){FCHK=0;if(cart.length)reCart();else{closeSheet();stToast('⚠️ Menu vừa thay đổi',CHG.join(' '));CHG=[]}}else finish()});return}FCHK=0;
   var me=meGet();if(!me.ph||!me.pin){closeSheet();gShow('Hãy đăng nhập để đặt đơn.');return}
   var nm=me.name||'Khách',ph=me.ph,pin=me.pin,ad=$('ad').value.trim();
   if(!delivery&&!selfShip){if(!$('rwarn'))$('rch').insertAdjacentHTML('afterend','<p id="rwarn" class="urg" style="margin-top:-2px">Bạn chọn <b>Giao tận nơi</b> hoặc <b>Khách tự đặt ship</b> giúp quán nhé.</p>');if($('rch').scrollIntoView)$('rch').scrollIntoView({block:'center'});return}
@@ -558,8 +560,9 @@ function finish(){
 }
 function sendOrder(m,nm,ph,tt,pin,lc){var e=function(t){var x=$('sst');if(x)x.innerHTML=t};
 var fail=function(t){e('❌ '+(t||'Chưa tạo được đơn, bạn thử lại giúp quán nhé.')+'<br><button class="btn" style="justify-content:center;margin-top:12px" onclick="openCart()">Quay lại giỏ hàng</button>')};
-fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{},{items:cart.map(function(l){return {n:l.name,p:l.price,t:l.tops.map(function(k){return TOPS[k][0]}),q:l.qty}})}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
 if(d&&d.login){meSet(null);fail(esc(d.err||'Cần đăng nhập lại')+'. Đăng nhập lại rồi đặt lại, giỏ hàng vẫn giữ nguyên.');setTimeout(function(){closeSheet();gShow(d.err||'')},2500);return}
+if(d&&d.menu){refreshCfg(function(){if(!CHG.length)CHG.push(d.err);if(cart.length)reCart();else{closeSheet();stToast('⚠️ Menu vừa thay đổi',CHG.join(' '));CHG=[]}});return}
 if(!r.ok||!d.id)return fail(d&&d.err?esc(d.err):'');
 if(giftUse&&giftUse.fromSaved)dropGift();
 var o={id:d.id,code:d.code,amount:d.amount,content:d.content,bank:d.bank,min:d.min,at:Date.now(),t:m,ph:ph,total:tt};
@@ -647,7 +650,23 @@ function copyMsg(b){
 var PW='';try{PW=localStorage.getItem('pw')||''}catch(e){}
 build();upd();myBtn();gInit();
 if(location.hash==='#admin')$('adm').style.display='';
-fetch('/api/config').then(function(r){return r.ok?r.json():{}}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build()}}).catch(function(){});
+refreshCfg();
+// ---- Menu luôn mới: tải lại menu khi khách quay lại trang và mỗi 20 giây khi đang mở; món hết / đổi giá thì sửa giỏ và báo khách ----
+var CHG=[],CFGT=0;
+function refreshCfg(cb){if(location.hash==='#admin'&&PW){cb&&cb(false);return}
+  fetch('/api/config',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&d.cats){CFG=norm(d);syncTops();build();CFGT=Date.now();var n=cartCheck();upd();cb&&cb(n)}else cb&&cb(false)}).catch(function(){cb&&cb(false)})}
+function reCart(){var v={};['ad','nt'].forEach(function(k){if($(k))v[k]=$(k).value});var d=delivery,sf=selfShip;openCart();['ad','nt'].forEach(function(k){if(v[k]!=null&&$(k))$(k).value=v[k]});if(d)ship(1);else if(sf)ship(2);if($('sh').scrollTo)$('sh').scrollTo(0,0)}
+function cartCheck(){var n=0,items={};CFG.cats.forEach(function(c){c.i.forEach(function(x){if(!(x.n in items))items[x.n]=x})});
+  for(var i=cart.length-1;i>=0;i--){var l=cart[i],x=items[l.name];
+    if(!x||x.off){CHG.push(l.name+' vừa hết món, đã bỏ khỏi giỏ.');cart.splice(i,1);n++;continue}
+    if(x.p!==l.price){CHG.push('Giá '+l.name+' đổi từ '+fmt(l.price)+' thành '+fmt(x.p)+'.');l.price=x.p;n++}
+    var tn=l.topN||l.tops.map(function(k){return TOPS[k]?TOPS[k][0]:''}),nt=[];
+    tn.forEach(function(t){var k=-1;TOPS.forEach(function(T,j){if(T[0]===t)k=j});if(k<0){CHG.push('Topping '+t+' ('+l.name+') vừa hết, đã bỏ ra.');n++}else nt.push(k)});
+    l.tops=nt;l.topN=nt.map(function(k){return TOPS[k][0]})}
+  CHG=CHG.filter(function(t,i,a){return a.indexOf(t)===i});return n}
+function cfgLive(){if(document.hidden)return;var open=$('ov')&&$('ov').classList.contains('show');refreshCfg(function(n){if(n&&open&&$('sh')&&/Đơn của bạn/.test($('sh').innerHTML)){cart.length?reCart():(closeSheet(),stToast('⚠️ Menu vừa thay đổi',CHG.join(' ')||'Giỏ hàng đã được cập nhật'))}})}
+setInterval(cfgLive,20000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&Date.now()-CFGT>5000)cfgLive()});
 function cartQty(){return cart.reduce(function(a,l){return a+l.qty},0)}
 function applySeason(){
   var n=CFG.info.season==='noel';

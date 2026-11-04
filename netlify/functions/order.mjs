@@ -26,6 +26,24 @@ export default async (req) => {
   // Bắt buộc đã đăng ký: số điện thoại + PIN phải đúng thì mới tạo đơn
   const mem = await checkPin(ph, pin);
   if (mem.st !== "ok") return Response.json({ err: MSG[mem.st] || "Lỗi", login: true }, { status: mem.st === "locked" ? 429 : 401 });
+  // Kiểm tra lại món với menu mới nhất: món hết hoặc giá vừa đổi thì không nhận đơn, báo khách tải lại giỏ
+  if (Array.isArray(d.items)) {
+    let cfg = null;
+    try { cfg = await getStore({ name: "shop", consistency: "strong" }).get("config", { type: "json" }); } catch {}
+    if (cfg && Array.isArray(cfg.cats)) {
+      const items = new Map(), tops = new Map((cfg.tops || []).map((t) => [t.n, Number(t.p) || 0]));
+      cfg.cats.forEach((c) => (c.i || []).forEach((x) => { if (!items.has(x.n)) items.set(x.n, x); }));
+      const bad = [];
+      for (const it of d.items.slice(0, 100)) {
+        const x = items.get(String(it && it.n));
+        if (!x || x.off) { bad.push(String(it && it.n) + " vừa hết món"); continue; }
+        const ts = Array.isArray(it.t) ? it.t.map(String) : [];
+        if (ts.some((t) => !tops.has(t))) { bad.push("Topping của " + x.n + " vừa hết"); continue; }
+        if (Number(it.p) !== Number(x.p)) bad.push("Giá " + x.n + " vừa đổi");
+      }
+      if (bad.length) return Response.json({ err: bad.join(", ") + ". Giỏ hàng đã được cập nhật, bạn xem lại rồi đặt nhé.", menu: 1 }, { status: 409 });
+    }
+  }
   // Giao tận nơi: chỉ cần địa chỉ khách gõ. Nhận tại quán thì không cần.
   let shipInfo = {};
   if (d.ship) {
