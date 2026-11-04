@@ -220,6 +220,7 @@ main.w{padding-top:12px}
 .im svg{height:70%;width:auto;color:#14213D}
 .bd{background:#E3342F;color:#FFF3DC;font:800 10px/1.9 "Be Vietnam Pro",sans-serif;letter-spacing:.3px}
 .bds{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:1}.bds .bd{position:static}
+.urg{font-size:13px;line-height:1.45;background:#FFF3DC;border:1.5px dashed #E3342F;color:#14213D;border-radius:12px;padding:8px 12px;margin:0 0 12px}.urg a{color:#E3342F;font-weight:700}
 .shipnote{font-size:13px;color:var(--mut);margin:-2px 0 10px;line-height:1.45}.shipnote b{color:var(--ink)}
 .bd.nw{background:#1F63C9;color:#FFF3DC}.bd.tr{background:#FFD45C;color:#14213D}
 .cd h3{font:700 15px/1.25 "Be Vietnam Pro",sans-serif;min-height:0;display:block;color:#14213D}
@@ -405,7 +406,7 @@ function drawAdmin(){
 }
 function adInfo(){
   var I=CFG.info,h='<div class="lb">Giao diện theo mùa</div><div class="ch"><button class="'+(I.season?'':'on')+'" onclick="setSeason(\'\')">Bình thường</button><button class="'+(I.season==='noel'?'on':'')+'" onclick="setSeason(\'noel\')">🎄 Noel</button></div>'+adGifts();
-  [['name','Tên quán'],['tag','Câu giới thiệu'],['addr','Địa chỉ'],['phone','Số điện thoại hiển thị'],['zalo','Số Zalo (viết liền, không dấu cách)'],['hours','Giờ mở cửa']].forEach(function(f){h+='<div class="lb">'+f[1]+'</div><input value="'+esc(I[f[0]])+'" onchange="CFG.info.'+f[0]+'=this.value;save()">'});
+  [['name','Tên quán'],['tag','Câu giới thiệu'],['addr','Địa chỉ'],['phone','Số điện thoại hiển thị'],['zalo','Số Zalo (viết liền, không dấu cách)'],['hours','Giờ mở cửa'],['fb','Link fanpage (để khách nhắn đơn gấp)']].forEach(function(f){h+='<div class="lb">'+f[1]+'</div><input value="'+esc(I[f[0]])+'" onchange="CFG.info.'+f[0]+'=this.value;save()">'});
   return h+'<div class="lb">Logo</div><input type="file" accept="image/*" onchange="upImg(this,function(id){CFG.info.logo=id;save();drawAdmin()})"><div class="lb">Mã QR nhận chuyển khoản</div>'+(I.qr?'<img src="/img/'+esc(I.qr)+'" style="width:140px;border-radius:12px;display:block;margin-bottom:8px" alt="">':'')+'<input type="file" accept="image/*" onchange="upImg(this,function(id){CFG.info.qr=id;save();drawAdmin()})">';
 }
 function adMenu(){
@@ -521,6 +522,7 @@ function openCart(){
   h+='<p class="shipnote">🛵 Quán sẽ đặt tài xế <b>Grab</b>, <b>Xanh SM</b>, <b>Ahamove</b> hoặc <b>Shopee</b> để giao đến bạn.</p></div>';
   h+='<div id="selfbox" style="display:none"><p class="shipnote">🛵 Bạn tự đặt tài xế (Grab, Xanh SM, Ahamove, Shopee…) đến lấy tại quán'+(CFG.info.addr?': <b>'+esc(CFG.info.addr)+'</b>':'')+'. Nhắn tài xế báo <b>mã đơn</b> khi đến lấy nhé.</p></div>';
   h+='<textarea id="nt" rows="2" placeholder="Ghi chú (không bắt buộc)"></textarea>';
+  var FB=/^https?:\/\//i.test(CFG.info.fb||'')?CFG.info.fb:'';h+='<p class="urg">⏰ Quán <b>không nhận đơn gấp</b> qua web. Nếu cần gấp, bạn vui lòng nhắn trực tiếp cho quán qua '+(FB?'<a href="'+esc(FB)+'" target="_blank" rel="noopener">trang fanpage</a>':'trang fanpage')+' nhé.</p>';
   h+='<div class="lb">Thanh toán</div><p style="font-size:14px;color:var(--mut);margin:0 0 14px">Bấm <b>Hoàn tất đơn</b> rồi quét mã QR để chuyển khoản. Đơn chỉ được gửi đến quán khi thanh toán thành công.</p>';
   h+='<button class="btn" onclick="finish()"><span>Hoàn tất đơn</span><span>'+fmt(total())+'</span></button>';
   delivery=false;selfShip=false;show(h);
