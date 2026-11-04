@@ -216,7 +216,7 @@ main.w{padding-top:12px}
 .cat h2 small{color:#FFF3DC;opacity:.8}
 .grid{gap:10px}
 .cd{border-radius:20px;padding:8px 8px 10px;box-shadow:none;text-align:left}
-.im{aspect-ratio:16/11;border-radius:14px;background:#DCE8F8!important;margin-bottom:8px}
+.im{aspect-ratio:1/1;border-radius:14px;background:#DCE8F8!important;margin-bottom:8px}
 .im svg{height:70%;width:auto;color:#14213D}
 .bd{background:#E3342F;color:#FFF3DC;font:800 10px/1.9 "Be Vietnam Pro",sans-serif;letter-spacing:.3px}
 .bds{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:1}.bds .bd{position:static}
@@ -400,8 +400,12 @@ function build(){
 }
 function syncTops(){TOPS=CFG.tops.map(function(t){return [t.n,t.p]})}
 function save(){syncTops();build();if(!PW)return;q=q.then(function(){return fetch('/api/config',{method:'POST',headers:{'x-admin':PW,'content-type':'application/json'},body:JSON.stringify(CFG)}).then(function(r){if(r.status===401){PW='';loginSheet('Hết phiên, đăng nhập lại')}})}).catch(function(){})}
-function rs(f){return createImageBitmap(f).then(function(bm){var s=Math.min(1,900/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);return new Promise(function(ok){c.toBlob(ok,'image/jpeg',.85)})})}
-function upImg(inp,cb){var f=inp.files[0];if(!f)return;inp.disabled=true;rs(f).then(function(b){return fetch('/api/upload',{method:'POST',headers:{'x-admin':PW},body:b})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){cb(r.id)}).catch(function(){inp.disabled=false;inp.insertAdjacentText('afterend','Không tải được ảnh, thử lại nhé.')})}
+// sq: ảnh món — cắt vuông ở giữa, 720×720, JPEG 80% (~50–70KB); logo, mã QR giữ nguyên tỉ lệ, cạnh dài tối đa 900px
+function rs(f,sq){return createImageBitmap(f).then(function(bm){var c=document.createElement('canvas'),g=c.getContext('2d');
+  if(sq){var m=Math.min(bm.width,bm.height),z=Math.min(720,m);c.width=c.height=z;g.drawImage(bm,(bm.width-m)/2,(bm.height-m)/2,m,m,0,0,z,z)}
+  else{var s=Math.min(1,900/Math.max(bm.width,bm.height));c.width=Math.round(bm.width*s);c.height=Math.round(bm.height*s);g.drawImage(bm,0,0,c.width,c.height)}
+  return new Promise(function(ok){c.toBlob(ok,'image/jpeg',sq?.8:.85)})})}
+function upImg(inp,cb,sq){var f=inp.files[0];if(!f)return;inp.disabled=true;rs(f,sq).then(function(b){return fetch('/api/upload',{method:'POST',headers:{'x-admin':PW},body:b})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){cb(r.id)}).catch(function(){inp.disabled=false;inp.insertAdjacentText('afterend','Không tải được ảnh, thử lại nhé.')})}
 function openAdmin(){if(!PW)return loginSheet();tab='info';ed=null;drawAdmin()}
 function loginSheet(msg){show('<h3>Đăng nhập quản lý</h3>'+(msg?'<p style="color:var(--mr)">'+msg+'</p>':'')+'<input id="pw" type="password" placeholder="Mật khẩu" autocomplete="current-password"><button class="btn" onclick="login()"><span>Đăng nhập</span></button>')}
 function login(){var p=$('pw').value.trim();fetch('/api/config',{headers:{'x-admin':p}}).then(function(r){if(r.ok){PW=p;try{localStorage.setItem('pw',p)}catch(e){}openAdmin()}else r.text().then(function(t){loginSheet('Sai mật khẩu ['+r.status+'] '+t.slice(0,60))})}).catch(function(){loginSheet('Không kết nối được')})}
@@ -429,8 +433,8 @@ function adItem(){
   var x=CFG.cats[ed.ci].i[ed.k],p='CFG.cats['+ed.ci+'].i['+ed.k+']';
   return '<div class="lb">Tên món</div><input value="'+esc(x.n)+'" onchange="'+p+'.n=this.value;save()">'
   +'<div class="lb">Giá (nghìn đồng, ví dụ 25)</div><input type="number" inputmode="numeric" value="'+x.p+'" onchange="'+p+'.p=+this.value||0;save()">'
-  +'<div class="lb">Hình ảnh</div>'+(x.img?'<img src="/img/'+esc(x.img)+'" style="width:96px;height:120px;object-fit:cover;border-radius:12px;display:block;margin-bottom:8px" alt="">':'')
-  +'<input type="file" accept="image/*" onchange="upImg(this,function(id){'+p+'.img=id;save();drawAdmin()})">'
+  +'<div class="lb">Hình ảnh</div>'+(x.img?'<img src="/img/'+esc(x.img)+'" style="width:110px;height:110px;object-fit:cover;border-radius:12px;display:block;margin-bottom:8px" alt="">':'')
+  +'<input type="file" accept="image/*" onchange="upImg(this,function(id){'+p+'.img=id;save();drawAdmin()},1)">'
   +'<div class="ch" style="margin:10px 0"><button class="'+(x.b?'on':'')+'" onclick="'+p+'.b=+!'+p+'.b;save();drawAdmin()">Best seller</button><button class="'+(x.nw?'on':'')+'" onclick="'+p+'.nw=+!'+p+'.nw;save();drawAdmin()">Món mới</button><button class="'+(x.tr?'on':'')+'" onclick="'+p+'.tr=+!'+p+'.tr;save();drawAdmin()">Nên thử</button><button class="'+(x.off?'on':'')+'" onclick="'+p+'.off=+!'+p+'.off;save();drawAdmin()">Tạm hết món</button></div>'
   +'<div class="sec2"><button class="btn o" onclick="ed=null;drawAdmin()">‹ Quay lại</button><button class="btn o" onclick="if(!delArm){delArm=1;drawAdmin();return}CFG.cats['+ed.ci+'].i.splice('+ed.k+',1);ed=null;save();drawAdmin()">'+(delArm?'Bấm lại để xóa':'Xóa món')+'</button></div>';
 }
