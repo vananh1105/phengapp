@@ -45,7 +45,7 @@ self.addEventListener("push", (e) => {
     if (d && d.test) { title = "🔔 Thông báo thử · O Sugar"; body = "Máy này đã nhận được thông báo đơn mới 🐈‍⬛"; }
     else if (d) {
       title = "🔔 CÓ ĐƠN MỚI! #" + d.code;
-      body = [fmt(d.total || 0), "đã thanh toán", (d.cups || 0) + " ly", d.ship ? "giao" + (d.km != null ? " " + String(d.km).replace(".", ",") + " km" : "") : "nhận tại quán"].join(" · ");
+      body = [fmt(d.total || 0), "đã thanh toán", (d.cups || 0) + " ly", d.ship ? "giao" + (d.km != null ? " " + String(d.km).replace(".", ",") + " km" : "") : d.self ? "khách tự đặt ship" : "nhận tại quán"].join(" · ");
     }
     await self.registration.showNotification(title, {
       body,

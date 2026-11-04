@@ -358,7 +358,7 @@ var M=[
 {id:'st',n:'Sữa tươi',en:'Fresh Milk',e:'🥛',bg:'#e3ecf2',i:[['STTC Đường Đen',0,22],['STTC Đường Đen Kem Cheese',0,30],['Sữa Tươi Thốt Nốt',1,22]]},
 {id:'tc',n:'Trà trái cây',en:'Fruit Tea',p:22,e:'🍹',bg:'#f7d6dc',i:[['Trà Dâu'],['Trà Đào'],['Trà Vải',1],['Trà Lài Tắc'],['Olong Chanh Vàng'],['Trà Măng Cầu',1,25],['Trà Me Đác Rim',1,25],['Trà Lài Đác Thơm',0,25],['Trà Mận Bắc',0,25],['Trà Long Nhãn',1,25],['Bánh Que Kem Trứng',0,15]]}
 ];
-var cart=[],group=false,cur=null,done=null,delivery=false;
+var cart=[],group=false,cur=null,done=null,delivery=false,selfShip=false;
 var $=function(s){return document.getElementById(s)};
 var fmt=function(k){return (k*1000).toLocaleString('vi-VN')+'đ'};
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
@@ -516,15 +516,16 @@ function openCart(){
   h+='<div class="tot"><span>Tổng cộng</span><span>'+fmt(total())+'</span></div>';
   h+='<div class="lb">Thông tin nhận hàng</div><div style="background:var(--cd);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:14px">Đặt bằng tài khoản: <b>'+esc(meGet().name||'')+'</b> · '+esc(meGet().ph||'')+'</div>';
   var L0=locGet();
-  h+='<div class="ch" style="margin-bottom:10px"><button id="r1" class="on" onclick="ship(0)">Nhận tại quán</button><button id="r2" onclick="ship(1)">Giao tận nơi</button></div>';
+  h+='<div class="ch" style="margin-bottom:10px"><button id="r1" class="on" onclick="ship(0)">Nhận tại quán</button><button id="r2" onclick="ship(1)">Giao tận nơi</button><button id="r3" onclick="ship(2)">Khách tự đặt ship</button></div>';
   h+='<div id="shipbox" style="display:none"><input id="ad" placeholder="Địa chỉ giao hàng: số nhà, đường, phường" value="'+esc(L0?L0.addr:'')+'" autocomplete="street-address">';
   h+='<p class="shipnote">🛵 Quán sẽ đặt tài xế <b>Grab</b>, <b>Xanh SM</b>, <b>Ahamove</b> hoặc <b>Shopee</b> để giao đến bạn.</p></div>';
+  h+='<div id="selfbox" style="display:none"><p class="shipnote">🛵 Bạn tự đặt tài xế (Grab, Xanh SM, Ahamove, Shopee…) đến lấy tại quán'+(CFG.info.addr?': <b>'+esc(CFG.info.addr)+'</b>':'')+'. Nhắn tài xế báo <b>mã đơn</b> khi đến lấy nhé.</p></div>';
   h+='<textarea id="nt" rows="2" placeholder="Ghi chú (không bắt buộc)"></textarea>';
   h+='<div class="lb">Thanh toán</div><p style="font-size:14px;color:var(--mut);margin:0 0 14px">Bấm <b>Hoàn tất đơn</b> rồi quét mã QR để chuyển khoản. Đơn chỉ được gửi đến quán khi thanh toán thành công.</p>';
   h+='<button class="btn" onclick="finish()"><span>Hoàn tất đơn</span><span>'+fmt(total())+'</span></button>';
-  delivery=false;show(h);
+  delivery=false;selfShip=false;show(h);
 }
-function ship(d){delivery=!!d;$('r1').className=d?'':'on';$('r2').className=d?'on':'';$('shipbox').style.display=d?'block':'none'}
+function ship(d){delivery=d===1;selfShip=d===2;$('r1').className=d?'':'on';$('r2').className=d===1?'on':'';$('r3').className=d===2?'on':'';$('shipbox').style.display=d===1?'block':'none';$('selfbox').style.display=d===2?'block':'none'}
 // ---- Giao hàng: nhớ địa chỉ cũ của khách ----
 function locGet(){try{var v=JSON.parse(localStorage.getItem('ship_loc')||'null');return v&&v.addr?v:null}catch(e){return null}}
 function locSet(v){try{localStorage.setItem('ship_loc',JSON.stringify(v))}catch(e){}}
@@ -536,7 +537,7 @@ function finish(){
     if(ad.length<5){$('ad').focus();$('ad').placeholder='Bạn điền địa chỉ giao hàng giúp quán nhé';return}
     LC={addr:ad};locSet(LC);
   }
-  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:'Nhận tại quán')+'\n';
+  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:selfShip?'Khách tự đặt ship (tài xế đến lấy tại quán)':'Nhận tại quán')+'\n';
   var keys=group?cart.map(function(l){return l.who}).filter(function(v,i,a){return a.indexOf(v)===i}):[''];
   keys.forEach(function(k){
     if(group)m+='\n'+k+':\n';
@@ -680,10 +681,10 @@ function giftUseSaved(){var g=savedGift();if(g){g.fromSaved=1;giftUse=g;refreshG
 function giftBack(){giftUse=null;refreshGift()}
 function refreshGift(){
   var K=['nm','ph','ad','nt'],v={};K.forEach(function(k){if($(k))v[k]=$(k).value});
-  var d=delivery,c=$('pd')&&$('pd').checked;
+  var d=delivery,sf=selfShip,c=$('pd')&&$('pd').checked;
   openCart();
   K.forEach(function(k){if(v[k]!=null&&$(k))$(k).value=v[k]});
-  if(d)ship(1);if(c&&$('pd'))$('pd').checked=true;
+  if(d)ship(1);else if(sf)ship(2);if(c&&$('pd'))$('pd').checked=true;
   var g=document.querySelector('.gift');if(g&&g.scrollIntoView)g.scrollIntoView({block:'center'});
 }
 function adGifts(){
