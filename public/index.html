@@ -75,21 +75,6 @@ button.tile.on{outline:2px solid var(--mr)}
 .mi{background:var(--cd);border-radius:14px;padding:12px;margin:10px 0}.mi .mh{display:flex;justify-content:space-between;gap:8px;font-weight:600}.mi small{color:var(--mut);font-weight:500}.mi pre{background:var(--bg)}
 .ov{position:fixed;inset:0;background:rgba(30,10,14,.5);z-index:20;display:none;align-items:flex-end}
 .ov.show{display:flex}
-/* Bản đồ chọn vị trí giao hàng */
-#mapov{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
-#mapov.show{display:flex}
-#mapov .mt{padding:10px max(14px,env(safe-area-inset-left,0px)) 8px;display:grid;gap:8px}
-#mapov .mt h3{margin:0;font-size:20px}
-#mapov .row{display:flex;gap:6px}#mapov .row input{margin:0;flex:1;min-width:0}
-#mapov .row button{flex:none;border:0;border-radius:12px;background:var(--mr);color:var(--on);font:600 14px inherit;padding:0 14px;cursor:pointer}
-#mres{display:grid;gap:4px;max-height:30vh;overflow:auto}#mres:empty{display:none}
-#mres button{border:1.5px solid var(--ln);background:var(--cd);color:var(--ink);border-radius:10px;padding:8px 10px;text-align:left;font:inherit;font-size:13px;cursor:pointer}
-#map{flex:1;min-height:0;background:var(--sky)}
-#mapov .mb{padding:10px max(14px,env(safe-area-inset-left,0px)) calc(12px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;background:var(--cd);border-top:1px solid var(--ln)}
-#mst{font-weight:600;font-size:14px;min-height:20px}#mst.ok{color:#2E7D5B}#mst.bad{color:#C62A3A}
-#mapov .acts{display:grid;grid-template-columns:1fr 2fr;gap:8px}
-.locst{font-size:13px;margin:-2px 0 10px;font-weight:600}.locst.ok{color:#2E7D5B}.locst.bad{color:#C62A3A}.locst.mut{color:var(--mut);font-weight:400}
-.mapbtn{width:100%;justify-content:center;margin-bottom:6px}
 .sheet{background:var(--bg);width:100%;max-width:640px;margin:0 auto;max-height:90%;overflow-y:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
 @keyframes up{from{transform:translateY(40px);opacity:0}}
 @media (prefers-reduced-motion:reduce){.sheet{animation:none}html{scroll-behavior:auto}}
@@ -358,13 +343,6 @@ main.w{padding-top:12px}
 <div id="stoast" role="status"><svg aria-hidden="true" style="--cup:#E3342F;--lid:#FFF3DC;--blush:#E3342F;--cat:#14110F;--face:#FFF3DC"><use href="#p-wave"/></svg><div><b id="stt1"></b><span id="stt2"></span></div></div>
 <div class="bar"><div class="mob"><button class="mo" id="mo" onclick="myOrders()" style="display:none"></button><button class="mo" id="mst" onclick="openStamps()" style="display:none">🐾 Thẻ tích điểm</button></div><button class="btn" id="cb" onclick="openCart()" disabled><span id="cc">Xem đơn của bạn</span><span id="ct">0đ</span></button></div>
 <div class="ov" id="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sh"></div></div>
-<div id="mapov" role="dialog" aria-label="Bản đồ">
-  <div class="mt"><h3 id="mtt">Chọn vị trí giao hàng</h3>
-    <div class="row"><input id="mq" placeholder="Gõ địa chỉ rồi bấm Tìm" onkeydown="if(event.key==='Enter')mapSearch()"><button onclick="mapSearch()">Tìm</button><button onclick="mapMe()" title="Vị trí của tôi">📍</button></div>
-    <div id="mres"></div></div>
-  <div id="map"></div>
-  <div class="mb"><div id="mst"></div><div class="acts"><button class="btn o" style="justify-content:center" onclick="closeMap()">Quay lại</button><button class="btn" id="mok" style="justify-content:center" onclick="mapOk()" disabled>Giao đến đây</button></div></div>
-</div>
 
 <script>
 var SUGAR=[0,30,50,70,100], ICE=['Không đá','Ít đá','Vừa','Nhiều đá'];
@@ -425,8 +403,6 @@ function drawAdmin(){
 function adInfo(){
   var I=CFG.info,h='<div class="lb">Giao diện theo mùa</div><div class="ch"><button class="'+(I.season?'':'on')+'" onclick="setSeason(\'\')">Bình thường</button><button class="'+(I.season==='noel'?'on':'')+'" onclick="setSeason(\'noel\')">🎄 Noel</button></div>'+adGifts();
   [['name','Tên quán'],['tag','Câu giới thiệu'],['addr','Địa chỉ'],['phone','Số điện thoại hiển thị'],['zalo','Số Zalo (viết liền, không dấu cách)'],['hours','Giờ mở cửa']].forEach(function(f){h+='<div class="lb">'+f[1]+'</div><input value="'+esc(I[f[0]])+'" onchange="CFG.info.'+f[0]+'=this.value;save()">'});
-  var SL=shopLL();h+='<div class="lb">Vị trí quán (để tính quãng đường giao hàng)</div><div style="font-size:14px;margin-bottom:6px">'+(SL.set?'📍 '+SL.lat.toFixed(5)+', '+SL.lng.toFixed(5):'⚠️ Chưa đặt, đang dùng vị trí gần đúng ở trung tâm Bà Rịa')+'</div><button class="btn o mapbtn" onclick="openMap(\'shop\')">📍 Đặt vị trí quán trên bản đồ</button>';
-  h+='<div class="lb">Giao tối đa bao nhiêu km (theo đường đi)</div><input type="number" inputmode="decimal" min="1" max="100" value="'+SL.max+'" onchange="CFG.info.maxKm=Math.max(1,Math.min(100,+this.value||10));save()">';
   return h+'<div class="lb">Logo</div><input type="file" accept="image/*" onchange="upImg(this,function(id){CFG.info.logo=id;save();drawAdmin()})"><div class="lb">Mã QR nhận chuyển khoản</div>'+(I.qr?'<img src="/img/'+esc(I.qr)+'" style="width:140px;border-radius:12px;display:block;margin-bottom:8px" alt="">':'')+'<input type="file" accept="image/*" onchange="upImg(this,function(id){CFG.info.qr=id;save();drawAdmin()})">';
 }
 function adMenu(){
@@ -539,79 +515,25 @@ function openCart(){
   var L0=locGet();
   h+='<div class="ch" style="margin-bottom:10px"><button id="r1" class="on" onclick="ship(0)">Nhận tại quán</button><button id="r2" onclick="ship(1)">Giao tận nơi</button></div>';
   h+='<div id="shipbox" style="display:none"><input id="ad" placeholder="Địa chỉ giao hàng: số nhà, đường, phường" value="'+esc(L0?L0.addr:'')+'" autocomplete="street-address">';
-  h+='<button class="btn o mapbtn" onclick="openMap(\'ship\')">📍 '+(L0?'Đổi vị trí trên bản đồ':'Chọn vị trí trên bản đồ')+'</button><div id="locst" class="locst"></div></div>';
+  h+='</div>';
   h+='<textarea id="nt" rows="2" placeholder="Ghi chú (không bắt buộc)"></textarea>';
   h+='<div class="lb">Thanh toán</div><p style="font-size:14px;color:var(--mut);margin:0 0 14px">Bấm <b>Hoàn tất đơn</b> rồi quét mã QR để chuyển khoản. Đơn chỉ được gửi đến quán khi thanh toán thành công.</p>';
   h+='<button class="btn" onclick="finish()"><span>Hoàn tất đơn</span><span>'+fmt(total())+'</span></button>';
-  delivery=false;show(h);locShow();
+  delivery=false;show(h);
 }
 function ship(d){delivery=!!d;$('r1').className=d?'':'on';$('r2').className=d?'on':'';$('shipbox').style.display=d?'block':'none'}
-// ---- Giao hàng: vị trí trên bản đồ + quãng đường từ quán ----
-function shopLL(){var I=CFG.info||{},la=+I.lat,ln=+I.lng;return {lat:la&&ln?la:10.4963,lng:la&&ln?ln:107.1684,max:+I.maxKm>0?+I.maxKm:10,set:!!(la&&ln)}}
-function locGet(){try{var v=JSON.parse(localStorage.getItem('ship_loc')||'null');return v&&v.lat&&v.lng?v:null}catch(e){return null}}
+// ---- Giao hàng: nhớ địa chỉ cũ của khách ----
+function locGet(){try{var v=JSON.parse(localStorage.getItem('ship_loc')||'null');return v&&v.addr?v:null}catch(e){return null}}
 function locSet(v){try{localStorage.setItem('ship_loc',JSON.stringify(v))}catch(e){}}
-function kmTxt(k){return (Math.round(k*10)/10).toLocaleString('vi-VN')+' km'}
-function locShow(){var e=$('locst');if(!e)return;var L=locGet(),S=shopLL();
-  if(!L){e.className='locst mut';e.textContent='Chọn vị trí để quán biết đường giao và tính quãng đường (giao trong '+S.max+' km).';return}
-  var ok=L.km<=S.max;e.className='locst '+(ok?'ok':'bad');e.textContent=(ok?'✅ ':'❌ ')+'Cách quán khoảng '+kmTxt(L.km)+(L.road?' theo đường đi':' (ước chừng)')+(ok?' · trong vùng giao hàng':' · ngoài vùng giao hàng (tối đa '+S.max+' km)')}
-var MAP=null,MK=null,RT=null,SHOPMK=null,RING=null,PICK=null,PKM=null,MMODE='ship',MSEQ=0;
-function loadLeaflet(cb){if(window.L)return cb();
-  var c=document.createElement('link');c.rel='stylesheet';c.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(c);
-  var j=document.createElement('script');j.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';j.onload=cb;j.onerror=function(){$('mst').className='bad';$('mst').textContent='Không tải được bản đồ, kiểm tra mạng rồi thử lại.'};document.head.appendChild(j)}
-function openMap(mode){MMODE=mode;var S=shopLL(),LC0=mode==='ship'?locGet():null;
-  $('mapov').className='show';$('mres').innerHTML='';$('mq').value=mode==='ship'?(($('ad')&&$('ad').value)||''):'';
-  $('mtt').textContent=mode==='ship'?'Chọn vị trí giao hàng':'Vị trí của quán';
-  $('mok').textContent=mode==='ship'?'Giao đến đây':'Đặt vị trí quán ở đây';
-  $('mst').className='';$('mst').textContent=mode==='ship'?'Chạm vào bản đồ hoặc tìm địa chỉ để đặt ghim.':'Kéo ghim tới đúng cửa quán.';$('mok').disabled=true;
-  loadLeaflet(function(){
-    if(!MAP){MAP=L.map('map',{zoomControl:true});L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(MAP);MAP.on('click',function(e){setPick(e.latlng.lat,e.latlng.lng)})}
-    if(SHOPMK)SHOPMK.remove();if(RING)RING.remove();
-    if(mode==='ship'){SHOPMK=L.marker([S.lat,S.lng],{icon:L.divIcon({className:'',html:'<div style="background:#6e0f22;color:#fff;border-radius:99px;padding:3px 8px;font:700 12px system-ui;white-space:nowrap;transform:translate(-50%,-50%);display:inline-block">🧋 Quán</div>'})}).addTo(MAP);
-      RING=L.circle([S.lat,S.lng],{radius:S.max*1000,color:'#6e0f22',weight:1.5,fillOpacity:.04,dashArray:'6 6'}).addTo(MAP)}
-    setTimeout(function(){MAP.invalidateSize();
-      if(LC0&&mode==='ship'){MAP.setView([LC0.lat,LC0.lng],16);setPick(LC0.lat,LC0.lng)}
-      else if(mode==='shop'){MAP.setView([S.lat,S.lng],17);setPick(S.lat,S.lng)}
-      else{MAP.setView([S.lat,S.lng],13);if(MK){MK.remove();MK=null}if(RT){RT.remove();RT=null}}},50);
-  });
-}
-function closeMap(){$('mapov').className=''}
-function setPick(lat,lng){PICK={lat:lat,lng:lng};
-  if(!MK){MK=L.marker([lat,lng],{draggable:true}).addTo(MAP);MK.on('dragend',function(){var p=MK.getLatLng();setPick(p.lat,p.lng)})}else MK.setLatLng([lat,lng]);
-  if(MMODE==='shop'){$('mst').className='ok';$('mst').textContent='Vị trí quán: '+lat.toFixed(5)+', '+lng.toFixed(5);$('mok').disabled=false;return}
-  var S=shopLL(),seq=++MSEQ;$('mok').disabled=true;$('mst').className='';$('mst').textContent='Đang tính quãng đường…';
-  var air=function(){var R=6371,r=function(x){return x*Math.PI/180},a=Math.sin(r(lat-S.lat)/2),b=Math.sin(r(lng-S.lng)/2);return 2*R*Math.asin(Math.sqrt(a*a+Math.cos(r(S.lat))*Math.cos(r(lat))*b*b))};
-  var done=function(km,road,geo){if(seq!==MSEQ)return;PKM={km:km,road:road};
-    if(RT){RT.remove();RT=null}if(geo)RT=L.geoJSON(geo,{style:{color:'#1F63C9',weight:4,opacity:.8}}).addTo(MAP);
-    var ok=km<=S.max;$('mst').className=ok?'ok':'bad';$('mst').textContent=(ok?'✅ Cách quán khoảng ':'❌ Cách quán khoảng ')+kmTxt(km)+(road?' theo đường đi':' (ước chừng)')+(ok?' · trong vùng giao hàng':' · ngoài vùng giao hàng (quán giao tối đa '+S.max+' km)');$('mok').disabled=!ok};
-  fetch('https://router.project-osrm.org/route/v1/driving/'+S.lng+','+S.lat+';'+lng+','+lat+'?overview=simplified&geometries=geojson').then(function(r){return r.json()}).then(function(j){
-    if(j&&j.code==='Ok'&&j.routes&&j.routes[0])done(j.routes[0].distance/1000,true,j.routes[0].geometry);else done(air()*1.3,false)}).catch(function(){done(air()*1.3,false)});
-  if(!$('mq').value.trim())fetch('https://nominatim.openstreetmap.org/reverse?format=json&accept-language=vi&zoom=18&lat='+lat+'&lon='+lng).then(function(r){return r.json()}).then(function(j){if(seq===MSEQ&&j&&j.display_name&&!$('mq').value.trim())$('mq').value=j.display_name.split(', ').slice(0,4).join(', ')}).catch(function(){});
-}
-function mapSearch(){var q=$('mq').value.trim();if(!q)return;var S=shopLL(),b=[S.lng-.3,S.lat+.3,S.lng+.3,S.lat-.3].join(',');
-  $('mres').innerHTML='<div style="font-size:13px;color:var(--mut)">Đang tìm…</div>';
-  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=vn&accept-language=vi&viewbox='+b+'&q='+encodeURIComponent(q)).then(function(r){return r.json()}).then(function(a){
-    if(!a||!a.length){$('mres').innerHTML='<div style="font-size:13px;color:var(--mut)">Không tìm thấy. Bạn chạm thẳng vào bản đồ để đặt ghim nhé.</div>';return}
-    window.MRES=a;$('mres').innerHTML=a.map(function(x,i){return '<button onclick="mapGo('+i+')">'+esc(x.display_name)+'</button>'}).join('')}).catch(function(){$('mres').innerHTML='<div style="font-size:13px;color:var(--mut)">Không tìm được lúc này. Bạn chạm vào bản đồ để đặt ghim nhé.</div>'})}
-function mapGo(i){var x=window.MRES[i];$('mres').innerHTML='';MAP.setView([+x.lat,+x.lon],17);setPick(+x.lat,+x.lon)}
-function mapMe(){if(!navigator.geolocation){$('mst').textContent='Máy không hỗ trợ lấy vị trí.';return}$('mst').className='';$('mst').textContent='Đang lấy vị trí của bạn…';
-  navigator.geolocation.getCurrentPosition(function(p){MAP.setView([p.coords.latitude,p.coords.longitude],17);setPick(p.coords.latitude,p.coords.longitude)},function(){$('mst').className='bad';$('mst').textContent='Không lấy được vị trí. Bạn cho phép truy cập vị trí hoặc chạm vào bản đồ nhé.'},{enableHighAccuracy:true,timeout:10000})}
-function mapOk(){if(!PICK)return;
-  if(MMODE==='shop'){CFG.info.lat=Math.round(PICK.lat*1e6)/1e6;CFG.info.lng=Math.round(PICK.lng*1e6)/1e6;save();closeMap();drawAdmin();return}
-  var a=($('ad')&&$('ad').value.trim())||$('mq').value.trim();
-  locSet({addr:a,lat:PICK.lat,lng:PICK.lng,km:Math.round(PKM.km*10)/10,road:PKM.road});
-  if($('ad')&&!$('ad').value.trim())$('ad').value=a;closeMap();locShow();
-  var b=document.querySelector('.mapbtn');if(b)b.textContent='📍 Đổi vị trí trên bản đồ'}
 function finish(){
   var me=meGet();if(!me.ph||!me.pin){closeSheet();gShow('Hãy đăng nhập để đặt đơn.');return}
   var nm=me.name||'Khách',ph=me.ph,pin=me.pin,ad=$('ad').value.trim();
   var LC=null;
   if(delivery){
     if(ad.length<5){$('ad').focus();$('ad').placeholder='Bạn điền địa chỉ giao hàng giúp quán nhé';return}
-    var SS=shopLL();LC=locGet();if(!LC){openMap('ship');return}
-    if(LC.km>SS.max){locShow();var le=$('locst');if(le&&le.scrollIntoView)le.scrollIntoView({block:'center'});return}
-    LC.addr=ad;locSet(LC);
+    LC={addr:ad};locSet(LC);
   }
-  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad+' ('+kmTxt(LC.km)+')':'Nhận tại quán')+'\n';
+  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:'Nhận tại quán')+'\n';
   var keys=group?cart.map(function(l){return l.who}).filter(function(v,i,a){return a.indexOf(v)===i}):[''];
   keys.forEach(function(k){
     if(group)m+='\n'+k+':\n';
@@ -624,7 +546,7 @@ function finish(){
 }
 function sendOrder(m,nm,ph,tt,pin,lc){var e=function(t){var x=$('sst');if(x)x.innerHTML=t};
 var fail=function(t){e('❌ '+(t||'Chưa tạo được đơn, bạn thử lại giúp quán nhé.')+'<br><button class="btn" style="justify-content:center;margin-top:12px" onclick="openCart()">Quay lại giỏ hàng</button>')};
-fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr,lat:lc.lat,lng:lc.lng}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
+fetch('/api/order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign(lc?{text:m,name:nm,phone:ph,total:tt,pin:pin,ship:1,addr:lc.addr}:{text:m,name:nm,phone:ph,total:tt,pin:pin},freeV()?{free:1}:{}))}).then(function(r){return r.json().catch(function(){return {}}).then(function(d){
 if(d&&d.login){meSet(null);fail(esc(d.err||'Cần đăng nhập lại')+'. Đăng nhập lại rồi đặt lại, giỏ hàng vẫn giữ nguyên.');setTimeout(function(){closeSheet();gShow(d.err||'')},2500);return}
 if(!r.ok||!d.id)return fail(d&&d.err?esc(d.err):'');
 if(giftUse&&giftUse.fromSaved)dropGift();
