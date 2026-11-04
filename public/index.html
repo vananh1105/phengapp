@@ -517,7 +517,7 @@ function openCart(){
   h+='<div class="tot"><span>Tổng cộng</span><span>'+fmt(total())+'</span></div>';
   h+='<div class="lb">Thông tin nhận hàng</div><div style="background:var(--cd);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:14px">Đặt bằng tài khoản: <b>'+esc(meGet().name||'')+'</b> · '+esc(meGet().ph||'')+'</div>';
   var L0=locGet();
-  h+='<div class="ch" style="margin-bottom:10px"><button id="r1" class="on" onclick="ship(0)">Nhận tại quán</button><button id="r2" onclick="ship(1)">Giao tận nơi</button><button id="r3" onclick="ship(2)">Khách tự đặt ship</button></div>';
+  h+='<div class="ch" id="rch" style="margin-bottom:10px"><button id="r2" onclick="ship(1)">Giao tận nơi</button><button id="r3" onclick="ship(2)">Khách tự đặt ship</button></div>';
   h+='<div id="shipbox" style="display:none"><input id="ad" placeholder="Địa chỉ giao hàng: số nhà, đường, phường" value="'+esc(L0?L0.addr:'')+'" autocomplete="street-address">';
   h+='<p class="shipnote">🛵 Quán sẽ đặt tài xế <b>Grab</b>, <b>Xanh SM</b>, <b>Ahamove</b> hoặc <b>Shopee</b> để giao đến bạn.</p></div>';
   h+='<div id="selfbox" style="display:none"><p class="shipnote">🛵 Bạn tự đặt tài xế (Grab, Xanh SM, Ahamove, Shopee…) đến lấy tại quán'+(CFG.info.addr?': <b>'+esc(CFG.info.addr)+'</b>':'')+'. Nhắn tài xế báo <b>mã đơn</b> khi đến lấy nhé.</p></div>';
@@ -527,19 +527,20 @@ function openCart(){
   h+='<button class="btn" onclick="finish()"><span>Hoàn tất đơn</span><span>'+fmt(total())+'</span></button>';
   delivery=false;selfShip=false;show(h);
 }
-function ship(d){delivery=d===1;selfShip=d===2;$('r1').className=d?'':'on';$('r2').className=d===1?'on':'';$('r3').className=d===2?'on':'';$('shipbox').style.display=d===1?'block':'none';$('selfbox').style.display=d===2?'block':'none'}
+function ship(d){delivery=d===1;selfShip=d===2;var w=$('rwarn');if(w)w.remove();$('r2').className=d===1?'on':'';$('r3').className=d===2?'on':'';$('shipbox').style.display=d===1?'block':'none';$('selfbox').style.display=d===2?'block':'none'}
 // ---- Giao hàng: nhớ địa chỉ cũ của khách ----
 function locGet(){try{var v=JSON.parse(localStorage.getItem('ship_loc')||'null');return v&&v.addr?v:null}catch(e){return null}}
 function locSet(v){try{localStorage.setItem('ship_loc',JSON.stringify(v))}catch(e){}}
 function finish(){
   var me=meGet();if(!me.ph||!me.pin){closeSheet();gShow('Hãy đăng nhập để đặt đơn.');return}
   var nm=me.name||'Khách',ph=me.ph,pin=me.pin,ad=$('ad').value.trim();
+  if(!delivery&&!selfShip){if(!$('rwarn'))$('rch').insertAdjacentHTML('afterend','<p id="rwarn" class="urg" style="margin-top:-2px">Bạn chọn <b>Giao tận nơi</b> hoặc <b>Khách tự đặt ship</b> giúp quán nhé.</p>');if($('rch').scrollIntoView)$('rch').scrollIntoView({block:'center'});return}
   var LC=null;
   if(delivery){
     if(ad.length<5){$('ad').focus();$('ad').placeholder='Bạn điền địa chỉ giao hàng giúp quán nhé';return}
     LC={addr:ad};locSet(LC);
   }
-  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:selfShip?'Khách tự đặt ship (tài xế đến lấy tại quán)':'Nhận tại quán')+'\n';
+  var m='ĐƠN HÀNG · '+CFG.info.name+'\nKhách: '+nm+' · '+ph+'\n'+(delivery?'Giao đến: '+ad:'Khách tự đặt ship (tài xế đến lấy tại quán)')+'\n';
   var keys=group?cart.map(function(l){return l.who}).filter(function(v,i,a){return a.indexOf(v)===i}):[''];
   keys.forEach(function(k){
     if(group)m+='\n'+k+':\n';
