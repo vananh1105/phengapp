@@ -14,6 +14,7 @@
 - Chưa rõ ý thì hỏi lại trước khi làm (ví dụ "ứng dụng bán hàng" là trang đặt hàng hay phần mềm bán tại quầy, "mẫu B" là mẫu nào).
 - Thay đổi giao diện lớn: làm vài mẫu xem trước cho chủ repo chọn rồi mới áp vào code thật.
 - Luôn sửa tiếp trên bản mới nhất mà chủ repo đã chốt (ví dụ đã chọn mẫu B thì mọi chỉnh sửa sau chèn vào mẫu B), không quay lại bản cũ hay mẫu ban đầu. Trước khi sửa, kiểm tra bản hiện tại (file, commit hoặc trang mẫu mới nhất) và nói rõ đang sửa trên bản nào.
+- **Không được sót bất cứ thứ gì của chủ quán.** Khi tổng hợp, báo cáo hay đề xuất xoá/dọn, phải kiểm tra thật (không dựa vào trí nhớ) và kể đủ mọi thứ: cả 2 repo `phengapp` và `phong-ban-tra-sua` (file, nội quy CLAUDE.md, nhánh, PR đang mở hoặc chưa gộp, skill trong `.claude/skills/` kể cả skill nằm trong PR chưa gộp như `web-quan-tra` ở PR #7), các trang Claude (Artifacts, ví dụ Văn phòng 3D, Tính giá vốn đồ uống, Cẩm nang Meta Ads), lịch tự chạy, các cuộc trò chuyện Claude Code, commit chưa đưa lên ở các cuộc khác, file kho dữ liệu (`nghien-cuu/kho-du-lieu/`). Chỗ nào không xem được (chat thường, bộ nhớ claude.ai) thì nói rõ là không xem được.
 - Không chép linh vật, logo hay thương hiệu của quán khác; chỉ lấy cảm hứng phong cách rồi vẽ mới cho O Sugar.
 
 ## Netlify và credit
@@ -35,3 +36,14 @@
 
 ## Skill
 - `.claude/skills/web-quan-tra/`: skill làm/sửa web đặt đơn + trang quản lý cho quán (gọi `/web-quan-tra`). Thêm hay đổi chức năng web thì cập nhật luôn skill (`references/tinh-nang.md`, `giao-dien.md`). File zip để tải lên tài khoản Claude tạo bằng `bash .claude/skills/web-quan-tra/scripts/dong-goi.sh . <file.zip>` (tự xoá tài khoản ngân hàng, địa chỉ, SĐT khỏi bản mẫu).
+
+## Quy tắc chung của chủ quán (đồng bộ với bộ nhớ Claude)
+
+Các quy tắc này giống hệt nhau trong bộ nhớ (memory) của Claude và trong CLAUDE.md của cả 2 repo `phengapp` và `phong-ban-tra-sua`. Cập nhật ngày 2026-11-09.
+
+- **Thêm rule mới thì ghi cả hai nơi:** mỗi khi chủ quán thêm một rule, ghi vào bộ nhớ Claude **và** CLAUDE.md của cả 2 repo. Vẫn phải hỏi trước khi push. Push vào `main` của `phengapp` tốn 1 lượt build Netlify, nên khi có nhiều rule thì gom lại push một lần.
+- **Tốn tiền phải báo trước:** bất cứ gợi ý hay việc gì tốn credit hoặc tốn tiền (công cụ trả phí, gói đăng ký, credit API, build Netlify, quảng cáo) đều phải nói rõ trước khi làm.
+- **Chủ động gợi ý skill/plugin:** khi một việc nên làm thành skill hoặc plugin (hoặc đã có skill/plugin phù hợp) thì tự đề xuất, kèm lý do ngắn; chủ quán không muốn tự theo dõi chuyện này.
+- **Web demo sáng tạo:** khi làm web demo/mẫu cho một sản phẩm hay thương hiệu (không phải web thật đang chạy của quán), tự sáng tạo màu sắc và hiệu ứng riêng cho từng sản phẩm, không lặp một bộ cố định, sáng tạo hơn đề bài, không bám sát câu lệnh. Web thật của quán vẫn theo quy tắc "chỉ sửa đúng phần được yêu cầu".
+- **Phân tích kỹ:** khi chủ quán gửi phương pháp, công cụ hay video để phân tích, phải kiểm tra kỹ và tự nghiên cứu sâu trước khi trả lời; đưa ra cách đầy đủ nhất, không đơn giản hoá.
+- **Mọi câu hỏi:** suy nghĩ kỹ, đối chiếu và tìm hiểu trước khi trả lời; nói rõ Claude thật sự làm được gì; không chỉ trả lời đúng nghĩa đen câu hỏi mà chủ động đề xuất phương án cao cấp nhất Claude làm được.
