@@ -1,5 +1,4 @@
 import { getStore } from "@netlify/blobs";
-import { BANK } from "../lib/pay.mjs";
 export const config = { path: "/api/config" };
 const envPw = () => (process.env.ADMIN_PASSWORD || "").trim();
 const isAdmin = (req) => !!envPw() && (req.headers.get("x-admin") || "").trim() === envPw();
@@ -9,9 +8,7 @@ export default async (req) => {
     if (req.headers.get("x-admin") !== null)
       return isAdmin(req) ? Response.json({ ok: true }) : new Response("env=" + envPw().length + " ky tu, ban go=" + (req.headers.get("x-admin")||"").trim().length + " ky tu", { status: 401 });
     const c = await store.get("config", { type: "json" });
-    // Trang bán tại quầy (?pos=1) cần thêm tài khoản nhận tiền để in mã QR
-    const out = new URL(req.url).searchParams.has("pos") ? { ...(c || {}), bank: BANK } : (c || {});
-    return Response.json(out, { headers: { "cache-control": "no-store" } });
+    return Response.json(c || {}, { headers: { "cache-control": "no-store" } });
   }
   if (req.method === "POST") {
     if (!isAdmin(req)) return new Response("no", { status: 401 });
