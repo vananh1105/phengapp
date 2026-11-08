@@ -6,8 +6,8 @@ import { sendPushAll } from "./push.mjs";
 export function orderSummary(code, text, v) {
   const t = String(text || "");
   const cups = [...t.matchAll(/^- (\d+) ×/gm)].reduce((a, m) => a + Number(m[1]), 0);
-  const ship = /^Giao đến:/m.test(t);
-  return { code, total: (v && v.total) || 0, cups, ship, km: v && v.km != null ? v.km : null, at: Date.now() };
+  const ship = /^Giao đến:/m.test(t), self = /^Khách tự đặt ship/m.test(t);
+  return { code, total: (v && v.total) || 0, cups, ship, self, km: v && v.km != null ? v.km : null, at: Date.now() };
 }
 
 export async function notifyNewOrder(origin, code, text, v) {

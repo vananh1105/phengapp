@@ -65,6 +65,9 @@ export async function resetPin(phone) {
   return true;
 }
 
+// Đọc tài khoản khách theo số điện thoại (null nếu chưa có)
+export const getMember = (phone) => store().get("m:" + phone, { type: "json" });
+
 // ---- Thẻ tích điểm: mua 10 ly tặng 1 ly ----
 export const STAMP_GOAL = 10;
 // Số ly trong nội dung đơn (các dòng "- 2 × Tên món ...")

@@ -1,7 +1,6 @@
 import { getStore } from "@netlify/blobs";
 import { normPhone, validPin, checkPin, addOrder, MSG, STAMP_GOAL } from "../lib/member.mjs";
 import { BANK, PAY_MIN, codeOf, payContent } from "../lib/pay.mjs";
-import { shopOf, roadKm, validLatLng } from "../lib/geo.mjs";
 export const config = { path: "/api/order" };
 const orders = () => getStore({ name: "orders", consistency: "strong" });
 const pays = () => getStore({ name: "pay", consistency: "strong" });
@@ -27,18 +26,30 @@ export default async (req) => {
   // Bắt buộc đã đăng ký: số điện thoại + PIN phải đúng thì mới tạo đơn
   const mem = await checkPin(ph, pin);
   if (mem.st !== "ok") return Response.json({ err: MSG[mem.st] || "Lỗi", login: true }, { status: mem.st === "locked" ? 429 : 401 });
-  // Giao tận nơi: phải có địa chỉ + vị trí trên bản đồ, quãng đường đi theo bản đồ không quá giới hạn (mặc định 10 km).
-  // Nhận tại quán thì không cần.
+  // Kiểm tra lại món với menu mới nhất: món hết hoặc giá vừa đổi thì không nhận đơn, báo khách tải lại giỏ
+  if (Array.isArray(d.items)) {
+    let cfg = null;
+    try { cfg = await getStore({ name: "shop", consistency: "strong" }).get("config", { type: "json" }); } catch {}
+    if (cfg && Array.isArray(cfg.cats)) {
+      const items = new Map(), tops = new Map((cfg.tops || []).map((t) => [t.n, Number(t.p) || 0]));
+      cfg.cats.forEach((c) => (c.i || []).forEach((x) => { if (!items.has(x.n)) items.set(x.n, x); }));
+      const bad = [];
+      for (const it of d.items.slice(0, 100)) {
+        const x = items.get(String(it && it.n));
+        if (!x || x.off) { bad.push(String(it && it.n) + " vừa hết món"); continue; }
+        const ts = Array.isArray(it.t) ? it.t.map(String) : [];
+        if (ts.some((t) => !tops.has(t))) { bad.push("Topping của " + x.n + " vừa hết"); continue; }
+        if (Number(it.p) !== Number(x.p)) bad.push("Giá " + x.n + " vừa đổi");
+      }
+      if (bad.length) return Response.json({ err: bad.join(", ") + ". Giỏ hàng đã được cập nhật, bạn xem lại rồi đặt nhé.", menu: 1 }, { status: 409 });
+    }
+  }
+  // Giao tận nơi: chỉ cần địa chỉ khách gõ. Nhận tại quán thì không cần.
   let shipInfo = {};
   if (d.ship) {
-    const addr = String(d.addr || "").trim().slice(0, 300), lat = Number(d.lat), lng = Number(d.lng);
+    const addr = String(d.addr || "").trim().slice(0, 300);
     if (addr.length < 5) return Response.json({ err: "Bạn chưa điền địa chỉ giao hàng" }, { status: 400 });
-    if (!validLatLng(lat, lng)) return Response.json({ err: "Bạn chưa chọn vị trí giao hàng trên bản đồ" }, { status: 400 });
-    let info = {};
-    try { info = ((await getStore({ name: "shop", consistency: "strong" }).get("config", { type: "json" })) || {}).info || {}; } catch {}
-    const shop = shopOf(info), dist = await roadKm(shop, { lat, lng }), km = Math.round(dist.km * 10) / 10;
-    if (km > shop.maxKm) return Response.json({ err: `Địa chỉ cách quán khoảng ${km} km, ngoài vùng giao hàng (tối đa ${shop.maxKm} km)`, far: true, km }, { status: 400 });
-    shipInfo = { addr, lat, lng, km, road: dist.road };
+    shipInfo = { addr };
   }
   // Dùng 1 ly miễn phí từ thẻ tích điểm: phải đủ 10 dấu (dấu bị trừ khi đơn thanh toán xong, xem sepay.mjs)
   const free = d.free ? 1 : 0;
@@ -53,5 +64,5 @@ export default async (req) => {
     await pays().setJSON("c:" + code, { id });
   } catch { return new Response("failed", { status: 502 }); }
   try { await addOrder(ph, id); } catch {}
-  return Response.json({ ok: true, km: shipInfo.km, id, code, amount, content: payContent(code), bank: BANK, min: PAY_MIN });
+  return Response.json({ ok: true, id, code, amount, content: payContent(code), bank: BANK, min: PAY_MIN });
 };
