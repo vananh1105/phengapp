@@ -33,3 +33,14 @@
 - `netlify/lib/push.mjs`: gửi Web Push (VAPID).
 - Thanh toán trước qua SePay: `order.mjs` tạo đơn trạng thái `pay` (quán chưa thấy), khách quét VietQR (TPBank, nội dung `PHENG <mã đơn>`, giữ 15 phút); `sepay.mjs` (`/api/sepay`, header `Authorization: Apikey <SEPAY_API_KEY>`) nhận tiền vào, đủ tiền thì đơn sang `new` + báo quán (`lib/notify.mjs`); tiền không khớp lưu `pay` store `u:` để quán xử lý tay ở `don.html`. Tài khoản nhận tiền ở `netlify/lib/pay.mjs`.
 - Biến môi trường Netlify: `ADMIN_PASSWORD`, `SEPAY_API_KEY`, (tuỳ chọn) `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`.
+
+## Quy tắc chung của chủ quán (đồng bộ với bộ nhớ Claude)
+
+Các quy tắc này giống hệt nhau trong bộ nhớ (memory) của Claude và trong CLAUDE.md của cả 2 repo `phengapp` và `phong-ban-tra-sua`. Cập nhật ngày 2026-11-09.
+
+- **Thêm rule mới thì ghi cả hai nơi:** mỗi khi chủ quán thêm một rule, ghi vào bộ nhớ Claude **và** CLAUDE.md của cả 2 repo. Vẫn phải hỏi trước khi push. Push vào `main` của `phengapp` tốn 1 lượt build Netlify, nên khi có nhiều rule thì gom lại push một lần.
+- **Tốn tiền phải báo trước:** bất cứ gợi ý hay việc gì tốn credit hoặc tốn tiền (công cụ trả phí, gói đăng ký, credit API, build Netlify, quảng cáo) đều phải nói rõ trước khi làm.
+- **Chủ động gợi ý skill/plugin:** khi một việc nên làm thành skill hoặc plugin (hoặc đã có skill/plugin phù hợp) thì tự đề xuất, kèm lý do ngắn; chủ quán không muốn tự theo dõi chuyện này.
+- **Web demo sáng tạo:** khi làm web demo/mẫu cho một sản phẩm hay thương hiệu (không phải web thật đang chạy của quán), tự sáng tạo màu sắc và hiệu ứng riêng cho từng sản phẩm, không lặp một bộ cố định, sáng tạo hơn đề bài, không bám sát câu lệnh. Web thật của quán vẫn theo quy tắc "chỉ sửa đúng phần được yêu cầu".
+- **Phân tích kỹ:** khi chủ quán gửi phương pháp, công cụ hay video để phân tích, phải kiểm tra kỹ và tự nghiên cứu sâu trước khi trả lời; đưa ra cách đầy đủ nhất, không đơn giản hoá.
+- **Mọi câu hỏi:** suy nghĩ kỹ, đối chiếu và tìm hiểu trước khi trả lời; nói rõ Claude thật sự làm được gì; không chỉ trả lời đúng nghĩa đen câu hỏi mà chủ động đề xuất phương án cao cấp nhất Claude làm được.
