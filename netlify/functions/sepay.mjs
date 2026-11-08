@@ -43,12 +43,6 @@ export default async (req) => {
       return Response.json({ success: true });
     }
   }
-  // Khách trả tại quầy (trang ban.html, nội dung "QUAY <số đơn> <ngàythang>"): lưu riêng, không báo lệch
-  if (!code && /QUAY[\s._-]*\d{1,4}/i.test(content)) {
-    await pays.setJSON("q:" + new Date().toISOString() + "-" + (tx.txid || Math.random().toString(36).slice(2, 8)), tx);
-    if (txKey !== "t:") await pays.setJSON(txKey, { ok: 1, quay: 1 });
-    return Response.json({ success: true });
-  }
   // Tiền vào nhưng không khớp đơn: lưu lại cho quán xử lý tay
   await pays.setJSON("u:" + new Date().toISOString() + "-" + (tx.txid || Math.random().toString(36).slice(2, 8)), { ...tx, reason, code: code || "" });
   if (txKey !== "t:") await pays.setJSON(txKey, { ok: 0 });
