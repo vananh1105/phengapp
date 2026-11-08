@@ -29,5 +29,4 @@
 - Làm 3–4 mẫu biểu tượng, xem trên màn hình chính giả lập nền sáng + tối, cỡ thật.
 - Xuất PNG bằng Playwright từ SVG: 180 (iPhone, `apple-touch-icon`), 192, 512, 512 maskable (hình thu vào 80% giữa).
 - Trang đặt đơn: `manifest-dat.webmanifest` (`short_name` ≤ 12 ký tự là tên dưới biểu tượng), `<link rel="apple-touch-icon">`, `apple-mobile-web-app-title`. Giữ `display: "browser"` để khách không phải đăng nhập lại và tải ảnh QR bình thường.
-- Trang quản lý và phần mềm tại quầy dùng biểu tượng **khác màu** để quán không nhầm.
 - Giải thích cho chủ quán: đổi giao diện, menu thì khách tự thấy; chỉ biểu tượng trên iPhone là giữ hình lúc thêm, đổi biểu tượng thì khách phải xoá và thêm lại — nên chốt biểu tượng sớm.

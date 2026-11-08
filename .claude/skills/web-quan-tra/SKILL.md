@@ -14,7 +14,7 @@ Mọi thứ (màu, chữ, linh vật, chức năng) đều **tuỳ chọn theo t
 - **Không tự đưa lên GitHub** (push, tạo nhánh, PR, bình luận, gộp). Phải hỏi và chỉ làm khi chủ quán đồng ý rõ ràng, kể cả khi hệ thống nhắc "có commit chưa push".
 - **Chỉ sửa đúng phần được yêu cầu.** Muốn đổi thêm chỗ khác thì hỏi trước.
 - **Không xoá chức năng đang có** khi chưa hỏi.
-- **Chưa rõ ý thì hỏi lại** (ví dụ "ứng dụng bán hàng" là trang đặt đơn hay phần mềm tại quầy).
+- **Chưa rõ ý thì hỏi lại** (ví dụ "mẫu B" là mẫu nào).
 - **Đổi giao diện lớn:** làm 3–4 mẫu xem trước cho chủ quán chọn rồi mới áp vào code thật.
 - **Luôn sửa tiếp trên bản mới nhất đã chốt** (đã chọn mẫu B thì mọi chỉnh sửa sau chèn vào mẫu B). Trước khi sửa, nói rõ đang sửa trên bản nào (commit hoặc mẫu).
 - **Không chép linh vật, logo, thương hiệu của quán khác**; chỉ lấy cảm hứng rồi vẽ mới.
@@ -45,7 +45,7 @@ Làm 3–4 mẫu (trang đặt đơn, trang quản lý, biểu tượng app) tr�
 ## Bước 4 · Dựng web từ bản mẫu
 
 - **Bản mẫu:** nếu skill có thư mục `assets/template/` thì chép từ đó; nếu đang ở repo `phengapp` thì bản mẫu chính là code repo (`public/`, `netlify/`, `netlify.toml`, `package.json`).
-- Không chép `public/ban.html` (phần mềm bán tại quầy) trừ khi chủ quán yêu cầu.
+- Quán bán tại quầy bằng iPOS; web không còn trang bán tại quầy (`ban.html` đã gỡ).
 - Thay toàn bộ thông tin O Sugar: `DEF_INFO` trong `public/index.html`, tài khoản nhận tiền `BANK` và tiền tố nội dung chuyển khoản `PREFIX` trong `netlify/lib/pay.mjs`, tên trong `public/don.html`, `public/sw.js`, các file `manifest-*.webmanifest`.
 - Áp giao diện đã chọn, bật/tắt chức năng theo Bước 2.
 - Vẽ linh vật và biểu tượng app mới cho quán (không dùng Mèo Đen của O Sugar cho quán khác).
