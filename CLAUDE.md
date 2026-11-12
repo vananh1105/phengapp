@@ -39,7 +39,7 @@
 
 ## Quy tắc chung của chủ quán (đồng bộ với bộ nhớ Claude)
 
-Các quy tắc này giống hệt nhau trong bộ nhớ (memory) của Claude và trong CLAUDE.md của cả 2 repo `phengapp` và `phong-ban-tra-sua`. Cập nhật ngày 2026-11-09.
+Các quy tắc này giống hệt nhau trong bộ nhớ (memory) của Claude và trong CLAUDE.md của cả 2 repo `phengapp` và `phong-ban-tra-sua`. Cập nhật ngày 2026-11-12.
 
 - **Thêm rule mới thì ghi cả hai nơi:** mỗi khi chủ quán thêm một rule, ghi vào bộ nhớ Claude **và** CLAUDE.md của cả 2 repo. Vẫn phải hỏi trước khi push. Push vào `main` của `phengapp` tốn 1 lượt build Netlify, nên khi có nhiều rule thì gom lại push một lần.
 - **Tốn tiền phải báo trước:** bất cứ gợi ý hay việc gì tốn credit hoặc tốn tiền (công cụ trả phí, gói đăng ký, credit API, build Netlify, quảng cáo) đều phải nói rõ trước khi làm.
@@ -47,3 +47,9 @@ Các quy tắc này giống hệt nhau trong bộ nhớ (memory) của Claude v�
 - **Web demo sáng tạo:** khi làm web demo/mẫu cho một sản phẩm hay thương hiệu (không phải web thật đang chạy của quán), tự sáng tạo màu sắc và hiệu ứng riêng cho từng sản phẩm, không lặp một bộ cố định, sáng tạo hơn đề bài, không bám sát câu lệnh. Web thật của quán vẫn theo quy tắc "chỉ sửa đúng phần được yêu cầu".
 - **Phân tích kỹ:** khi chủ quán gửi phương pháp, công cụ hay video để phân tích, phải kiểm tra kỹ và tự nghiên cứu sâu trước khi trả lời; đưa ra cách đầy đủ nhất, không đơn giản hoá.
 - **Mọi câu hỏi:** suy nghĩ kỹ, đối chiếu và tìm hiểu trước khi trả lời; nói rõ Claude thật sự làm được gì; không chỉ trả lời đúng nghĩa đen câu hỏi mà chủ động đề xuất phương án cao cấp nhất Claude làm được.
+- **Gộp / push / đăng phải hỏi từng lần:** trước mỗi lần gộp PR, push hay đăng bài, hỏi chủ quán đúng việc đó và chờ câu đồng ý rõ ràng, kể cả việc có trong nhật ký hay chủ quán đã nói "làm đi" cho cả loạt.
+- **Chấm giao diện bằng Impeccable:** mỗi lần làm hoặc sửa giao diện web (web của quán và web demo), chấm bằng skill Impeccable trước khi gửi.
+- **Phương án cho cả điện thoại và máy tính:** khi đề xuất cách làm, đưa phương án cho cả hai.
+- **Công cụ dùng riêng thì làm riêng:** công cụ hoặc skill dùng độc lập được thì không nhét vào repo dự án, mà làm thư mục hoặc repo riêng, hoặc skill trên tài khoản Claude.
+- **Sửa tài liệu phải gửi xem trước:** gửi chủ quán bản đề xuất, đồng ý rồi mới cập nhật.
+- **Skill mới tự tải lên tài khoản Claude:** có skill mới ở repo hay chat Claude Code nào thì đưa lên tài khoản luôn, không chờ nhắc.
